@@ -1,11 +1,16 @@
 @CHARSET "UTF-8";
 
-body {
+.main {
 	padding: 1%;
 }
 
+
 .clear {
 	clear: both;
+}
+
+.float-right {
+	float: right;
 }
 
 h1 {
@@ -61,7 +66,7 @@ td span {
 }
 
 /**** PRIKAZ BILJEŠKE *********/
-span {
+.main span {
 	font-weight: 600;
 }
 

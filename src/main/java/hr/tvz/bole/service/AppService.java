@@ -10,15 +10,15 @@ import hr.tvz.bole.model.User;
 
 @Service
 public class AppService {
-	
+
 	public List<User> findAllUsers() {
 		return MockHelper.mockUserList();
 	}
-	
+
 	public List<Notebook> findAllNotebooks() {
 		return MockHelper.mockNotebookList();
 	}
-	
+
 	public User findUserById(String userId) {
 		User noteUser = null;
 		try {
@@ -34,7 +34,16 @@ public class AppService {
 		}
 		return noteUser;
 	}
-	
+
+	public User findUserByFullName(String fullName) {
+		for (User user : MockHelper.mockUserList()) {
+			if (user.getUsername().equals(fullName)) {
+				return user;
+			}
+		}
+		return null;
+	}
+
 	public Notebook findNotebookById(String notebookId) {
 		Notebook noteNotebook = null;
 		if (notebookId != null) {
@@ -52,5 +61,5 @@ public class AppService {
 		}
 		return noteNotebook;
 	}
-	
+
 }

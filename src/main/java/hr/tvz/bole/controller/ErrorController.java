@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ControllerAdvice
+//@ControllerAdvice
+//TODO - lovi i @Valid errors
 public class ErrorController {
 
 	private static Logger logger = LoggerFactory.getLogger(ErrorController.class);

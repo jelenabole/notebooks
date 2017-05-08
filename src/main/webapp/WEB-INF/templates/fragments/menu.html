@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8" />
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div th:fragment="mojmenu">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+
+				<!-- toggle grouped -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#menu-collapse"
+						aria-expanded="false">
+						<span class="sr-only">New Notes</span> <span class="icon-bar"></span>
+						<span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" th:href="@{newNote}" th:utext="#{menu.newNote}">Menu Title</a>
+				</div>
+
+				<!-- left links -->
+				<div class="collapse navbar-collapse" id="menu-collapse">
+					<ul class="nav navbar-nav">
+						<li><a th:href="@{/end-session}" th:utext="#{menu.resetStats}">Reset</a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="true"
+							aria-expanded="false"><span th:utext="#{menu.importanceStats}">Stats </span><span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li th:each="elem : ${noteImportance}"><a> <span
+										th:text="${elem.key}">Key</span> (<span
+										th:text="${elem.value}">Value</span>)
+								</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a th:href="@{/newNote}" th:utext="#{menu.allNotes}">Sve</a></li>
+							</ul></li>
+					</ul>
+
+					<!-- right links -->
+					<ul class="nav navbar-nav navbar-right"
+						sec:authorize="isAuthenticated()">
+						<li><a th:text="#{menu.activeUser}">User:</a></li>
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="true"
+							aria-expanded="false"><b sec:authentication="name">Unknown</b>
+								<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a th:href="@{/newNote}" th:utext="#{menu.viewNotes}">View</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a th:href="@{/logout}" th:utext="#{menu.logout}">Logout</a></li>
+							</ul></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+	</div>
+
+</body>
+</html>
