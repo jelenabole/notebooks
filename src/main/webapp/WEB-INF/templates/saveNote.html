@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title th:utext="#{savedNote.title}">Tab Title</title>
+<title th:utext="#{title.savedNote}">Tab Title</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" type="text/css"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -21,9 +21,9 @@
 		<div class="savedNote col-md-8 col-md-offset-2"
 			th:classappend="${note.mark}">
 			<p th:object="${note}">
-				<span th:utext="#{savedNote.writtenBy}"></span><span class="bold"
+				<span th:utext="#{note.form.user}"></span><span class="bold"
 					th:text="*{user.fullName} + ' (' + *{user.username} + ')'"></span>
-				<br /> <span th:utext="#{savedNote.inNotebook}"></span><span
+				<br /> <span th:utext="#{note.form.notebook}"></span><span
 					class="bold"
 					th:text="*{notebook.title} + ' - ' + *{notebook.description}">
 				</span>
@@ -35,7 +35,7 @@
 			</div>
 			<!-- primary -->
 			<a class="btn btn-info floatingButton" th:href="@{/newNote}"
-				th:utext="#{savedNote.return}"></a>
+				th:utext="#{button.return}"></a>
 		</div>
 	</div>
 

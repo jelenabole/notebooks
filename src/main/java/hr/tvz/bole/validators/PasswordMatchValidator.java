@@ -3,7 +3,7 @@ package hr.tvz.bole.validators;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import hr.tvz.bole.form.RegisterForm;
+import hr.tvz.bole.form.UserForm;
 
 public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, Object> {
 
@@ -13,7 +13,7 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
 
 	@Override
 	public boolean isValid(Object object, ConstraintValidatorContext context) {
-		RegisterForm user = (RegisterForm) object;
+		UserForm user = (UserForm) object;
 		return user.getPassword().equals(user.getMatchPassword());
 	}
 }

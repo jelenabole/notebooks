@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title th:utext="#{title.viewNotebooks}">Tab Title</title>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body onload="$('.newForm').hide();">
+
+	<div th:insert="~{fragments/menu :: viewNotes}"></div>
+
+	<div class="mainNote newForm">
+		<div class="col-sm-4 col-sm-offset-4">
+			<form method="POST" th:object="${notebookForm}" class="notebookForm">
+				<table class="noteForm">
+					<tr>
+						<td><label for="title" th:utext="#{notebook.form.title}"></label></td>
+						<td><input id="title" th:field="*{title}" disabled
+							th:class="${#fields.hasErrors('title')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('title')}"
+							th:errors="*{title}"></span>
+					</tr>
+					<tr>
+						<td><label for="description"
+							th:utext="#{notebook.form.description}"></label></td>
+						<td><input id="description" th:field="*{description}"
+							th:class="${#fields.hasErrors('description')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('description')}"
+							th:errors="*{description}"></span>
+					</tr>
+					<tr>
+						<td><input type="text" id="id" hidden="hidden"
+							th:field="*{id}" /></td>
+						<td><input type="submit" name="saveButton"
+							th:value="#{button.save}" class="btn btn-success" /> <a
+							class="btn btn-warning" onclick="hideForm()"> <span
+								th:utext="#{button.cancel}"></span>
+						</a></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<div class="viewNotes">
+		<table class="table table-striped">
+			<thead class="thead-inverse">
+				<tr>
+					<th th:utext="#{table.id}"></th>
+					<th th:utext="#{notebook.title}"></th>
+					<th th:utext="#{notebook.description}"></th>
+					<th th:utext="#{notebook.numberOfNotes}"></th>
+					<th th:utext="#{table.actions}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="notebook : ${notebooks}">
+					<td th:text="${notebook.id}"></td>
+					<td th:text="${notebook.title}"></td>
+					<td th:text="${notebook.description}"></td>
+					<td th:text="${notebook.numberOfNotes}"></td>
+					<td><a class="btn btn-info"
+						th:attr="onclick='javascript:editNotebook(\'' + ${notebook.id} + '\', \'' + ${notebook.title} + '\', \'' + ${notebook.description} + '\');'"
+						th:text="#{button.edit}"></a> <a class="btn btn-warning"
+						th:href="@{'/viewNotebooks/' + ${notebook.id}}"
+						th:text="#{button.delete}"
+						th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'"></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a class="btn btn-info floatingButton" th:href="@{/newNote}"
+			th:utext="#{button.return}"></a>
+	</div>
+
+	<script type="text/javascript">
+		function editNotebook(id, title, description) {
+			showForm();
+			console.log("funkcija: " + id);
+			$("#id").val(id);
+			$("#title").val(title);
+			$("#description").val(description);
+			// 			$("#id").val(id);
+			//na cancel obrisati sva polja = id je hidden polje
+			// 			console.log("noteForm: " + noteForm);
+			//dohvati notebookForm, prekopiraj objekt u njega
+
+		}
+
+		var hideForm = function() {
+			$(".newForm").hide();
+		}
+		var showForm = function() {
+			$(".newForm").show();
+		}
+	</script>
+
+</body>
+</html>

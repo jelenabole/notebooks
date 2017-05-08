@@ -10,7 +10,7 @@ public class User implements Serializable {
 	String name;
 	String surname;
 	String username;
-	// TODO - nije uvijek potrebno:
+	String email;
 	String password;
 	// TODO - za što služi enabled:
 	boolean enabled;
@@ -32,11 +32,13 @@ public class User implements Serializable {
 		this.surname = surname;
 	}
 
-	public User(Integer id, String name, String surname, String username, String password, boolean enabled) {
+	public User(Integer id, String name, String surname, String username, String email, String password,
+			boolean enabled) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
+		this.email = email;
 		this.password = password;
 		this.enabled = enabled;
 	}
@@ -75,6 +77,14 @@ public class User implements Serializable {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {

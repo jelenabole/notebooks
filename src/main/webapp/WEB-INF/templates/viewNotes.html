@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<title th:utext="#{previewNote.title}">Tab Title</title>
+<title th:utext="#{title.viewNotes}">Tab Title</title>
 <meta charset="UTF-8">
 
 <link rel="stylesheet" type="text/css"
@@ -23,12 +23,12 @@
 		<table class="table table-striped">
 			<thead class="thead-inverse">
 				<tr>
-					<th sec:authorize="hasRole('ROLE_ADMIN')"
-						th:utext="#{viewNotes.table.user}"></th>
-					<th th:utext="#{viewNotes.table.notebook}"></th>
-					<th th:utext="#{viewNotes.table.header}"></th>
-					<th th:utext="#{viewNotes.table.text}"></th>
-					<th th:utext="#{viewNotes.table.important}"></th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{note.user}"></th>
+					<th th:utext="#{note.notebook}"></th>
+					<th th:utext="#{note.header}"></th>
+					<th th:utext="#{note.text}"></th>
+					<th th:utext="#{note.important}"></th>
+					<th th:utext="#{table.actions}"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -39,21 +39,19 @@
 					<td th:text="${note.header}"></td>
 					<td th:text="${note.text}"></td>
 					<td th:class="${note.mark}"><span
-						th:text="${note.important} ? #{previewNote.table.yes} : #{previewNote.table.no}"></span>
-						<span th:if="${note.mark} != null"
-						class="glyphicon glyphicon-heart"
+						th:text="${note.important} ? #{table.yes} : #{table.no}"></span> <span
+						th:if="${note.mark} != null" class="glyphicon glyphicon-heart"
 						th:style="'color:' + ${note.mark}"></span></td>
 					<td><a class="btn btn-info"
-						th:href="@{'/newNote/' + ${note.id}}"
-						th:text="#{viewNotes.table.edit}"></a> <a class="btn btn-warning"
-						th:href="@{'/viewNotes/' + ${note.id}}"
-						th:text="#{viewNotes.table.delete}"></a></td>
+						th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
+						<a class="btn btn-warning" th:href="@{'/viewNotes/' + ${note.id}}"
+						th:text="#{button.delete}"></a></td>
 				</tr>
 			</tbody>
 		</table>
 
 		<a class="btn btn-info floatingButton" th:href="@{/newNote}"
-			th:utext="#{savedNote.return}"></a>
+			th:utext="#{button.return}"></a>
 	</div>
 
 </body>

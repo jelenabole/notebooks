@@ -23,36 +23,38 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import hr.tvz.bole.enums.NoteImportance;
+import hr.tvz.bole.enums.NoteMarks;
 import hr.tvz.bole.form.NewNoteForm;
 import hr.tvz.bole.model.Note;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
 import hr.tvz.bole.model.UserRole;
-import hr.tvz.bole.repository.NoteRepository;
-import hr.tvz.bole.repository.NotebookRepository;
-import hr.tvz.bole.repository.UserRepository;
 import hr.tvz.bole.service.MessageService;
 import hr.tvz.bole.service.NotebookEditor;
 import hr.tvz.bole.service.UserEditor;
+import hr.tvz.bole.service.impl.NoteService;
+import hr.tvz.bole.service.impl.NotebookService;
+import hr.tvz.bole.service.impl.UserService;
 
 //TODO - promijenit Note u bazi = userUsername i notebookTitle
 //TODO - postaviti validacije (duljine) kakve su u bazi
 //TODO - provjeriti da li sve metode iz repozitorija rade
 
-//TODO - za važno se šalje "1" - staviti broj a ne tinyint = trenutno bool u bazi
+//TODO - za important se šalje "1" - staviti broj a ne tinyint = trenutno bool u bazi
 //mapira se iz jedan i u jedan
-@SessionAttributes({ "newNoteForm", "userRole", "byNotebooks", "byImportance", "lastChanged" })
+@SessionAttributes({ "newNoteForm", "userRole", "byNotebooks", "byImportance" })
 @Controller
 public class NewNoteController {
 
 	private static Logger logger = LoggerFactory.getLogger(NewNoteController.class);
 
 	@Autowired
-	UserRepository userRepository;
+	UserService userService;
 	@Autowired
-	NotebookRepository notebookRepository;
+	NotebookService notebookService;
 	@Autowired
-	NoteRepository noteRepository;
+	NoteService noteService;
+
 	@Autowired
 	UserEditor userEditor;
 	@Autowired
@@ -64,11 +66,6 @@ public class NewNoteController {
 	public void dataBinding(WebDataBinder binder) {
 		binder.registerCustomEditor(User.class, userEditor);
 		binder.registerCustomEditor(Notebook.class, notebookEditor);
-	}
-
-	@ModelAttribute("lastChanged")
-	public String getLastChanged() {
-		return new String();
 	}
 
 	@ModelAttribute("userRole")
@@ -84,7 +81,7 @@ public class NewNoteController {
 	@ModelAttribute("byNotebooks")
 	public Map<String, Integer> getStatsByNotebooks() {
 		Map<String, Integer> byNotebooks = new HashMap<String, Integer>();
-		for (Notebook notebook : notebookRepository.findAll()) {
+		for (Notebook notebook : notebookService.findAll()) {
 			byNotebooks.put(notebook.getTitle(), 0);
 		}
 		return byNotebooks;
@@ -100,11 +97,11 @@ public class NewNoteController {
 			Model model, Principal principal) {
 
 		// provjeriti korisnika i zapisati u session:
-		UserRole role = new UserRole(principal.getName(), userRepository.hasAdminRole(principal.getName()));
+		UserRole role = new UserRole(principal.getName(), userService.hasAdminRole(principal.getName()));
 		logger.info("GET - newNote - admin role: " + role.isAdmin());
 		model.addAttribute("userRole", role);
+		model.addAttribute("boja", new String("red"));
 
-		System.out.println("username: " + principal.getName());
 		refreshForm(model, newNoteForm);
 
 		return "newNote";
@@ -114,7 +111,7 @@ public class NewNoteController {
 	public String loadExistingNote(@ModelAttribute NewNoteForm newNoteForm, @PathVariable int id, Model model) {
 		logger.info("GET - editNote - note id: " + id);
 
-		mapNoteToForm(newNoteForm, noteRepository.findOne(id));
+		mapNoteToForm(newNoteForm, noteService.findById(id));
 
 		return "redirect:/newNote";
 	}
@@ -122,7 +119,7 @@ public class NewNoteController {
 	@PostMapping("/newNote")
 	public String previewAndValidateForm(@Valid NewNoteForm newNoteForm, BindingResult result, Model model) {
 
-		// XXX - ako nije označen ni jedan radio - ostaje stara vrijednost:
+		// XXX - ako nije označen ni jedan radio - nema oznake:
 		if (newNoteForm.getImportant() == null) {
 			newNoteForm.setMark(null);
 		}
@@ -144,21 +141,12 @@ public class NewNoteController {
 		}
 		logger.info("/saveNote - saving with id: " + newNoteForm.getId());
 
-		// promjena countera i lastChanged:
-		// TODO - counter, isto dohvatiti brojač:
-		// String lastChanged = (String) model.asMap().get("lastChanged");
-		// lastChanged = newNoteForm.getNotebook().getTitle();
-		// System.out.println("last changed: " + lastChanged);
-		// model.addAttribute("lastChanged", lastChanged);
-
 		Note newNote = new Note(newNoteForm);
-		System.out.println("id: " + newNoteForm.getId());
-		System.out.println("note id: " + newNoteForm.getId());
 
 		if (newNote.getId() == null) {
-			noteRepository.save(newNote);
+			noteService.save(newNote);
 		} else {
-			noteRepository.update(newNote);
+			noteService.update(newNote);
 		}
 		model.addAttribute("note", newNote);
 		model.addAttribute("newNoteForm", new NewNoteForm());
@@ -195,14 +183,15 @@ public class NewNoteController {
 		UserRole role = (UserRole) model.asMap().get("userRole");
 		List<Note> listOfNotes = null;
 		if (role.isAdmin()) {
-			model.addAttribute("userList", userRepository.findAll());
-			listOfNotes = noteRepository.findAll();
+			model.addAttribute("userList", userService.findAllUsers());
+			listOfNotes = noteService.findAll();
 		} else {
-			newNoteForm.setUser(userRepository.findOne(role.getUsername()));
-			listOfNotes = noteRepository.findByUsername(role.getUsername());
+			newNoteForm.setUser(userService.findOneByUsername(role.getUsername()));
+			listOfNotes = noteService.findByUsername(role.getUsername());
 		}
-		model.addAttribute("notebookList", notebookRepository.findAll());
+		model.addAttribute("notebookList", notebookService.findAll());
 		model.addAttribute("listOfNotes", listOfNotes);
+		model.addAttribute("noteMarks", NoteMarks.getAllMarks());
 		fillStats(model, listOfNotes);
 	}
 

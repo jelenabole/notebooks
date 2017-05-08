@@ -5,16 +5,8 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<title th:utext="#{newNote.title}">Tab Title</title>
+<title th:utext="#{title.newNote}">Tab Title</title>
 <meta charset="UTF-8" />
-
-<!-- 
-<link rel="stylesheet" type="text/css"
-	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css"
-	th:href="@{/resources/bootstrap.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" /> 
--->
 
 <link rel="stylesheet" type="text/css"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -22,13 +14,6 @@
 <script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
 <script type="text/javascript"
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-<!-- 
-<script type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script type="text/javascript"
-	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
- -->
 
 </head>
 
@@ -38,7 +23,7 @@
 
 	<div class="mainNote">
 		<div class="row">
-			<h1 th:utext="#{newNote.form.header}"
+			<h1 th:utext="#{header.newNote}"
 				class="col-sm-3 col-sm-offset-2">header</h1>
 		</div>
 		<div class="row">
@@ -46,12 +31,12 @@
 				<form method="POST" th:object="${newNoteForm}" class="newNoteForm">
 					<table class="noteForm">
 						<tr>
-							<td><label for="user" th:utext="#{newNote.form.user}"></label></td>
+							<td><label for="user" th:utext="#{note.form.user}"></label></td>
 							<td><select id="user" th:field="*{user}"
 								sec:authorize="hasRole('ROLE_ADMIN')"
 								th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'">
 									<option value="-1" selected
-										th:utext="#{newNote.form.chooseUser}"></option>
+										th:utext="#{note.form.chooseUser}"></option>
 									<option th:each="user : ${userList}" th:value="${user.id}"
 										th:text="${user.fullName}"></option>
 							</select> <input id="user" th:field="*{user.fullName}"
@@ -63,28 +48,28 @@
 						</tr>
 						<tr>
 							<td><label for="notebook"
-								th:utext="#{newNote.form.notebook}"></label></td>
+								th:utext="#{note.form.notebook}"></label></td>
 							<td><select id="notebook" th:field="*{notebook}"
 								th:class="${#fields.hasErrors('notebook')}? 'form-control has-error' : 'form-control'">
-									<option value="-1" th:utext="#{newNote.form.chooseNotebook}">something</option>
+									<option value="-1" th:utext="#{note.form.chooseNotebook}">something</option>
 									<option th:each="notebook : ${notebookList}"
 										th:value="${notebook.id}" th:text="${notebook.title}"></option>
 							</select> <span class="error" th:if="${#fields.hasErrors('notebook')}"
 								th:errors="*{notebook}">error</span></td>
 						</tr>
 						<tr>
-							<td><label for="header" th:utext="#{newNote.form.title}"></label></td>
+							<td><label for="header" th:utext="#{note.form.title}"></label></td>
 							<td><input id="header" th:field="*{header}"
 								th:class="${#fields.hasErrors('header')}? 'form-control has-error' : 'form-control'"
-								th:placeholder="#{newNote.form.enterTitle}" /> <span
+								th:placeholder="#{note.form.enterTitle}" /> <span
 								class="error" th:if="${#fields.hasErrors('header')}"
 								th:errors="*{header}">error</span></td>
 						</tr>
 						<tr>
-							<td><label for="text" th:utext="#{newNote.form.text}"></label></td>
+							<td><label for="text" th:utext="#{note.form.text}"></label></td>
 							<td><textarea id="text" th:field="*{text}"
 									th:class="${#fields.hasErrors('text')}? 'form-control has-error' : 'form-control'"
-									th:placeholder="#{newNote.form.enterText}">
+									th:placeholder="#{note.form.enterText}">
 						</textarea> <span class="error" th:if="${#fields.hasErrors('text')}"
 								th:errors="*{text}">error</span></td>
 						</tr>
@@ -93,29 +78,21 @@
 							<td><label class="block"><input id="important"
 									type="checkbox" value="1" th:field="*{important}"
 									th:checked="'true'" /> <span
-									th:utext="#{newNote.form.important}"></span></label> <!-- boje - ralzičite oznake -->
+									th:utext="#{note.important}"></span></label> <!-- boje - ralzičite oznake -->
 
-								<label class="marks"><input type="radio"
-									th:field="*{mark}" value="default" checked /> <span
-									th:utext="#{newNote.form.default}"></span></label> <label class="marks"><input
-									type="radio" th:field="*{mark}" value="red" /> <span
-									th:utext="#{newNote.form.red}"></span></label> <label class="marks"><input
-									type="radio" th:field="*{mark}" value="blue" /> <span
-									th:utext="#{newNote.form.blue}"></span></label> <label class="marks"><input
-									type="radio" th:field="*{mark}" value="orange" /> <span
-									th:utext="#{newNote.form.orange}"></span></label> <label class="marks"><input
-									type="radio" th:field="*{mark}" value="green" /> <span
-									th:utext="#{newNote.form.green}"></span></label> <label class="marks"><input
-									type="radio" th:field="*{mark}" value="purple" /> <span
-									th:utext="#{newNote.form.purple}"></span></label></td>
+								<label class="marks" th:each="noteMark : ${noteMarks}">
+									<input type="radio" th:field="*{mark}"
+									th:value="${noteMark.name}" /> <span
+									th:utext="#{${noteMark.translation}}"></span>
+							</label></td>
 						</tr>
 
 						<tr>
 							<td></td>
 							<td><input type="submit" name="saveButton"
-								th:value="#{newNote.form.save}" class="btn btn-success" /> <a
+								th:value="#{button.save}" class="btn btn-success" /> <a
 								class="btn btn-warning" th:href="@{/deleteForm}"> <span
-									th:utext="#{newNote.form.delete}"></span>
+									th:utext="#{button.delete}"></span>
 							</a></td>
 						</tr>
 					</table>
@@ -126,8 +103,8 @@
 				<table class="table table-sm stat-table">
 					<thead class="thead-inverse">
 						<tr>
-							<th th:utext="#{newNote.table.notebook}"></th>
-							<th th:utext="#{newNote.table.numberOfNotes}"></th>
+							<th th:utext="#{note.notebook}"></th>
+							<th th:utext="#{note.numberOfNotes}"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -168,35 +145,5 @@
 			}
 		}
 	</script>
-	<div>
-		<table class="table table-striped">
-			<thead class="thead-inverse">
-				<tr>
-					<th th:utext="#{viewNotes.table.user}"></th>
-					<th th:utext="#{viewNotes.table.notebook}"></th>
-					<th th:utext="#{viewNotes.table.header}"></th>
-					<th th:utext="#{viewNotes.table.text}"></th>
-					<th th:utext="#{viewNotes.table.important}"></th>
-					<th>Promjena</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="note : ${listOfNotes}">
-					<td th:text="${note.user.fullName}"></td>
-					<td th:text="${note.notebook.title}"></td>
-					<td th:text="${note.header}"></td>
-					<td th:text="${note.text}"></td>
-					<td th:class="${note.mark}"><span
-						th:text="${note.important} ? #{previewNote.table.yes} : #{previewNote.table.no}"></span>
-						<span th:if="${note.mark} != null"
-						class="glyphicon glyphicon-heart"
-						th:style="'color:' + ${note.mark}"></span></td>
-					<td><a class="btn btn-info"
-						th:href="@{'/newNote/' + ${note.id}}"
-						th:text="${note.id} + 'edit'"></a>
-				</tr>
-			</tbody>
-		</table>
-	</div>
 </body>
 </html>

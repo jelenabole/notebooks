@@ -6,106 +6,86 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.transaction.annotation.Transactional;
 
-import hr.tvz.bole.PasswordGenerator;
-import hr.tvz.bole.exceptions.UserExistsException;
 import hr.tvz.bole.model.User;
-import hr.tvz.bole.model.UserRole;
+import hr.tvz.bole.repository.RoleRepository;
 import hr.tvz.bole.repository.UserRepository;
 
 public class JdbcUserRepository implements UserRepository {
 
-	private static Logger logger = LoggerFactory.getLogger(JdbcNoteRepository.class);
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	RoleRepository userRoleRepository;
 
 	public JdbcUserRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	String SELECT_USER = "SELECT id, name, surname, username, password, enabled FROM users";
-	String SELECT_IF_ADMIN = "SELECT id, username, role FROM user_roles WHERE username=? AND role='ROLE_ADMIN'";
+	static final String SELECT_USERS = "SELECT id, name, surname, username, email, password, enabled FROM users";
+	static final String UPDATE_USER = "UPDATE users SET name=?, surname=?, email=? WHERE id = ?";
+	static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
+	static final String CHANGE_PASSWORD = "UPDATE users SET password=? WHERE id=?";
 
 	@Override
 	public List<User> findAll() {
-		return jdbcTemplate.query(SELECT_USER, new UserRowMapper());
+		return jdbcTemplate.query(SELECT_USERS, new UserRowMapper());
 	}
 
 	@Override
-	public User findOne(String username) {
-		return jdbcTemplate.queryForObject(SELECT_USER + " WHERE username=?", new UserRowMapper(), username);
-	}
-
-	@Override
-	public boolean hasAdminRole(String username) {
+	public User findOne(Integer id) {
 		try {
-			jdbcTemplate.queryForObject(SELECT_IF_ADMIN, new UserRoleRowMapper(), username);
-			return true;
+			return jdbcTemplate.queryForObject(SELECT_USERS + " WHERE id=?", new UserRowMapper(), id);
 		} catch (EmptyResultDataAccessException e) {
-			return false;
+			return null;
 		}
 	}
 
 	@Override
-	@Transactional
-	public User save(User user) throws UserExistsException {
-		if (checkIfUserExists(user.getUsername())) {
-			//TODO - prevesti grešku:
-			throw new UserExistsException("user exists: " + user.getUsername());
-		}
-		
-		user.setPassword(PasswordGenerator.generatePassword(user.getPassword()));
-		Integer userId = insertUserAndReturnId(user);
-		logger.info("save new user - id: " + userId);
-		user.setId(userId);
-		
-		insertUserRole(user, "ROLE_USER");
-		return user;
-	}
-
-	private boolean checkIfUserExists(String username) {
+	public User findOneByUsername(String username) {
 		try {
-			findOne(username);
+			return jdbcTemplate.queryForObject(SELECT_USERS + " WHERE username=?", new UserRowMapper(), username);
 		} catch (EmptyResultDataAccessException e) {
-			return false;
+			return null;
 		}
-		return true;
 	}
 
-	private Integer insertUserAndReturnId(User user) {
+	@Override
+	public Integer save(User user) {
 		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users");
 		jdbcInsert.setGeneratedKeyName("id");
-		
-		//TODO - enabled polje zahardcodirano = TRUE
+
+		// TODO - enabled polje zahardcodirano = TRUE
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("name", user.getName());
 		args.put("surname", user.getSurname());
 		args.put("username", user.getUsername());
+		args.put("email", user.getEmail());
 		args.put("password", user.getPassword());
 		args.put("enabled", true);
-		Integer userId = jdbcInsert.executeAndReturnKey(args).intValue();
-		
-		return userId;
-	}
-	
-	private Integer insertUserRole(User user, String userRole) {
-		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("user_roles");
-		jdbcInsert.setGeneratedKeyName("id");
-		
-		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("username", user.getUsername());
-		args.put("role", userRole);
-		Integer userId = jdbcInsert.executeAndReturnKey(args).intValue();
-		
-		return userId;
+
+		return jdbcInsert.executeAndReturnKey(args).intValue();
 	}
 
+	@Override
+	public Integer update(User user) {
+		return jdbcTemplate.update(UPDATE_USER, user.getName(), user.getSurname(), user.getEmail(), user.getId());
+	}
+
+	@Override
+	public Integer changePassword(Integer id, String password) {
+		return jdbcTemplate.update(CHANGE_PASSWORD, password, id);
+	}
+
+	@Override
+	public void delete(Integer id) {
+		jdbcTemplate.update(DELETE_USER, id);
+	}
 
 	private static final class UserRowMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -113,20 +93,12 @@ public class JdbcUserRepository implements UserRepository {
 			String name = rs.getString("name");
 			String surname = rs.getString("surname");
 			String username = rs.getString("username");
+			String email = rs.getString("email");
 			String password = rs.getString("password");
 			boolean enabled = rs.getBoolean("enabled");
 
-			return new User(id, name, surname, username, password, enabled);
+			return new User(id, name, surname, username, email, password, enabled);
 		}
 	}
 
-	private static final class UserRoleRowMapper implements RowMapper<UserRole> {
-		public UserRole mapRow(ResultSet rs, int rowNum) throws SQLException {
-			int id = rs.getInt("id");
-			String name = rs.getString("username");
-			String role = rs.getString("role");
-
-			return new UserRole(id, name, role);
-		}
-	}
 }

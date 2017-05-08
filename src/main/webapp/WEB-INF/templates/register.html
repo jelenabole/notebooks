@@ -4,7 +4,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title th:utext="#{login.registerTitle}">Tab Title</title>
+<title th:utext="#{title.register}">Tab Title</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" type="text/css"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -18,79 +18,70 @@
 	<div th:insert="~{fragments/menu :: register}"></div>
 
 	<div class="container">
-		<div class="mainLogin row vertical-center-row">
+		<div class="mainLogin mainRegister row vertical-center-row">
 			<div class="row">
-				<h1 th:text="#{login.form.registerHeader}">form</h1>
+				<h1 th:utext="#{header.register}">form</h1>
 
 				<div class="col-sm-5 col-sm-offset-3">
-					<form method="POST" th:object="${user}">
-						<!-- <input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" />-->
+					<form method="POST" th:object="${userForm}">
 						<table>
 							<tr>
-								<td><label for="name" th:utext="#{login.name}"></label></td>
+								<td><label for="name" th:utext="#{user.form.name}"></label></td>
 								<td><input type="text" name="name" id="name"
 									th:field="*{name}"
 									th:class="${#fields.hasErrors('name')}? 'form-control has-error' : 'form-control'"
-									th:placeholder="#{login.placeholder.name}" autofocus /> <span
-									class="error" th:if="${#fields.hasErrors('name')}"
-									th:errors="*{name}">error</span></td>
+									th:placeholder="#{user.name}" autofocus /> <span class="error"
+									th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</span></td>
 							</tr>
 							<tr>
-								<td><label for="surname" th:utext="#{login.surname}"></label></td>
+								<td><label for="surname" th:utext="#{user.form.surname}"></label></td>
 								<td><input type="text" name="surname" id="surname"
 									th:field="*{surname}"
 									th:class="${#fields.hasErrors('surname')}? 'form-control has-error' : 'form-control'"
-									th:placeholder="#{login.placeholder.surname}" autofocus /> <span
-									class="error" th:if="${#fields.hasErrors('surname')}"
-									th:errors="*{surname}">error</span></td>
+									th:placeholder="#{user.surname}" /> <span class="error"
+									th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">error</span></td>
 							</tr>
 							<tr>
-								<td><label for="username" th:utext="#{login.username}"></label></td>
+								<td><label for="username" th:utext="#{user.form.username}"></label></td>
 								<td><input type="text" name="username" id="username"
 									th:field="*{username}"
 									th:class="${#fields.hasErrors('username')}? 'form-control has-error' : 'form-control'"
-									th:placeholder="#{login.placeholder.username}" autofocus /> <span
-									class="error" th:if="${#fields.hasErrors('username')}"
+									th:placeholder="#{user.username}" /> <span class="error"
+									th:if="${#fields.hasErrors('username')}"
 									th:errors="*{username}">error</span></td>
 							</tr>
 							<tr>
-								<td><label for="text" th:utext="#{login.email}"></label></td>
+								<td><label for="email" th:utext="#{user.form.email}"></label></td>
 								<td><input type="text" name="email" id="email"
 									th:field="*{email}"
 									th:class="${#fields.hasErrors('email')}? 'form-control has-error' : 'form-control'"
-									th:placeholder="#{login.placeholder.email}" /> <span
-									class="error" th:if="${#fields.hasErrors('email')}"
-									th:errors="*{email}">error</span></td>
+									th:placeholder="#{user.email}" /> <span class="error"
+									th:if="${#fields.hasErrors('email')}" th:errors="*{email}">error</span></td>
 							</tr>
 							<tr>
-								<td><label for="password" th:utext="#{login.password}"></label></td>
+								<td><label for="password" th:utext="#{user.form.password}"></label></td>
 								<td><input type="password" name="password" id="password"
 									th:field="*{password}"
 									th:class="${#fields.hasErrors('password')} ? 'form-control has-error' : (${#fields.hasErrors('global')} ? 'form-control has-error' : 'form-control')"
-									th:placeholder="#{login.placeholder.password}" /> <span
-									class="error" th:if="${#fields.hasErrors('password')}"
+									th:placeholder="#{user.password}" /> <span class="error"
+									th:if="${#fields.hasErrors('password')}"
 									th:errors="*{password}">error</span></td>
 							</tr>
 							<tr>
 								<td><label for="matchPassword"
-									th:utext="#{login.matchPassword}"></label></td>
+									th:utext="#{user.form.repeatPassword}"></label></td>
 								<td><input type="password" name="matchPassword"
 									id="matchPass" th:field="*{matchPassword}"
 									th:class="${#fields.hasErrors('password')} ? 'form-control has-error' : (${#fields.hasErrors('global')} ? 'form-control has-error' : 'form-control')"
-									th:placeholder="#{login.placeholder.password}" /> <span
-									class="error" th:if="${#fields.hasErrors('password')}"
+									th:placeholder="#{user.password}" /> <span class="error"
+									th:if="${#fields.hasErrors('password')}"
 									th:errors="*{password}">error</span> <span class="error"
-									th:if="${#fields.hasErrors('global')}" th:errors="${user}">error</span></td>
-							</tr>
-							<tr th:if="${error}" class="error">
-								<td></td>
-								<td class="error" th:utext="#{login.loginError}"></td>
+									th:if="${#fields.hasErrors('global')}" th:errors="${userForm}">error</span></td>
 							</tr>
 							<tr>
 								<td></td>
 								<td><input type="submit" name="register"
-									th:value="#{login.registerButton}" class="btn btn-success"></td>
+									th:value="#{button.register}" class="btn btn-success"></td>
 							</tr>
 						</table>
 					</form>
@@ -99,27 +90,5 @@
 		</div>
 	</div>
 
-	<div>
-		<table class="table table-striped">
-			<thead class="thead-inverse">
-				<tr>
-					<th>Id</th>
-					<th>Full name</th>
-					<th>Username</th>
-					<th>Password</th>
-					<th>Enabled</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="user : ${users}">
-					<td th:text="${user.id}"></td>
-					<td th:text="${user.fullName}"></td>
-					<td th:text="${user.username}"></td>
-					<td th:text="${user.password}"></td>
-					<td th:text="${user.enabled}"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
 </body>
 </html>

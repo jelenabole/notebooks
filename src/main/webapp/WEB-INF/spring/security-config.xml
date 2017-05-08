@@ -12,6 +12,7 @@
 		<intercept-url pattern="/login*" access="isAnonymous()" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 
+		<access-denied-handler error-page="/403" />
 		<form-login login-page="/login" default-target-url="/newNote"
 			authentication-failure-url="/login?error=true" />
 		<logout logout-success-url="/login?logout=true" />

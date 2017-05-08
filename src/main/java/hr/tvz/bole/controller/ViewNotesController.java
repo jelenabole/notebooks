@@ -15,9 +15,9 @@ import hr.tvz.bole.repository.NoteRepository;
 
 @Controller
 @SessionAttributes({ "userRole" })
-public class ViewNoteController {
+public class ViewNotesController {
 
-	private static Logger logger = LoggerFactory.getLogger(NewNoteController.class);
+	private static Logger logger = LoggerFactory.getLogger(ViewNotesController.class);
 
 	@Autowired
 	NoteRepository noteRepository;

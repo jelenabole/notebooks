@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title th:utext="#{title.userInfo}">Tab Title</title>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div th:insert="~{fragments/menu :: viewNotes}"></div>
+
+	<div>
+		<div class="col-sm-6 col-sm-offset-3">
+			<form method="POST" th:object="${userForm}" class="user">
+				<table>
+					<tr>
+						<td><label for="name" th:utext="#{user.form.name}"></label></td>
+						<td><input type="text" name="name" id="name"
+							th:field="*{name}"
+							th:class="${#fields.hasErrors('name')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('name')}"
+							th:errors="*{name}">error</span></td>
+					</tr>
+					<tr>
+						<td><label for="surname" th:utext="#{user.form.surname}"></label></td>
+						<td><input type="text" name="surname" id="surname"
+							th:field="*{surname}"
+							th:class="${#fields.hasErrors('surname')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('surname')}"
+							th:errors="*{surname}">error</span></td>
+					</tr>
+					<tr>
+						<td><label for="username" th:utext="#{user.form.username}"></label></td>
+						<td><input type="text" name="username" id="username"
+							th:field="*{username}" class="form-control" disabled /></td>
+					</tr>
+					<tr>
+						<td><label for="email" th:utext="#{user.form.email}"></label></td>
+						<td><input type="text" name="email" id="email"
+							th:field="*{email}"
+							th:class="${#fields.hasErrors('email')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('email')}"
+							th:errors="*{email}">error</span></td>
+					</tr>
+					<tr>
+						<td><label for="matchPassword"
+							th:utext="#{user.form.newPassword}"></label></td>
+						<td><input type="password" name="matchPassword"
+							id="matchPass" th:field="*{matchPassword}" class="form-control"
+							th:placeholder="#{user.newPassword}" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="submit" name="register"
+							th:value="#{button.save}" class="btn btn-success"></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -56,7 +56,6 @@
 			<div class="container-fluid">
 				<div th:insert="~{:: header}"></div>
 				<div class="collapse navbar-collapse" id="menu-collapse">
-					<div th:insert="~{:: filterNotes}"></div>
 
 					<!-- search -->
 					<form class="navbar-form navbar-left">
@@ -86,8 +85,8 @@
 			<span class="sr-only">New Notes</span> <span class="icon-bar"></span>
 			<span class="icon-bar"></span> <span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand" th:href="@{newNote}"
-			th:utext="#{menu.newNote}">Menu Title</a>
+		<a class="navbar-brand" th:href="@{newNote}" th:utext="#{menu.header}">Menu
+			Title</a>
 	</div>
 
 	<!-- left links - stats -->
@@ -95,7 +94,7 @@
 		<li><a th:href="@{/end-session}" th:utext="#{menu.resetStats}">Reset</a></li>
 		<li class="dropdown"><a href="#" class="dropdown-toggle"
 			data-toggle="dropdown" role="button" aria-haspopup="true"
-			aria-expanded="false"><span th:utext="#{menu.importanceStats}">Stats
+			aria-expanded="false"><span th:utext="#{menu.statsByImportance}">Stats
 			</span><span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li th:each="elem : ${byImportance}"><a> <span
@@ -107,29 +106,23 @@
 			</ul></li>
 	</ul>
 
+
 	<!-- left links - filter notes -->
 	<ul th:fragment="filterNotes" class="nav navbar-nav">
-		<!-- 
-						<li>Filter by:</li>
-						<li>Važno</li>
-						<li>Boje</li>
-						<li>Search</li>
-						 -->
-
-		<li><a th:href="@{/end-session}" th:utext="#{menu.resetStats}">Reset</a></li>
+		<li><a th:href="@{/end-session}">Gumb 1</a></li>
 		<li class="dropdown"><a href="#" class="dropdown-toggle"
 			data-toggle="dropdown" role="button" aria-haspopup="true"
-			aria-expanded="false"><span th:utext="#{menu.importanceStats}">Stats
-			</span><span class="caret"></span></a>
+			aria-expanded="false"><span>Gumb 2</span><span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li th:each="elem : ${byImportance}"><a> <span
 						th:text="${elem.key.string}">Key</span> (<span
 						th:text="${elem.value}">Value</span>)
 				</a></li>
 				<li role="separator" class="divider"></li>
-				<li><a th:href="@{/viewNotes}" th:utext="#{menu.allNotes}">Sve</a></li>
+				<li><a th:href="@{/viewNotes}">Sve</a></li>
 			</ul></li>
 	</ul>
+
 
 	<!-- right links -->
 	<ul th:fragment="userLinks" class="nav navbar-nav navbar-right"
@@ -140,44 +133,55 @@
 			aria-expanded="false"><b sec:authentication="name">Unknown</b> <span
 				class="caret"></span></a>
 			<ul class="dropdown-menu">
-				<li><a th:href="@{/viewNotes}" th:utext="#{menu.viewNotes}">View</a></li>
+				<li sec:authorize="hasRole('ROLE_ADMIN')"><a
+					th:href="@{/viewUsers}" th:utext="#{menu.viewUsers}">Users</a></li>
+				<li>
+					<!-- sec:authorize="hasRole('ROLE_ADMIN')" --> <a
+					th:href="@{/viewNotebooks}" th:utext="#{menu.viewNotebooks}">Notebooks</a>
+				</li>
+				<li><a th:href="@{/viewNotes}" th:utext="#{menu.viewNotes}">Notes</a></li>
 
 				<li role="separator" class="divider"></li>
-				<li><a href="?lang=en" th:utext="#{lang.english}"></a></li>
-				<li><a href="?lang=hr" th:utext="#{lang.croatian}"></a></li>
+				<li><a href="?lang=en" th:utext="#{menu.english}"></a></li>
+				<li><a href="?lang=hr" th:utext="#{menu.croatian}"></a></li>
 
 				<li role="separator" class="divider"></li>
+				<li><a th:href="@{|user/${#authentication.name}|}"
+					th:utext="#{menu.userInfo}">Info</a></li>
 				<li><a th:href="@{/logout}" th:utext="#{menu.logout}">Logout</a></li>
 			</ul></li>
 	</ul>
 
+
+	<!-- ??? -->
 	<div th:fragment="header-no-collapse" class="navbar-header">
 		<a class="navbar-brand" th:href="@{newNote}"
-			th:utext="#{login.menu.notes}">Menu Title</a>
+			th:utext="#{menu.header}">Menu Title</a>
 	</div>
+
 
 	<!-- login buttons -->
 	<ul th:fragment="loginButtons" class="nav navbar-nav">
 		<li><a th:href="@{register}" role="button"
-			th:utext="#{login.menu.register}"></a></li>
+			th:utext="#{menu.register}"></a></li>
 	</ul>
+
 
 	<!-- register buttons -->
 	<ul th:fragment="registerButtons" class="nav navbar-nav">
-		<li><a th:href="@{login}" role="button"
-			th:utext="#{login.menu.login}"></a></li>
-
+		<li><a th:href="@{login}" role="button" th:utext="#{menu.login}"></a></li>
 	</ul>
+
 
 	<!-- choose language -->
 	<ul th:fragment="language" class="nav navbar-nav navbar-right">
 		<li class="dropdown"><a href="#" class="dropdown-toggle"
 			data-toggle="dropdown" role="button" aria-haspopup="true"
 			aria-expanded="false"> <span class="glyphicon glyphicon-globe"></span>
-				<span th:text="#{login.menu.language}"></span> <span class="caret"></span></a>
+				<span th:utext="#{menu.language}"></span> <span class="caret"></span></a>
 			<ul class="dropdown-menu">
-				<li><a href="?lang=en" th:utext="#{login.lang.english}"></a></li>
-				<li><a href="?lang=hr" th:utext="#{login.lang.croatian}"></a></li>
+				<li><a href="?lang=en" th:utext="#{menu.english}"></a></li>
+				<li><a href="?lang=hr" th:utext="#{menu.croatian}"></a></li>
 			</ul></li>
 	</ul>
 
