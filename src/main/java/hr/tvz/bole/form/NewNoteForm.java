@@ -1,4 +1,4 @@
-package hr.tvz.bole;
+package hr.tvz.bole.form;
 
 import javax.validation.constraints.Size;
 
@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class NewNoteForm {
 
-	// TODO - Thymeleaf vraæa empty na option, umjesto null:
+	// TODO - Thymeleaf vraæa empty iz option, umjesto null:
 	@NotEmpty
 	String userId;
 	@NotEmpty
@@ -15,6 +15,15 @@ public class NewNoteForm {
 	String header;
 	@Size(min = 1)
 	String text;
+	String klasa;
+
+	public String getKlasa() {
+		return klasa;
+	}
+
+	public void setKlasa(String klasa) {
+		this.klasa = klasa;
+	}
 
 	String importance;
 

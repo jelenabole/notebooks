@@ -1,0 +1,46 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Login Page</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+</head>
+
+<body>
+	<h1>Prijava korisnika</h1>
+	<form method="POST" th:object="${userForm}">
+		<!-- <input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" />-->
+		
+		<table>
+			<tr>
+				<td><label for="username">Korisničko ime:</label></td>
+				<td><input name="username" id="username" th:field="*{username}"
+					th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
+					placeholder="Korisničko ime" autofocus /> <span
+					th:if="${#fields.hasErrors('username')}" th:errors="*{username}">error</span></td>
+			</tr>
+			<tr>
+				<td><label for="password">Lozinka:</label></td>
+				<td><input name="password" id="password" th:field="*{password}"
+					th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
+					placeholder="Lozinka" /> <span
+					th:if="${#fields.hasErrors('password')}" th:errors="*{password}">error</span></td>
+			</tr>
+			<tr th:if="${error}" class="error">
+				<td colspan="2">Krivo korisničko ime ili lozinka!</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" name="login" value="Prijava"
+					class="btn btn-success"></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

@@ -72,3 +72,11 @@ p span {
 .centered {
 	text-align: center;
 }
+
+.kockice {
+	border: dashed 4px black;
+}
+
+.crte {
+	border: solid 4px black;
+}

@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<div>
+	<div th:classappend="${note.klasa}">
 		<p th:object="${note}">
 			Napisao: <span th:text="*{user.fullName} + ' (' + *{user.username} + ')'"></span>
 			<br /> Bilježnica: <span

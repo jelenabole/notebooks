@@ -31,6 +31,10 @@
 			<td th:text="${note.text}"></td>
 		</tr>
 		<tr>
+			<td>Klasa:</td>
+			<td th:text="${note.klasa}"></td>
+		</tr>
+		<tr>
 			<td>Važno:</td>
 			<td th:text="${note.importance} == true ? 'DA' : 'NE'"></td>
 			<!-- th:text="'Važno: ' + ( (${note.importance} == true) ? 'DA' : 'NE')" -->

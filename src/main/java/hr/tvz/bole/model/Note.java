@@ -6,16 +6,26 @@ public class Note {
 	String header;
 	String text;
 	Boolean importance;
+	public String getKlasa() {
+		return klasa;
+	}
+
+	public void setKlasa(String klasa) {
+		this.klasa = klasa;
+	}
+
+	String klasa;
 
 	public Note() {
 	}
 
-	public Note(User user, Notebook notebook, String header, String text, Boolean importance) {
+	public Note(User user, Notebook notebook, String header, String text, Boolean importance, String klasa) {
 		this.user = user;
 		this.notebook = notebook;
 		this.header = header;
 		this.text = text;
 		this.importance = importance;
+		this.klasa = klasa;
 	}
 
 	public Boolean getImportance() {

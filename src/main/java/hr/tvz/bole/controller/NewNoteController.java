@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import hr.tvz.bole.NewNoteForm;
+import hr.tvz.bole.form.NewNoteForm;
 import hr.tvz.bole.model.Note;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
@@ -85,9 +85,9 @@ public class NewNoteController {
 			model.addAttribute("notebookList", appService.findAllNotebooks());
 			return "newNote";
 		}
-
+		
 		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText(),
-				newNoteForm.getImportance() != null);
+				newNoteForm.getImportance() != null, newNoteForm.getKlasa());
 		model.addAttribute("note", newNote);
 
 		return "previewNote";
@@ -110,11 +110,11 @@ public class NewNoteController {
 		}
 		model.addAttribute("noteImportance", noteImportance);
 
-		// Note objekt - validacije preskoæene:
+		// Note objekt - validacije preskocene:
 		User noteUser = appService.findUserById(newNoteForm.getUserId());
 		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
 		Note note = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText(),
-				newNoteForm.getImportance() != null);
+				newNoteForm.getImportance() != null, newNoteForm.getKlasa());
 
 		model.addAttribute("note", note);
 

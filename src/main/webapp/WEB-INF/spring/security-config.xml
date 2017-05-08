@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http use-expressions="true">
+		<intercept-url pattern="/resources/**" access="permitAll" />
+		<intercept-url pattern="/login*" access="isAnonymous()" />
+		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<!-- <intercept-url pattern="/noviKolegij.html" access="hasRole('ROLE_ADMIN') 
+			" /> <intercept-url pattern="/odabirKolegija.html" access="hasAnyRole('ROLE_STUDENT', 
+			'ROLE_ADMIN')" /> -->
+		<form-login login-page='/login' default-target-url="/newNote"
+			authentication-failure-url="/login-error" />
+		<logout logout-success-url="/login?logout=true" />
+		<csrf disabled="true"/>
+	</http>
+
+	<!-- id userService nije potreban ?! potreban zbog authentication manager -->
+	<user-service id="userService">
+		<user name="user" password="user" authorities="ROLE_DEMO,ROLE_USER" />
+		<user name="demo" password="demo" authorities="ROLE_DEMO" />
+		<user name="admin" password="admin" authorities="ROLE_USER,ROLE_ADMIN" />
+	</user-service>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userService" />
+	</authentication-manager>
+</beans:beans>
