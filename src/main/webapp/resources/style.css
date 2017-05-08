@@ -1,0 +1,56 @@
+@CHARSET "UTF-8";
+
+body {
+	padding: 2%;
+}
+h1 {
+	text-align: center;
+	margin: 3%;
+}
+
+/***** FORMA ZA UNOS ******/
+
+table {
+	margin: 0 auto;
+}
+
+td {
+	vertical-align: top;
+}
+
+label {
+	text-align: right;
+	display: block;
+	margin-right: 2%;
+	margin-top: 7%;
+	font-weight: 500;
+}
+
+input[type="submit"] {
+	display: block;
+	margin: 3% auto;
+}
+
+.has-error {
+	border: 1px solid red;
+}
+
+td span {
+	color: darkred;
+	margin-left: 3%;
+}
+
+/**** PRIKAZ BILJEŠKE *********/
+
+span {
+	font-weight: 600;
+}
+p span {
+	font-weight: bold;
+}
+
+.centered {
+	text-align: center;
+}
+
+
