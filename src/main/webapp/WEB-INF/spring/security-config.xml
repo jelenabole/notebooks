@@ -22,12 +22,12 @@
 	<!-- id userService nije potreban ?! potreban zbog authentication manager -->
 	<user-service id="userService">
 		<user name="demo" password="demo" authorities="ROLE_DEMO,ROLE_USER" />
-		<user name="admin" password="admin" authorities="ROLE_ADMIN" />
+		<user name="admin" password="admin" authorities="ROLE_ADMIN,ROLE_USER" />
 		
-		<user name="pperic" password="user" authorities="ROLE_STUDENT" />
-		<user name="iivic" password="user" authorities="ROLE_STUDENT" />
-		<user name="mmarkic" password="user" authorities="ROLE_STUDENT" />
-		<user name="user" password="user" authorities="ROLE_STUDENT" />
+		<user name="pperic" password="user" authorities="ROLE_USER" />
+		<user name="iivic" password="user" authorities="ROLE_USER" />
+		<user name="mmarkic" password="user" authorities="ROLE_USER" />
+		<user name="user" password="user" authorities="ROLE_USER" />
 	</user-service>
 
 	<authentication-manager alias="authenticationManager">

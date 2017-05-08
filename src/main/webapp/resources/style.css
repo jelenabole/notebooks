@@ -4,30 +4,6 @@ html {
 	height: 100%;
 }
 
-/*** dodatne klase za uređivanje bilješki ***/
-.savedNote { /* defaultna - mijenjati boju */
-	/* crno-bijela, siva, plava, zelena, crvena, naranđasto-žuta */
-	padding: 2%;
-	border-left: 6px solid blue;
-	background-color: lightblue;
-	border-radius: 10px;
-}
-
-.savedNote .content {
-	padding: 5% 0;
-}
-.savedNote h1 {
-	padding: 5%;
-}
-
-.kockice {
-	border: dashed 4px black;
-}
-
-.crtice {
-	border: solid 4px black;
-}
-
 /*** DEFAULT CLASSES ***/
 .has-error {
 	border: 2px solid red;
@@ -102,7 +78,7 @@ h1 {
 /*** PREVIEW NOTE (previewNote) ***/
 .previewTable input[type="submit"], .previewTable input[type="button"],
 	.previewTable button {
-	margin: 3% auto;
+	margin: auto;
 }
 
 .previewTable td:first-child {
@@ -112,8 +88,8 @@ h1 {
 /*** SAVED NOTE PAGE (savedNote) ***/
 .floatingButton {
 	position: fixed;
-	bottom: 10px;
-	left: 10px;
+	bottom: 15px;
+	left: 15px;
 }
 
 /*** LOGIN - mainLogin (form same as on first page) ***/
@@ -169,3 +145,50 @@ p span {
 
 
 */
+
+/*** dodatne klase za uređivanje bilješki ***/
+.savedNote { /* defaultna - mijenjati boju */
+	/* crno-bijela, siva, plava, zelena, crvena, naranđasto-žuta */
+	padding: 2%;
+	border-left: 6px solid black;
+	background-color: #F6F9FC;
+	border-radius: 10px;
+}
+
+.savedNote .content {
+	padding: 5% 0;
+}
+
+.savedNote h1 {
+	padding: 5%;
+}
+
+.default {
+	border-color: black;
+	background-color: #F6F9FC;
+}
+
+.purple {
+	border-color: #7C3889;
+	background-color: #E9D3ED;
+}
+
+.red {
+	border-color: #f71914;
+	background-color: #f9bcbb;
+}
+
+.blue {
+	border-color: #3e2ecc;
+	background-color: #bac3f4;
+}
+
+.orange {
+	border-color: #ff4c00;
+	background-color: #ffa977;
+}
+
+.green {
+	border-color: #2acc35;
+	background-color: #b0ff91;
+}

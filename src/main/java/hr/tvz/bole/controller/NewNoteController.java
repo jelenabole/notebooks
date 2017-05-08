@@ -1,7 +1,9 @@
 package hr.tvz.bole.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -28,7 +31,7 @@ import hr.tvz.bole.service.AppService;
 import hr.tvz.bole.service.NotebookEditor;
 import hr.tvz.bole.service.UserEditor;
 
-@SessionAttributes({ "newNoteForm", "counter", "lastChanged", "noteImportance" })
+@SessionAttributes({ "newNoteForm", "counter", "lastChanged", "noteImportance", "listOfNotes" })
 @Controller
 public class NewNoteController {
 	private static Logger logger = LoggerFactory.getLogger(NewNoteController.class);
@@ -44,7 +47,7 @@ public class NewNoteController {
 
 	@ModelAttribute("lastChanged")
 	public String getLastChanged() {
-		return "";
+		return new String();
 	}
 
 	@ModelAttribute("noteImportance")
@@ -69,6 +72,12 @@ public class NewNoteController {
 		}
 		return counter;
 	}
+	
+	@ModelAttribute("listOfNotes")
+	public List<Note> getListOfNotes() {
+		List<Note> listOfNotes = new ArrayList<>();
+		return listOfNotes;
+	}
 
 	@GetMapping("/newNote")
 	public String getNewForm(@ModelAttribute NewNoteForm newNoteForm, Model model, Principal principal) {
@@ -80,7 +89,7 @@ public class NewNoteController {
 		if (noteUser != null) {
 			newNoteForm.setUser(noteUser);
 		}
-
+		
 		return "newNote";
 	}
 
@@ -93,40 +102,40 @@ public class NewNoteController {
 			model.addAttribute("notebookList", appService.findAllNotebooks());
 			return "newNote";
 		}
-		
-		model.addAttribute("note", new Note(newNoteForm));
 
 		return "previewNote";
 	}
 
 	@PostMapping("/saveNote")
-	public String saveForm(Model model) {
+	public String saveForm(Model model, @SessionAttribute ArrayList<Note> listOfNotes) {
 		NewNoteForm newNoteForm = (NewNoteForm) model.asMap().get("newNoteForm");
 		// provjera zbog refresha stranice - form obrisan:
 		if (newNoteForm.getHeader() == null) {
 			return "redirect:/newNote";
 		}
-		
+
 		// provjera important (radi povećanja brojača):
 		@SuppressWarnings("unchecked")
 		Map<String, Integer> noteImportance = (Map<String, Integer>) model.asMap().get("noteImportance");
-		if (newNoteForm.getImportant() == null) {
+		if (newNoteForm.getImportant() == null)
 			noteImportance.put("Nevažne bilješke", noteImportance.get("Nevažne bilješke") + 1);
-		} else {
+		else
 			noteImportance.put("Važne bilješke", noteImportance.get("Važne bilješke") + 1);
-		}
 		model.addAttribute("noteImportance", noteImportance);
 
 		// promjena countera i lastChanged:
 		@SuppressWarnings("unchecked")
 		Map<String, Integer> counter = (Map<String, Integer>) model.asMap().get("counter");
+
 		String lastChanged = (String) model.asMap().get("lastChanged");
-
 		lastChanged = newNoteForm.getNotebook().getTitle();
-		counter.put(lastChanged, counter.get(lastChanged) + 1);
-		model.addAttribute("lastChanged", lastChanged);
 
+		counter.put(lastChanged, counter.get(lastChanged) + 1);
+
+		listOfNotes.add(new Note(newNoteForm));
+		
 		// note objekt i refresh forme:
+		model.addAttribute("lastChanged", lastChanged);
 		model.addAttribute("note", new Note(newNoteForm));
 		model.addAttribute("newNoteForm", new NewNoteForm());
 

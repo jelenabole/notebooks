@@ -1,8 +1,13 @@
 package hr.tvz.bole.model;
 
+import java.io.Serializable;
+
 import hr.tvz.bole.form.NewNoteForm;
 
-public class Note {
+public class Note implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	User user;
 	Notebook notebook;
 	String header;

@@ -1,6 +1,11 @@
 package hr.tvz.bole.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	Integer id;
 	String username;
 	String name;

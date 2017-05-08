@@ -92,13 +92,21 @@
 							<td></td>
 							<td><label class="block"><input id="important"
 									type="checkbox" value="value" th:field="*{important}" /> <span
-									th:utext="#{newNote.form.important}"></span></label><label
-								class="marks"><input type="radio" th:field="*{mark}"
-									value="kockice" /> <span th:utext="#{newNote.form.squares}"></span></label>
+									th:utext="#{newNote.form.important}"></span></label> <!-- boje - ralzičite oznake -->
 
 								<label class="marks"><input type="radio"
-									th:field="*{mark}" value="crtice" /> <span
-									th:utext="#{newNote.form.lines}"></span></label></td>
+									th:field="*{mark}" value="default" checked /> <span
+									th:utext="#{newNote.form.default}"></span></label> <label class="marks"><input
+									type="radio" th:field="*{mark}" value="red" /> <span
+									th:utext="#{newNote.form.red}"></span></label> <label class="marks"><input
+									type="radio" th:field="*{mark}" value="blue" /> <span
+									th:utext="#{newNote.form.blue}"></span></label> <label class="marks"><input
+									type="radio" th:field="*{mark}" value="orange" /> <span
+									th:utext="#{newNote.form.orange}"></span></label> <label class="marks"><input
+									type="radio" th:field="*{mark}" value="green" /> <span
+									th:utext="#{newNote.form.green}"></span></label> <label class="marks"><input
+									type="radio" th:field="*{mark}" value="purple" /> <span
+									th:utext="#{newNote.form.purple}"></span></label></td>
 						</tr>
 
 						<tr>
@@ -123,9 +131,10 @@
 					</thead>
 					<tbody>
 						<tr th:each="elem : ${counter}">
-							<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
+							<!-- th:class="${lastChanged} == ${elem.key} ? table-warning : ''" -->
+							<td th:style="${lastChanged} == ${elem.key} ? 'background-color:seashell' : ''"
 								th:text="${elem.key}">Key</td>
-							<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
+							<td th:style="${lastChanged} == ${elem.key} ? 'background-color:seashell' : ''"
 								th:text="${elem.value}">Value</td>
 						</tr>
 					</tbody>
@@ -136,15 +145,23 @@
 
 	<script>
 		$("#important").click(function() {
-			console.log("clicked");
+			console.log("check radio buttons");
 			checked();
 		});
 
 		var checked = function() {
 			if ($("#important").is(":checked")) {
 				$(".marks").show();
+				//ako ni jedan nije označen, označiti prvi (default):
+				if ($(".marks input[type=radio]:checked")[0] == undefined) {
+					$(".marks input[type=radio]")[0].checked = true;
+				}
 			} else {
 				$(".marks").hide();
+				//ako je označen jedan, odznačiti ga:
+				if ($(".marks input[type=radio]:checked")[0] != undefined) {
+					$(".marks input[type=radio]:checked")[0].checked = false;
+				}
 			}
 		}
 	</script>

@@ -1,6 +1,11 @@
 package hr.tvz.bole.model;
 
-public class Notebook {
+import java.io.Serializable;
+
+public class Notebook implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	Integer id;
 	String title;
 	String description;

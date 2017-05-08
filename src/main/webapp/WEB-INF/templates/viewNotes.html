@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title th:utext="#{previewNote.title}">Tab Title</title>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div th:insert="~{fragments/menu :: full}"></div>
+
+	<div>
+		<table class="table table-striped">
+			<thead class="thead-inverse">
+				<tr>
+					<th th:utext="#{preview.table.user}"></th>
+					<th th:utext="#{preview.table.notebook}"></th>
+					<th th:utext="#{preview.table.header}"></th>
+					<th th:utext="#{preview.table.text}"></th>
+					<th th:utext="#{preview.table.important}"></th>
+					<th th:utext="#{preview.table.mark}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="note : ${listOfNotes}">
+					<td th:text="${note.user.fullName}"></td>
+					<td th:text="${note.notebook.title}"></td>
+					<td th:text="${note.header}"></td>
+					<td th:text="${note.text}"></td>
+					<td th:text="${note.important}"></td>
+					<td th:class="${note.mark}"><span
+						class="glyphicon glyphicon-heart" th:style="'color:'+${note.mark}"></span></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a class="btn btn-info floatingButton" th:href="@{/newNote}"
+			th:utext="#{savedNote.return}"></a>
+	</div>
+
+</body>
+</html>

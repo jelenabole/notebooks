@@ -46,7 +46,7 @@
 										th:text="${elem.value}">Value</span>)
 								</a></li>
 								<li role="separator" class="divider"></li>
-								<li><a th:href="@{/newNote}" th:utext="#{menu.allNotes}">Sve</a></li>
+								<li><a th:href="@{/viewNotes}" th:utext="#{menu.allNotes}">Sve</a></li>
 							</ul></li>
 					</ul>
 
@@ -59,7 +59,7 @@
 							aria-expanded="false"><b sec:authentication="name">Unknown</b>
 								<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a th:href="@{/newNote}" th:utext="#{menu.viewNotes}">View</a></li>
+								<li><a th:href="@{/viewNotes}" th:utext="#{menu.viewNotes}">View</a></li>
 
 								<li role="separator" class="divider"></li>
 								<li><a href="?lang=en" th:utext="#{lang.english}"></a></li>
