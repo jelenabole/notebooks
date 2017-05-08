@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title th:utext="#{previewNote.title}">Tab Title</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div th:insert="~{fragments/menu :: notes}"></div>
+
+	<div class="previewNote col-sm-6 col-sm-offset-3">
+		<table class="table table-bordered previewTable"
+			th:object="${newNoteForm}">
+			<tr>
+				<td th:utext="#{newNote.form.user}"></td>
+				<td th:text="*{user.fullName}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{newNote.form.notebook}"></td>
+				<td th:text="*{notebook.title}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{newNote.form.title}"></td>
+				<td th:text="*{header}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{newNote.form.text}"></td>
+				<td th:text="*{text}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{previewNote.table.important}"></td>
+				<!-- <td th:class="*{mark}"
+					th:text="*{important} != null ? 
+				(*{mark} != null ? #{previewNote.table.yes} + ' - ' + *{mark} 
+				: #{previewNote.table.yes}) : #{previewNote.table.no}">
+				</td> -->
+				<td th:class="*{mark}"><span
+					th:text="*{important} != null ? #{previewNote.table.yes} : #{previewNote.table.no}"></span>
+					<span th:if="*{mark} != null" class="glyphicon glyphicon-heart"
+					th:style="'color:' + *{mark}"></span></td>
+			</tr>
+			<tr>
+				<td><a class="btn btn-warning" th:href="@{/newNote}"
+					th:utext="#{previewNote.table.editNote}"> </a></td>
+				<td>
+					<form action="saveNote" method="POST">
+						<input type="submit" name="saveNote"
+							th:value="#{previewNote.table.saveNote}" class="btn btn-success">
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

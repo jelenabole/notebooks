@@ -1,0 +1,66 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title th:utext="#{login.title}">Tab Title</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body class="fullHeight">
+	<div th:insert="~{fragments/menu :: login}"></div>
+	
+	<div class="container">
+		<div class="mainLogin row vertical-center-row">
+			<div class="row">
+				<h1 th:utext="#{login.form.loginHeader}"></h1>
+
+				<div class="col-sm-5 col-sm-offset-3">
+					<form method="POST" th:object="${userForm}">
+						<!-- <input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />-->
+						<table>
+							<tr>
+								<td><label for="username" th:utext="#{login.username}"></label></td>
+								<td><input type="text" name="username" id="username"
+									th:field="*{username}"
+									th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
+									th:placeholder="#{login.placeholder.username}" autofocus /> <span
+									th:if="${#fields.hasErrors('username')}"
+									th:errors="*{username}">error</span></td>
+							</tr>
+							<tr>
+								<td><label for="password" th:utext="#{login.password}"></label></td>
+								<td><input type="password" name="password" id="password"
+									th:field="*{password}"
+									th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
+									th:placeholder="#{login.placeholder.password}" /> <span
+									th:if="${#fields.hasErrors('password')}"
+									th:errors="*{password}">error</span></td>
+							</tr>
+							<tr th:if="${error}">
+								<td></td>
+								<td class="error" th:utext="#{login.loginError}"></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input type="submit" name="login"
+									th:value="#{login.loginButton}" class="btn btn-success"></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</body>
+</html>

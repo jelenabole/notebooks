@@ -10,18 +10,20 @@ public class MockHelper {
 
 	public static List<User> mockUserList() {
 		List<User> userList = new ArrayList<>();
-		userList.add(new User(1, "pperic", "Pero", "Periæ"));
-		userList.add(new User(2, "iivic", "Ivo", "Iviæ")); 
-		userList.add(new User(3, "mmarkic", "Marko", "Markiæ"));
+		userList.add(new User(1, "pperic", "Pero", "PeriÄ‡"));
+		userList.add(new User(2, "iivic", "Ivo", "IviÄ‡"));
+		userList.add(new User(3, "mmarkic", "Marko", "MarkiÄ‡"));
+		userList.add(new User(3, "user", "User", "User"));
 
 		return userList;
 	}
-	 
+
 	public static List<Notebook> mockNotebookList() {
 		List<Notebook> notebookList = new ArrayList<>();
-		notebookList.add(new Notebook(1, "Prva biljenica", "Opis prve biljenice"));
-		notebookList.add(new Notebook(2, "Druga biljenica", "Opis druge biljenice"));
-		notebookList.add(new Notebook(3, "Treæa biljenica", "Opis treæe biljenice"));
+		notebookList.add(new Notebook(1, "Prva biljeÅ¾nica", "Opis prve biljeÅ¾nice"));
+		notebookList.add(new Notebook(2, "Druga biljeÅ¾nica", "Opis druge biljeÅ¾nice"));
+		notebookList.add(new Notebook(3, "TreÄ‡a biljeÅ¾nica", "Opis treÄ‡e biljeÅ¾nice"));
+		notebookList.add(new Notebook(3, "ÄŒetvrta biljeÅ¾nica", "Opis Äetvrte biljeÅ¾nice"));
 
 		return notebookList;
 	}

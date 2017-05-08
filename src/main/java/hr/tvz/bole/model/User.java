@@ -1,53 +1,101 @@
 package hr.tvz.bole.model;
 
-import org.springframework.stereotype.Component;
+import java.io.Serializable;
 
-@Component
-public class User {
+public class User implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	Integer id;
-	String username;
 	String name;
 	String surname;
-	String fullName;
-	
-	public User () {};
-	
-	public User(int id, String username, String name, String surname) {
+	String username;
+	// TODO - nije uvijek potrebno:
+	String password;
+	// TODO - za Å¡to sluÅ¾i enabled:
+	boolean enabled;
+
+	public User() {
+	};
+
+	public User(String username, String name, String surname) {
+		this.username = username;
+		this.name = name;
+		this.surname = surname;
+	}
+
+	// TODO - popraviti u bazi da postoji ID:
+	public User(Integer id, String username, String name, String surname) {
 		this.id = id;
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
-		this.fullName = name + " " + surname;
 	}
-	
-	//TODO - da li je potreban uopæe atribut, ili samo metoda za dohvaæanje cijelog?
-	//možda se ne treba ni postavljati preko konstruktora (nekad se poziva defaultni)
+
+	public User(Integer id, String name, String surname, String username, String password, boolean enabled) {
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+	}
+
 	public String getFullName() {
 		return name + " " + surname;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getSurname() {
 		return surname;
 	}
+
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@Override
+	public String toString() {
+		return "USER - id: " + id + " - fullname: " + name + " " + surname + " - username: " + username
+				+ " - password: " + password + " - enabled: " + enabled;
 	}
 }

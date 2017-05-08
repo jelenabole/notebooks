@@ -1,51 +1,25 @@
 @CHARSET "UTF-8";
 
-body {
-	padding: 2%;
-}
-h1 {
-	text-align: center;
-	margin: 3%;
+html {
+	height: 100%;
 }
 
-/***** FORMA ZA UNOS ******/
-
-table {
-	margin: 0 auto;
-}
-
-td {
-	vertical-align: top;
-}
-
-label {
-	text-align: right;
-	display: block;
-	margin-right: 2%;
-	margin-top: 7%;
-	font-weight: 500;
-}
-
-input[type="submit"] {
-	display: block;
-	margin: 3% auto;
-}
-
+/*** DEFAULT CLASSES ***/
 .has-error {
-	border: 1px solid red;
+	border: 2px solid red;
 }
 
-td span {
+.error {
 	color: darkred;
 	margin-left: 3%;
-}
-
-/**** PRIKAZ BILJEŠKE *********/
-
-span {
 	font-weight: 600;
 }
-p span {
+
+.block {
+	display: block;
+}
+
+.bold {
 	font-weight: bold;
 }
 
@@ -53,4 +27,174 @@ p span {
 	text-align: center;
 }
 
+h1 {
+	text-align: center;
+	padding: 2%;
+}
 
+/*** MAIN PAGE - New Note Form (mainNote - noteForm - statTable) ***/
+.noteForm {
+	width: 100%;
+	margin: 1%;
+}
+
+.noteForm td {
+	padding: 1%;
+	vertical-align: top; /* zbog ispisa grešaka */
+}
+
+.noteForm td:first-child {
+	text-align: right;
+	padding-left: 3%;
+	padding-top: 2%;
+}
+
+/* labels of checkboxes and radio buttons */
+.noteForm label span {
+	font-weight: 500;
+}
+
+.noteForm .marks {
+	padding-left: 3%;
+	font-style: italic;
+	display: block;
+}
+
+.noteForm input[type="submit"], .noteForm input[type="button"],
+	.noteForm button {
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+/*** MAIN PAGE - Note Statistics Table ***/
+.stat-table td:nth-child(2), .stat-table th:nth-child(2) {
+	text-align: center;
+}
+
+.stat-table td:nth-child(1) {
+	font-weight: 600;
+}
+
+/*** PREVIEW NOTE (previewNote) ***/
+.previewTable input[type="submit"], .previewTable input[type="button"],
+	.previewTable button {
+	margin: auto;
+}
+
+.previewTable td:first-child {
+	width: 20%;
+}
+
+/*** SAVED NOTE PAGE (savedNote) ***/
+.floatingButton {
+	position: fixed;
+	bottom: 15px;
+	left: 15px;
+}
+
+/*** LOGIN - mainLogin (form same as on first page) ***/
+.fullHeight, .mainLogin, .container {
+	height: 80%;
+}
+
+.container {
+	display: table;
+	vertical-align: middle;
+}
+
+.vertical-center-row {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.mainLogin table {
+	width: 100%;
+}
+
+.mainLogin td {
+	padding: 1%;
+}
+
+.mainLogin td:first-child {
+	text-align: right;
+	padding-left: 3%;
+}
+
+/*
+.clear {
+	clear: both;
+}
+
+.float-right {
+	float: right;
+}
+
+*/
+
+/**** PRIKAZ BILJEŠKE *********/
+
+/*
+.main span {
+	font-weight: 600;
+}
+
+p span {
+	font-weight: bold;
+}
+
+
+
+
+*/
+
+/*** dodatne klase za uređivanje bilješki ***/
+.savedNote { /* defaultna - mijenjati boju */
+	/* crno-bijela, siva, plava, zelena, crvena, naranđasto-žuta */
+	padding: 2%;
+	border-left: 6px solid black;
+	background-color: #F6F9FC;
+	border-radius: 10px;
+}
+
+.savedNote .content {
+	padding: 5% 0;
+}
+
+.savedNote h1 {
+	padding: 5%;
+}
+
+.default {
+	border-color: black;
+	background-color: #F6F9FC;
+}
+
+.purple {
+	border-color: #7C3889;
+	background-color: #E9D3ED;
+}
+
+.red {
+	border-color: #f71914;
+	background-color: #f9bcbb;
+}
+
+.blue {
+	border-color: #3e2ecc;
+	background-color: #bac3f4;
+}
+
+.orange {
+	border-color: #ff4c00;
+	background-color: #ffa977;
+}
+
+.green {
+	border-color: #2acc35;
+	background-color: #b0ff91;
+}
+
+/*** PRIKAZ LISTE BILJEŠKI ***/
+.viewNotes table td {
+	vertical-align: middle; /* zbog ispisa grešaka */
+}
