@@ -1,4 +1,4 @@
-package hr.tvz.bole;
+package hr.tvz.bole.model;
 
 import org.springframework.stereotype.Component;
 

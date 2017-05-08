@@ -3,6 +3,9 @@ package hr.tvz.bole;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.tvz.bole.model.Notebook;
+import hr.tvz.bole.model.User;
+
 public class MockHelper {
 
 	public static List<User> mockUserList() {
