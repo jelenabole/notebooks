@@ -1,10 +1,150 @@
 @CHARSET "UTF-8";
 
-.main {
+html {
+	height: 100%;
+}
+
+/*** dodatne klase za uređivanje bilješki ***/
+.savedNote { /* defaultna - mijenjati boju */
+	/* crno-bijela, siva, plava, zelena, crvena, naranđasto-žuta */
+	padding: 2%;
+	border-left: 6px solid blue;
+	background-color: lightblue;
+	border-radius: 10px;
+}
+
+.savedNote .content {
+	padding: 5% 0;
+}
+.savedNote h1 {
+	padding: 5%;
+}
+
+.kockice {
+	border: dashed 4px black;
+}
+
+.crtice {
+	border: solid 4px black;
+}
+
+/*** DEFAULT CLASSES ***/
+.has-error {
+	border: 2px solid red;
+}
+
+.error {
+	color: darkred;
+	margin-left: 3%;
+	font-weight: 600;
+}
+
+.block {
+	display: block;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.centered {
+	text-align: center;
+}
+
+h1 {
+	text-align: center;
+	padding: 2%;
+}
+
+/*** MAIN PAGE - New Note Form (mainNote - noteForm - statTable) ***/
+.noteForm {
+	width: 100%;
+	margin: 1%;
+}
+
+.noteForm td {
+	padding: 1%;
+	vertical-align: top; /* zbog ispisa grešaka */
+}
+
+.noteForm td:first-child {
+	text-align: right;
+	padding-left: 3%;
+	padding-top: 2%;
+}
+
+/* labels of checkboxes and radio buttons */
+.noteForm label span {
+	font-weight: 500;
+}
+
+.noteForm .marks {
+	padding-left: 3%;
+	font-style: italic;
+	display: block;
+}
+
+.noteForm input[type="submit"], .noteForm input[type="button"],
+	.noteForm button {
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+/*** MAIN PAGE - Note Statistics Table ***/
+.stat-table td:nth-child(2), .stat-table th:nth-child(2) {
+	text-align: center;
+}
+
+.stat-table td:nth-child(1) {
+	font-weight: 600;
+}
+
+/*** PREVIEW NOTE (previewNote) ***/
+.previewTable input[type="submit"], .previewTable input[type="button"],
+	.previewTable button {
+	margin: 3% auto;
+}
+
+.previewTable td:first-child {
+	width: 20%;
+}
+
+/*** SAVED NOTE PAGE (savedNote) ***/
+.floatingButton {
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
+}
+
+/*** LOGIN - mainLogin (form same as on first page) ***/
+.fullHeight, .mainLogin, .container {
+	height: 100%;
+}
+
+.container {
+	display: table;
+	vertical-align: middle;
+}
+
+.vertical-center-row {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.mainLogin table {
+	width: 100%;
+}
+
+.mainLogin td {
 	padding: 1%;
 }
 
+.mainLogin td:first-child {
+	text-align: right;
+	padding-left: 3%;
+}
 
+/*
 .clear {
 	clear: both;
 }
@@ -13,59 +153,10 @@
 	float: right;
 }
 
-h1 {
-	text-align: center;
-	margin: 3%;
-}
-
-/***** FORMA ZA UNOS ******/
-table {
-	margin: 0 auto;
-}
-
-td {
-	vertical-align: top;
-}
-
-label {
-	text-align: right;
-	display: block;
-	margin-right: 2%;
-	margin-top: 7%;
-	font-weight: 500;
-}
-
-input[type="submit"], form input[type="button"] {
-	margin: 3% auto;
-}
-
-.has-error {
-	border: 1px solid red;
-}
-
-td span {
-	color: darkred;
-	margin-left: 3%;
-}
-
-.info-table {
-	width: 50%;
-}
-
-.info-table td:nth-child(2), .info-table th:nth-child(2) {
-	text-align: center;
-}
-
-.info-table td:nth-child(1) {
-	font-weight: 600;
-}
-
-.aditional-table {
-	width: 30%;
-	float: right;
-}
+*/
 
 /**** PRIKAZ BILJEŠKE *********/
+/*
 .main span {
 	font-weight: 600;
 }
@@ -74,14 +165,7 @@ p span {
 	font-weight: bold;
 }
 
-.centered {
-	text-align: center;
-}
 
-.kockice {
-	border: dashed 4px black;
-}
 
-.crte {
-	border: solid 4px black;
-}
+
+*/

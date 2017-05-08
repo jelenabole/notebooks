@@ -4,43 +4,63 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Login Page</title>
+<title th:utext="#{login.title}">Tab Title</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" type="text/css"
-	th:href="@{/resources/bootstrap.min.css}" />
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
-<body>
-	<h1>Prijava korisnika</h1>
-	<form method="POST" th:object="${userForm}">
-		<!-- <input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" />-->
-		
-		<table>
-			<tr>
-				<td><label for="username">Korisničko ime:</label></td>
-				<td><input name="username" id="username" th:field="*{username}"
-					th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
-					placeholder="Korisničko ime" autofocus /> <span
-					th:if="${#fields.hasErrors('username')}" th:errors="*{username}">error</span></td>
-			</tr>
-			<tr>
-				<td><label for="password">Lozinka:</label></td>
-				<td><input name="password" id="password" th:field="*{password}"
-					th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
-					placeholder="Lozinka" /> <span
-					th:if="${#fields.hasErrors('password')}" th:errors="*{password}">error</span></td>
-			</tr>
-			<tr th:if="${error}" class="error">
-				<td colspan="2">Krivo korisničko ime ili lozinka!</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" name="login" value="Prijava"
-					class="btn btn-success"></td>
-			</tr>
-		</table>
-	</form>
+<body class="fullHeight">
+	<div th:insert="~{fragments/menu :: basic}"></div>
+	
+	<div class="container">
+		<div class="mainLogin row vertical-center-row">
+			<div class="row">
+				<h1 th:utext="#{login.userLogin}"></h1>
+
+				<div class="col-sm-5 col-sm-offset-3">
+					<form method="POST" th:object="${userForm}">
+						<!-- <input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />-->
+						<table>
+							<tr>
+								<td><label for="username" th:utext="#{login.username}"></label></td>
+								<td><input type="text" name="username" id="username"
+									th:field="*{username}"
+									th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
+									th:placeholder="#{login.placeholder.username}" autofocus /> <span
+									th:if="${#fields.hasErrors('username')}"
+									th:errors="*{username}">error</span></td>
+							</tr>
+							<tr>
+								<td><label for="password" th:utext="#{login.password}"></label></td>
+								<td><input type="password" name="password" id="password"
+									th:field="*{password}"
+									th:class="${#fields.hasErrors('password')}? 'form-control has-error' : 'form-control'"
+									th:placeholder="#{login.placeholder.password}" /> <span
+									th:if="${#fields.hasErrors('password')}"
+									th:errors="*{password}">error</span></td>
+							</tr>
+							<tr th:if="${error}" class="error">
+								<td></td>
+								<td class="error" th:utext="#{login.loginError}"></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><input type="submit" name="login"
+									th:value="#{login.loginButton}" class="btn btn-success"></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
 </body>
 </html>

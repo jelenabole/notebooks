@@ -8,18 +8,17 @@ import hr.tvz.bole.model.User;
 
 public class NewNoteForm {
 
-	// TODO - Thymeleaf vraća empty iz option, umjesto null:
+	// XXX - Thymeleaf vraća empty iz option-a, umjesto null (objekti su null)
 	@NotNull
 	User user;
-
 	@NotNull
 	Notebook notebook;
-
 	@Size(min = 1)
 	String header;
 	@Size(min = 1)
 	String text;
-	String klasa;
+	String important;
+	String mark;
 
 	public User getUser() {
 		return user;
@@ -37,24 +36,6 @@ public class NewNoteForm {
 		this.notebook = notebook;
 	}
 
-	public String getKlasa() {
-		return klasa;
-	}
-
-	public void setKlasa(String klasa) {
-		this.klasa = klasa;
-	}
-
-	String importance;
-
-	public String getImportance() {
-		return importance;
-	}
-
-	public void setImportance(String importance) {
-		this.importance = importance;
-	}
-
 	public String getHeader() {
 		return header;
 	}
@@ -69,5 +50,21 @@ public class NewNoteForm {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public String getImportant() {
+		return important;
+	}
+
+	public void setImportant(String important) {
+		this.important = important;
+	}
+
+	public String getMark() {
+		return mark;
+	}
+
+	public void setMark(String mark) {
+		this.mark = mark;
 	}
 }

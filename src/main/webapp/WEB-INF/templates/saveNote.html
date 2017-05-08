@@ -1,31 +1,43 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>View Saved Form</title>
+<title th:utext="#{savedNote.title}">Tab Title</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" type="text/css"
-	th:href="@{/resources/bootstrap.min.css}" />
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-	<div th:classappend="${note.klasa}">
-		<p th:object="${note}">
-			Napisao: <span th:text="*{user.fullName} + ' (' + *{user.username} + ')'"></span>
-			<br /> Bilježnica: <span
-				th:text="*{notebook.title} + ' - ' + *{notebook.description}">
-			</span>
-		</p>
+
+	<div th:insert="~{fragments/menu :: full}"></div>
+
+	<div class="row">
+		<div class="savedNote col-md-8 col-md-offset-2"
+			th:classappend="${note.mark}">
+			<p th:object="${note}">
+				<span th:utext="#{savedNote.writtenBy}"></span><span class="bold"
+					th:text="*{user.fullName} + ' (' + *{user.username} + ')'"></span>
+				<br /> <span th:utext="#{savedNote.inNotebook}"></span><span
+					class="bold"
+					th:text="*{notebook.title} + ' - ' + *{notebook.description}">
+				</span>
+			</p>
+
+			<div class="centered content">
+				<h1 th:text="${note.header}"></h1>
+				<p th:text="${note.text}"></p>
+			</div>
+			<!-- primary -->
+			<a class="btn btn-info floatingButton" th:href="@{/newNote}"
+				th:utext="#{savedNote.return}"></a>
+		</div>
 	</div>
 
-	<h1 th:text="${note.header}"></h1>
-	<div>
-		<p class="centered" th:text="${note.text}"></p>
-	</div>
-
-	<a th:href="@{/newNote}">Povratak</a>
 </body>
 </html>

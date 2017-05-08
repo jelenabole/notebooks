@@ -5,24 +5,19 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title th:utext="#{newNote.title}">>Tab Title</title>
+<title th:utext="#{newNote.title}">Tab Title</title>
 <meta charset="UTF-8" />
-<!-- 
-<script type="text/javascript"
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script type="text/javascript" th:src="@{/resources/bootstrap.min.js}"></script>
--->
-
-<link rel="stylesheet"
-	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 <!-- 
 <link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
 	th:href="@{/resources/bootstrap.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" /> -->
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" /> 
+-->
 
-
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
 <script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
 <script type="text/javascript"
@@ -37,112 +32,121 @@
 
 </head>
 
-<body onload="checked();" lang="en">
+<body onload="checked();">
 
-	<div th:insert="~{fragments/menu :: mojmenu}"></div>
+	<div th:insert="~{fragments/menu :: full}"></div>
 
-	Language :
-	<a href="?lang=en">English</a> |
-	<a href="?lang=hr">Croatian</a>
-	<br />
-	Language :
-	<a href="?language=en">English</a> |
-	<a href="?language=hr">Croatian</a>
-	
-	<div class="main">
-		<h1 th:utext="#{newNote.form.header}">header</h1>
-		<form method="POST" th:object="${newNoteForm}" class="newNoteForm">
-			<table>
-				<tr>
-					<td><label for="user" th:utext="#{newNote.form.user}"></label></td>
-					<td><select id="user" th:field="*{user}"
-						sec:authorize="hasRole('ROLE_ADMIN')"
-						th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'">
-							<option value="-1" selected th:utext="#{newNote.form.chooseUser}"></option>
-							<option th:each="user : ${userList}" th:value="${user.id}"
-								th:text="${user.fullName}" />
-					</select> <input id="user" th:field="*{user.fullName}"
-						sec:authorize="!hasRole('ROLE_ADMIN')" disabled
-						th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'" />
+	<div class="mainNote">
+		<div class="row">
+			<h1 th:utext="#{newNote.form.header}"
+				class="col-sm-3 col-sm-offset-2">header</h1>
+		</div>
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-1">
+				<form method="POST" th:object="${newNoteForm}" class="newNoteForm">
+					<table class="noteForm">
+						<tr>
+							<td><label for="user" th:utext="#{newNote.form.user}"></label></td>
+							<td><select id="user" th:field="*{user}"
+								sec:authorize="hasRole('ROLE_ADMIN')"
+								th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'">
+									<option value="-1" selected
+										th:utext="#{newNote.form.chooseUser}"></option>
+									<option th:each="user : ${userList}" th:value="${user.id}"
+										th:text="${user.fullName}"></option>
+							</select> <input id="user" th:field="*{user.fullName}"
+								sec:authorize="!hasRole('ROLE_ADMIN')" disabled
+								th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'" />
 
-						<span th:if="${#fields.hasErrors('user')}" th:errors="*{user}"></span>
-				</tr>
-				<tr>
-					<td><label for="notebookId" th:utext="#{newNote.form.notebook}"></label></td>
-					<td><select id="notebook" th:field="*{notebook}"
-						th:class="${#fields.hasErrors('notebook')}? 'form-control has-error' : 'form-control'">
-							<option value="-1" selected
-								th:utext="#{newNote.form.chooseNotebook}"></option>
-							<option th:each="notebook : ${notebookList}"
-								th:value="${notebook.id}" th:text="${notebook.title}" />
-					</select> <span th:if="${#fields.hasErrors('notebook')}"
-						th:errors="*{notebook}">error</span></td>
-				</tr>
-				<tr>
-					<td><label for="header" th:utext="#{newNote.form.title}"></label></td>
-					<td><input id="header" th:field="*{header}"
-						th:class="${#fields.hasErrors('header')}? 'form-control has-error' : 'form-control'"
-						th:placeholder="#{newNote.form.enterTitle}" /> <span
-						th:if="${#fields.hasErrors('header')}" th:errors="*{header}">error</span></td>
-				</tr>
-				<tr>
-					<td><label for="text" th:utext="#{newNote.form.text}"></label></td>
-					<td><textarea id="text" th:field="*{text}"
-							th:class="${#fields.hasErrors('text')}? 'form-control has-error' : 'form-control'"
-							th:placeholder="#{newNote.form.enterText}">
-						</textarea> <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}">error</span></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input class="importance" type="checkbox" value="da"
-						th:field="*{importance}" th:utext="#{newNote.form.important}"><br />
-						<i class="classes"><input type="radio" th:field="*{klasa}"
-							value="kockice" th:utext="#{newNote.form.squares}"><br>
-							<input type="radio" th:field="*{klasa}" value="crtice"
-							th:utext="#{newNote.form.lines}"><br></i></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="submit" name="saveButton" th:value="#{newNote.form.save}"
-						class="btn btn-success"> <a th:href="@{/deleteForm}">
-							<button class="btn btn-warning" th:utext="#{newNote.form.delete}"></button>
-					</a></td>
-				</tr>
-			</table>
-		</form>
+								<span class="error" th:if="${#fields.hasErrors('user')}"
+								th:errors="*{user}"></span>
+						</tr>
+						<tr>
+							<td><label for="notebook"
+								th:utext="#{newNote.form.notebook}"></label></td>
+							<td><select id="notebook" th:field="*{notebook}"
+								th:class="${#fields.hasErrors('notebook')}? 'form-control has-error' : 'form-control'">
+									<option value="-1" th:utext="#{newNote.form.chooseNotebook}">something</option>
+									<option th:each="notebook : ${notebookList}"
+										th:value="${notebook.id}" th:text="${notebook.title}"></option>
+							</select> <span class="error" th:if="${#fields.hasErrors('notebook')}"
+								th:errors="*{notebook}">error</span></td>
+						</tr>
+						<tr>
+							<td><label for="header" th:utext="#{newNote.form.title}"></label></td>
+							<td><input id="header" th:field="*{header}"
+								th:class="${#fields.hasErrors('header')}? 'form-control has-error' : 'form-control'"
+								th:placeholder="#{newNote.form.enterTitle}" /> <span
+								class="error" th:if="${#fields.hasErrors('header')}"
+								th:errors="*{header}">error</span></td>
+						</tr>
+						<tr>
+							<td><label for="text" th:utext="#{newNote.form.text}"></label></td>
+							<td><textarea id="text" th:field="*{text}"
+									th:class="${#fields.hasErrors('text')}? 'form-control has-error' : 'form-control'"
+									th:placeholder="#{newNote.form.enterText}">
+						</textarea> <span class="error" th:if="${#fields.hasErrors('text')}"
+								th:errors="*{text}">error</span></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><label class="block"><input id="important"
+									type="checkbox" value="value" th:field="*{important}" /> <span
+									th:utext="#{newNote.form.important}"></span></label><label
+								class="marks"><input type="radio" th:field="*{mark}"
+									value="kockice" /> <span th:utext="#{newNote.form.squares}"></span></label>
 
-		<script>
-			$(".importance").click(function() {
-				checked();
-			});
-			
-			var checked = function() {
-				if ($(".importance").is(":checked")) {
-					$(".classes").show();
-				} else {
-					$(".classes").hide();
-				}
-			}
-		</script>
+								<label class="marks"><input type="radio"
+									th:field="*{mark}" value="crtice" /> <span
+									th:utext="#{newNote.form.lines}"></span></label></td>
+						</tr>
 
-		<div>
-			<table class="table table-sm info-table">
-				<thead class="thead-default">
-					<tr>
-						<th th:utext="#{newNote.table.notebook}"></th>
-						<th th:utext="#{newNote.table.numberOfNotes}"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="elem : ${counter}">
-						<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
-							th:text="${elem.key}">Key</td>
-						<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
-							th:text="${elem.value}">Value</td>
-					</tr>
-				</tbody>
-			</table>
+						<tr>
+							<td></td>
+							<td><input type="submit" name="saveButton"
+								th:value="#{newNote.form.save}" class="btn btn-success" /> <a
+								class="btn btn-warning" th:href="@{/deleteForm}"> <span
+									th:utext="#{newNote.form.delete}"></span>
+							</a></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+
+			<div class="col-sm-5 col-sm-offset-1">
+				<table class="table table-sm stat-table">
+					<thead class="thead-inverse">
+						<tr>
+							<th th:utext="#{newNote.table.notebook}"></th>
+							<th th:utext="#{newNote.table.numberOfNotes}"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="elem : ${counter}">
+							<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
+								th:text="${elem.key}">Key</td>
+							<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
+								th:text="${elem.value}">Value</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
+
+	<script>
+		$("#important").click(function() {
+			console.log("clicked");
+			checked();
+		});
+
+		var checked = function() {
+			if ($("#important").is(":checked")) {
+				$(".marks").show();
+			} else {
+				$(".marks").hide();
+			}
+		}
+	</script>
 </body>
 </html>

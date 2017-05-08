@@ -1,55 +1,61 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
-<head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Preview Note</title>
+<head>
+<title th:utext="#{previewNote.title}">Tab Title</title>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css"
-	th:href="@{/resources/bootstrap.min.css}" />
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-	<table class="table table-bordered info-table">
-		<tr>
-			<td>Korisnik:</td>
-			<td th:text="${note.user.fullName}"></td>
-		</tr>
-		<tr>
-			<td>Bilježnica:</td>
-			<td th:text="${note.notebook.title}"></td>
-		</tr>
-		<tr>
-			<td>Naslov:</td>
-			<td th:text="${note.header}"></td>
-		</tr>
-		<tr>
-			<td>Tekst:</td>
-			<td th:text="${note.text}"></td>
-		</tr>
-		<tr>
-			<td>Klasa:</td>
-			<td th:text="${note.klasa}">-</td>
-		</tr>
-		<tr>
-			<td>Važno:</td>
-			<td th:text="${note.importance} == true ? 'DA' : 'NE'"></td>
-			<!-- th:text="'Važno: ' + ( (${note.importance} == true) ? 'DA' : 'NE')" -->
-		</tr>
-		<tr>
-			<td><p><a th:href="@{/newNote}">
-					<button class="btn btn-warning">Izmijeni bilješku</button>
-			</a></p></td>
-			<td>
-				<form action="saveNote" method="POST">
-					<input type="submit" name="saveNote" value="Spremi bilješku"
-						class="btn btn-success">
-				</form>
-			</td>
-		</tr>
-	</table>
+	<div th:insert="~{fragments/menu :: full}"></div>
+
+	<div class="previewNote col-sm-6 col-sm-offset-3">
+		<table class="table table-bordered previewTable">
+			<tr>
+				<td th:utext="#{newNote.form.user}"></td>
+				<td th:text="${note.user.fullName}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{newNote.form.notebook}"></td>
+				<td th:text="${note.notebook.title}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{newNote.form.title}"></td>
+				<td th:text="${note.header}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{newNote.form.text}"></td>
+				<td th:text="${note.text}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{previewNote.table.important}"></td>
+				<td
+					th:text="${note.important} == true ? 
+				(${note.mark} != null ? #{previewNote.table.yes} + ' - ' + ${note.mark} : #{previewNote.table.yes}) : 'NE'"></td>
+				<!-- th:text="'Važno: ' + ( (${note.importance} == true) ? 'DA' : 'NE')" -->
+			</tr>
+			<tr>
+				<td><a class="btn" th:href="@{/newNote}">
+						<button class="btn btn-warning"
+							th:utext="#{previewNote.table.editNote}"></button>
+				</a></td>
+				<td>
+					<form action="saveNote" method="POST">
+						<input type="submit" name="saveNote"
+							th:value="#{previewNote.table.saveNote}" class="btn btn-success">
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 </body>
 </html>

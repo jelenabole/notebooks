@@ -14,7 +14,7 @@
 			" /> <intercept-url pattern="/odabirKolegija.html" access="hasAnyRole('ROLE_STUDENT', 
 			'ROLE_ADMIN')" /> -->
 		<form-login login-page='/login' default-target-url="/newNote"
-			authentication-failure-url="/login-error" />
+			authentication-failure-url="/login?error=true" />
 		<logout logout-success-url="/login?logout=true" />
 		<csrf disabled="true"/>
 	</http>

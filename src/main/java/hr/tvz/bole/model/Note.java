@@ -1,39 +1,26 @@
 package hr.tvz.bole.model;
 
+import hr.tvz.bole.form.NewNoteForm;
+
 public class Note {
 	User user;
 	Notebook notebook;
 	String header;
 	String text;
-	Boolean importance;
-	public String getKlasa() {
-		return klasa;
-	}
-
-	public void setKlasa(String klasa) {
-		this.klasa = klasa;
-	}
-
-	String klasa;
+	Boolean important;
+	String mark;
 
 	public Note() {
 	}
 
-	public Note(User user, Notebook notebook, String header, String text, Boolean importance, String klasa) {
-		this.user = user;
-		this.notebook = notebook;
-		this.header = header;
-		this.text = text;
-		this.importance = importance;
-		this.klasa = klasa;
-	}
-
-	public Boolean getImportance() {
-		return importance;
-	}
-
-	public void setImportance(Boolean importance) {
-		this.importance = importance;
+	// XXX - prebacit u mapper:
+	public Note(NewNoteForm newNoteForm) {
+		this.user = newNoteForm.getUser();
+		this.notebook = newNoteForm.getNotebook();
+		this.header = newNoteForm.getHeader();
+		this.text = newNoteForm.getText();
+		this.important = newNoteForm.getImportant() != null;
+		this.mark = newNoteForm.getMark();
 	}
 
 	public User getUser() {
@@ -66,5 +53,21 @@ public class Note {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public Boolean getImportant() {
+		return important;
+	}
+
+	public void setImportant(Boolean important) {
+		this.important = important;
+	}
+
+	public String getMark() {
+		return mark;
+	}
+
+	public void setMark(String mark) {
+		this.mark = mark;
 	}
 }
