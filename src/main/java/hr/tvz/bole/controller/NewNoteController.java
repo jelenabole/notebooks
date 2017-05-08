@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -49,31 +48,27 @@ public class NewNoteController {
 	}
 
 	@GetMapping("/newNote")
-	public String getNewForm(Model model) {
+	public String newNoteForm(Model model) {
 		model.addAttribute("userList", appService.findAllUsers());
 		model.addAttribute("notebookList", appService.findAllNotebooks());
-
 		return "newNote";
 	}
 
 	@PostMapping("/newNote")
-	// XXX - zbog validacije sam morala ostaviti newNoteForm kao argument
-	public String previewAndValidateForm(@Valid NewNoteForm newNoteForm, BindingResult result, Model model) {
-
+	public String processForm(@Valid NewNoteForm newNoteForm, BindingResult result, Model model) {
+		
 		// get user info:
 		User noteUser = appService.findUserById(newNoteForm.getUserId());
-		// XXX - 2 uvjeta za provjeru, radi razlièitih grešaka
-		if (newNoteForm.getUserId() != null && noteUser == null) {
+		if (noteUser == null && newNoteForm.getUserId() != null) {
 			result.rejectValue("userId", "userId.wrongId");
 		}
 
 		// get notebook info:
 		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
-		if (newNoteForm.getNotebookId() != null && noteNotebook == null) {
+		if (noteNotebook == null && newNoteForm.getNotebookId() != null) {
 			result.rejectValue("notebookId", "notebook.wrongId");
 		}
 
-		// check errors:
 		if (result.hasErrors()) {
 			model.addAttribute("userList", appService.findAllUsers());
 			model.addAttribute("notebookList", appService.findAllNotebooks());
@@ -83,52 +78,61 @@ public class NewNoteController {
 		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText());
 		model.addAttribute("note", newNote);
 
-		return "previewNote";
+		return "notePreview";
 	}
 
-	// XXX - probati dohvatiti samo Note - veæ stvoren
-	@PostMapping("/saveNote")
-	public String saveForm(Model model) {
+	@GetMapping("/note")
+	public String previewForm(Model model) { // ne postoji NOTE u modelu!
+		System.out.println("note u modelu: " + model.asMap().get("note"));
+		
+		// potrebni podaci iz modela:
 		NewNoteForm newNoteForm = (NewNoteForm) model.asMap().get("newNoteForm");
-		// potrebno zbog refresha stranice:
-		if (newNoteForm.getHeader() == null) { // form je obrisan
-			System.out.println("newNote ne postoji");
-			return "redirect:/newNote";
-		}
-
-		// Note objekt - validacije preskoèene:
-		User noteUser = appService.findUserById(newNoteForm.getUserId());
-		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
-		Note note = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText());
-		model.addAttribute("note", note);
-
-		// promjena countera i lastChanged:
 		@SuppressWarnings("unchecked")
 		Map<String, Integer> counter = (Map<String, Integer>) model.asMap().get("counter");
-		String lastChanged = (String) model.asMap().get("lastChanged");
 
-		String title = noteNotebook.getTitle();
-		counter.put(title, counter.get(title) + 1);
-		lastChanged = title;
-		model.addAttribute("lastChanged", lastChanged);
+		// TODO - nepotrebne provjere, veæ su napravljene na ekranu ispred..
+		User noteUser = appService.findUserById(newNoteForm.getUserId());
+		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
+		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText());
+		model.addAttribute("note", newNote);
 
-		// XXX - forma je resetirana na sljedeæi naèin:
+		// updateNumberOfNotes(newNoteForm.getHeader());
+
+		// promjena countera (broji bilješke u bilježnicama)
+		// lastChanged = oznaèava zadnji promijenjeni objekt
+		counter.put(noteNotebook.getTitle(), counter.get(noteNotebook.getTitle()) + 1);
+		model.addAttribute("lastChanged", noteNotebook.getTitle());
+
+		// TODO - sprema se u bazu, potrebno obrisati postojeæi objekt:
+		// objekt je inicijaliziran preko @ModelAttribute funkcije gore, a briše
+		// se na ovaj naèin:
 		model.addAttribute("newNoteForm", new NewNoteForm());
 
-		return "saveNote";
+		return "note";
 	}
+	
+	@PostMapping("/note")
+	public String saveForm(@ModelAttribute Note note, Model model) { // ne postoji NOTE u modelu!
+		// potrebni podaci iz modela - counter:
+		@SuppressWarnings("unchecked")
+		Map<String, Integer> counter = (Map<String, Integer>) model.asMap().get("counter");
 
-	// XXX - lastChanged se pošalje kao get objekt (u linku) ???
-	@GetMapping("/saveNote")
-	public String redirect() {
-		return "redirect:/newNote";
-	}
+		// updateNumberOfNotes(newNoteForm.getHeader());
+		if (note != null) {
+			System.out.println(note);
+			System.out.println(note.getNotebook());
+			System.out.println(note.getHeader());
+		}
+		
+		counter.put(note.getNotebook().getTitle(), counter.get(note.getNotebook().getTitle()) + 1);
+		model.addAttribute("lastChanged", note.getNotebook().getTitle());
 
-	@GetMapping("/deleteForm")
-	public String deleteForm(Model model) {
 		model.addAttribute("newNoteForm", new NewNoteForm());
-		return "redirect:/newNote";
+
+		return "note";
 	}
+
+	// TODO - prenijeti na notePreview, zatim na note i obrisati objekt
 
 	@GetMapping("/end-session")
 	public String endSession(SessionStatus status) {
@@ -136,36 +140,4 @@ public class NewNoteController {
 		return "redirect:/newNote";
 	}
 
-	// XXX - sa ovim sessionAtributima mi ponekad piše u linku:
-	// XXX - /newNote;jsessionid=8459AD99D1877D920376F186F90E66BD
-	@PostMapping("/saveNote-druga")
-	public String saveFormDrugaTest(@SessionAttribute NewNoteForm newNoteForm,
-			@SessionAttribute Map<String, Integer> counter, @SessionAttribute String lastChanged,
-			@ModelAttribute Note note, Model model) {
-
-		if (newNoteForm == null) { // form = obrisan
-			return "redirect:/newNote";
-		}
-
-		if (note != null) {
-			// XXX - note nije null, ali podaci unutar njega jesu
-			System.out.println(note); // note je u obliku model.Note@527283de
-			System.out.println("naslov (string): " + note.getHeader());
-			System.out.println("bilježnica (objekt): " + note.getNotebook());
-		}
-
-		User noteUser = appService.findUserById(newNoteForm.getUserId());
-		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
-		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText());
-		model.addAttribute("note", newNote);
-
-		String title = noteNotebook.getTitle();
-		counter.put(title, counter.get(title) + 1);
-		lastChanged = title;
-		model.addAttribute("lastChanged", lastChanged);
-
-		model.addAttribute("newNoteForm", new NewNoteForm());
-
-		return "saveNote";
-	}
 }

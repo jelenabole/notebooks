@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>View Saved Form</title>
+<title>Note</title>
 <link rel="stylesheet" type="text/css"
 	href="<spring:url value="/resources/bootstrap.min.css" />">
 <link rel="stylesheet" type="text/css"

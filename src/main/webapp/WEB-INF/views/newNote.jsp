@@ -73,7 +73,7 @@
 				<td><input type="submit" name="saveButton" value="Spremi"
 					class="btn btn-success"> <input type="button"
 					name="deleteButton"
-					onclick="window.location.href='<spring:url value="/deleteForm" />';"
+					onclick="window.location.href='<spring:url value="/newNote" />';"
 					value="Obriši" class="btn btn-warning"></td>
 			</tr>
 		</table>

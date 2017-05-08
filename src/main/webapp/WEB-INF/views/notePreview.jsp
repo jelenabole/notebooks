@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Preview Note</title>
+<title>Note</title>
 <link rel="stylesheet" type="text/css"
 	href="<spring:url value="/resources/bootstrap.min.css" />">
 <link rel="stylesheet" type="text/css"
@@ -38,11 +38,13 @@
 				class="btn btn-warning"></td>
 			<td>
 
-				<form action="saveNote" method="POST">
+				<form action="note" method="POST">
 					<form:hidden path="note" />
-					<input type="submit" name="saveNote" value="Spremi bilješku"
-						class="btn btn-success">
-				</form>
+					<input type="hidden" id="something" name="something" value="some">
+					<input type="submit">
+				</form> <input type="button" name="saveNote" value="Spremi bilješku"
+				onclick="window.location.href='<spring:url value="/note" />';"
+				class="btn btn-success">
 			</td>
 		</tr>
 	</table>
