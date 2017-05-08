@@ -21,7 +21,7 @@ import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
 import hr.tvz.bole.service.AppService;
 
-@SessionAttributes({ "newNoteForm", "counter", "lastChanged" })
+@SessionAttributes({ "newNoteForm", "counter", "lastChanged", "noteImportance" })
 @Controller
 public class NewNoteController {
 
@@ -31,6 +31,15 @@ public class NewNoteController {
 	@ModelAttribute("lastChanged")
 	public String getLastChanged() {
 		return "";
+	}
+
+	@ModelAttribute("noteImportance")
+	public Map<String, Integer> getImportantNotes() {
+		Map<String, Integer> importance = new HashMap<String, Integer>();
+
+		importance.put("Važne bilješke", 0);
+		importance.put("Nevažne bilješke", 0);
+		return importance;
 	}
 
 	@ModelAttribute("newNoteForm")
@@ -48,96 +57,96 @@ public class NewNoteController {
 	}
 
 	@GetMapping("/newNote")
-	public String newNoteForm(Model model) {
+	public String getNewForm(Model model) {
 		model.addAttribute("userList", appService.findAllUsers());
 		model.addAttribute("notebookList", appService.findAllNotebooks());
+
 		return "newNote";
 	}
 
 	@PostMapping("/newNote")
-	public String processForm(@Valid NewNoteForm newNoteForm, BindingResult result, Model model) {
-		
+	public String previewAndValidateForm(@Valid NewNoteForm newNoteForm, BindingResult result, Model model) {
+
 		// get user info:
 		User noteUser = appService.findUserById(newNoteForm.getUserId());
-		if (noteUser == null && newNoteForm.getUserId() != null) {
+		if (!newNoteForm.getUserId().isEmpty() && noteUser == null) {
 			result.rejectValue("userId", "userId.wrongId");
 		}
 
 		// get notebook info:
 		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
-		if (noteNotebook == null && newNoteForm.getNotebookId() != null) {
+		if (!newNoteForm.getNotebookId().isEmpty() && noteNotebook == null) {
 			result.rejectValue("notebookId", "notebook.wrongId");
 		}
 
+		// check errors:
 		if (result.hasErrors()) {
 			model.addAttribute("userList", appService.findAllUsers());
 			model.addAttribute("notebookList", appService.findAllNotebooks());
 			return "newNote";
 		}
 
-		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText());
+		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText(),
+				newNoteForm.getImportance() != null);
 		model.addAttribute("note", newNote);
 
-		return "notePreview";
+		return "previewNote";
 	}
 
-	@GetMapping("/note")
-	public String previewForm(Model model) { // ne postoji NOTE u modelu!
-		System.out.println("note u modelu: " + model.asMap().get("note"));
-		
-		// potrebni podaci iz modela:
+	@PostMapping("/saveNote")
+	public String saveForm(Model model) {
 		NewNoteForm newNoteForm = (NewNoteForm) model.asMap().get("newNoteForm");
-		@SuppressWarnings("unchecked")
-		Map<String, Integer> counter = (Map<String, Integer>) model.asMap().get("counter");
+		// potrebno zbog refresha stranice - form obrisan:
+		if (newNoteForm.getHeader() == null) {
+			return "redirect:/newNote";
+		}
 
-		// TODO - nepotrebne provjere, veæ su napravljene na ekranu ispred..
+		@SuppressWarnings("unchecked")
+		Map<String, Integer> noteImportance = (Map<String, Integer>) model.asMap().get("noteImportance");
+		if (newNoteForm.getImportance() == null) {
+			noteImportance.put("Nevažne bilješke", noteImportance.get("Nevažne bilješke") + 1);
+		} else {
+			noteImportance.put("Važne bilješke", noteImportance.get("Važne bilješke") + 1);
+		}
+		model.addAttribute("noteImportance", noteImportance);
+
+		// Note objekt - validacije preskoæene:
 		User noteUser = appService.findUserById(newNoteForm.getUserId());
 		Notebook noteNotebook = appService.findNotebookById(newNoteForm.getNotebookId());
-		Note newNote = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText());
-		model.addAttribute("note", newNote);
+		Note note = new Note(noteUser, noteNotebook, newNoteForm.getHeader(), newNoteForm.getText(),
+				newNoteForm.getImportance() != null);
 
-		// updateNumberOfNotes(newNoteForm.getHeader());
+		model.addAttribute("note", note);
 
-		// promjena countera (broji bilješke u bilježnicama)
-		// lastChanged = oznaèava zadnji promijenjeni objekt
-		counter.put(noteNotebook.getTitle(), counter.get(noteNotebook.getTitle()) + 1);
-		model.addAttribute("lastChanged", noteNotebook.getTitle());
-
-		// TODO - sprema se u bazu, potrebno obrisati postojeæi objekt:
-		// objekt je inicijaliziran preko @ModelAttribute funkcije gore, a briše
-		// se na ovaj naèin:
-		model.addAttribute("newNoteForm", new NewNoteForm());
-
-		return "note";
-	}
-	
-	@PostMapping("/note")
-	public String saveForm(@ModelAttribute Note note, Model model) { // ne postoji NOTE u modelu!
-		// potrebni podaci iz modela - counter:
+		// promjena countera i lastChanged:
 		@SuppressWarnings("unchecked")
 		Map<String, Integer> counter = (Map<String, Integer>) model.asMap().get("counter");
+		String lastChanged = (String) model.asMap().get("lastChanged");
 
-		// updateNumberOfNotes(newNoteForm.getHeader());
-		if (note != null) {
-			System.out.println(note);
-			System.out.println(note.getNotebook());
-			System.out.println(note.getHeader());
-		}
-		
-		counter.put(note.getNotebook().getTitle(), counter.get(note.getNotebook().getTitle()) + 1);
-		model.addAttribute("lastChanged", note.getNotebook().getTitle());
+		String title = noteNotebook.getTitle();
+		counter.put(title, counter.get(title) + 1);
+		lastChanged = title;
+		model.addAttribute("lastChanged", lastChanged);
 
 		model.addAttribute("newNoteForm", new NewNoteForm());
 
-		return "note";
+		return "saveNote";
 	}
 
-	// TODO - prenijeti na notePreview, zatim na note i obrisati objekt
+	@GetMapping("/saveNote")
+	public String redirect() {
+		return "redirect:/newNote";
+	}
+
+	@GetMapping("/deleteForm")
+	public String deleteForm(Model model) {
+		model.addAttribute("newNoteForm", new NewNoteForm());
+		return "redirect:/newNote";
+	}
 
 	@GetMapping("/end-session")
 	public String endSession(SessionStatus status) {
 		status.setComplete();
 		return "redirect:/newNote";
 	}
-
 }

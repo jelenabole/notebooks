@@ -1,0 +1,108 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Add new note</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+</head>
+
+<body>
+
+	<a th:href="@{/end-session}">
+		<button class="btn btn-success">Resetiraj statistiku</button>
+	</a>
+	<!-- <strong th:text="${noteImportance['Važne bilješke']}">fsdf</strong> -->
+
+	<table class="table table-sm info-table aditional-table">
+		<thead class="thead-default">
+			<tr>
+				<th></th>
+				<th>Broj unesenih bilješki</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="elem : ${noteImportance}">
+				<td th:text="${elem.key}">Key</td>
+				<td th:text="${elem.value}">Value</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="clear"></div>
+
+	<h1>Unos nove bilješke</h1>
+	<form method="POST" th:object="${newNoteForm}">
+		<table>
+			<tr>
+				<td><label for="userId">Korisnik:</label></td>
+				<td><select id="userId" th:field="*{userId}"
+					th:class="${#fields.hasErrors('userId')}? 'form-control has-error' : 'form-control'">
+						<option value="" selected>-- odaberi korisnika --</option>
+						<option th:each="user : ${userList}" th:value="${user.id}"
+							th:text="${user.fullName}" />
+				</select> <span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></span>
+			</tr>
+			<tr>
+				<td><label for="notebookId">Bilježnica:</label></td>
+				<td><select id="notebookId" th:field="*{notebookId}"
+					th:class="${#fields.hasErrors('notebookId')}? 'form-control has-error' : 'form-control'">
+						<option value="" selected>-- odaberi bilježnicu --</option>
+						<option th:each="notebook : ${notebookList}"
+							th:value="${notebook.id}" th:text="${notebook.title}" />
+				</select> <span th:if="${#fields.hasErrors('notebookId')}"
+					th:errors="*{notebookId}">error</span></td>
+			</tr>
+			<tr>
+				<td><label for="header">Naslov:</label></td>
+				<td><input id="header" th:field="*{header}"
+					th:class="${#fields.hasErrors('header')}? 'form-control has-error' : 'form-control'"
+					placeholder="Unesi naslov" /> <span
+					th:if="${#fields.hasErrors('header')}" th:errors="*{header}">error</span></td>
+			</tr>
+			<tr>
+				<td><label for="text">Tekst:</label></td>
+				<td><textarea id="text" th:field="*{text}"
+						th:class="${#fields.hasErrors('text')}? 'form-control has-error' : 'form-control'"
+						placeholder="Unesi tekst">
+						</textarea> <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}">error</span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="checkbox" th:field="*{importance}" value="da">
+					Važno</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" name="saveButton" value="Spremi"
+					class="btn btn-success"> <a th:href="@{/deleteForm}">
+						<button class="btn btn-warning">Obriši</button>
+				</a>
+		</table>
+	</form>
+
+	<div>
+		<table class="table table-sm info-table">
+			<thead class="thead-default">
+				<tr>
+					<th>Bilježnica</th>
+					<th>Broj unesenih bilješki</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="elem : ${counter}">
+					<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
+						th:text="${elem.key}">Key</td>
+					<td th:class="${lastChanged} == ${elem.key} ? table-warning : ''"
+						th:text="${elem.value}">Value</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>

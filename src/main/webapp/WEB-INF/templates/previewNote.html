@@ -1,0 +1,51 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Preview Note</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	th:href="@{/resources/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+</head>
+
+<body>
+
+	<table class="table table-bordered info-table">
+		<tr>
+			<td>Korisnik:</td>
+			<td th:text="${note.user.fullName}"></td>
+		</tr>
+		<tr>
+			<td>Bilježnica:</td>
+			<td th:text="${note.notebook.title}"></td>
+		</tr>
+		<tr>
+			<td>Naslov:</td>
+			<td th:text="${note.header}"></td>
+		</tr>
+		<tr>
+			<td>Tekst:</td>
+			<td th:text="${note.text}"></td>
+		</tr>
+		<tr>
+			<td>Važno:</td>
+			<td th:text="${note.importance} == true ? 'DA' : 'NE'"></td>
+			<!-- th:text="'Važno: ' + ( (${note.importance} == true) ? 'DA' : 'NE')" -->
+		</tr>
+		<tr>
+			<td><p><a th:href="@{/newNote}">
+					<button class="btn btn-warning">Izmijeni bilješku</button>
+			</a></p></td>
+			<td>
+				<form action="saveNote" method="POST">
+					<input type="submit" name="saveNote" value="Spremi bilješku"
+						class="btn btn-success">
+				</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

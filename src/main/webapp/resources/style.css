@@ -1,7 +1,11 @@
 @CHARSET "UTF-8";
 
 body {
-	padding: 2%;
+	padding: 1%;
+}
+
+.clear {
+	clear: both;
 }
 
 h1 {
@@ -49,6 +53,11 @@ td span {
 
 .info-table td:nth-child(1) {
 	font-weight: 600;
+}
+
+.aditional-table {
+	width: 30%;
+	float: right;
 }
 
 /**** PRIKAZ BILJEŠKE *********/
