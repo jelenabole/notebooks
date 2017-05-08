@@ -34,7 +34,7 @@
 
 <body onload="checked();">
 
-	<div th:insert="~{fragments/menu :: full}"></div>
+	<div th:insert="~{fragments/menu :: notes}"></div>
 
 	<div class="mainNote">
 		<div class="row">
@@ -91,7 +91,8 @@
 						<tr>
 							<td></td>
 							<td><label class="block"><input id="important"
-									type="checkbox" value="value" th:field="*{important}" /> <span
+									type="checkbox" value="1" th:field="*{important}"
+									th:checked="'true'" /> <span
 									th:utext="#{newNote.form.important}"></span></label> <!-- boje - ralzičite oznake -->
 
 								<label class="marks"><input type="radio"
@@ -130,11 +131,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="elem : ${counter}">
+						<tr th:each="elem : ${byNotebooks}">
 							<!-- th:class="${lastChanged} == ${elem.key} ? table-warning : ''" -->
-							<td th:style="${lastChanged} == ${elem.key} ? 'background-color:seashell' : ''"
+							<td
+								th:style="${lastChanged} == ${elem.key} ? 'background-color:seashell' : ''"
 								th:text="${elem.key}">Key</td>
-							<td th:style="${lastChanged} == ${elem.key} ? 'background-color:seashell' : ''"
+							<td
+								th:style="${lastChanged} == ${elem.key} ? 'background-color:seashell' : ''"
 								th:text="${elem.value}">Value</td>
 						</tr>
 					</tbody>
@@ -165,5 +168,35 @@
 			}
 		}
 	</script>
+	<div>
+		<table class="table table-striped">
+			<thead class="thead-inverse">
+				<tr>
+					<th th:utext="#{viewNotes.table.user}"></th>
+					<th th:utext="#{viewNotes.table.notebook}"></th>
+					<th th:utext="#{viewNotes.table.header}"></th>
+					<th th:utext="#{viewNotes.table.text}"></th>
+					<th th:utext="#{viewNotes.table.important}"></th>
+					<th>Promjena</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="note : ${listOfNotes}">
+					<td th:text="${note.user.fullName}"></td>
+					<td th:text="${note.notebook.title}"></td>
+					<td th:text="${note.header}"></td>
+					<td th:text="${note.text}"></td>
+					<td th:class="${note.mark}"><span
+						th:text="${note.important} ? #{previewNote.table.yes} : #{previewNote.table.no}"></span>
+						<span th:if="${note.mark} != null"
+						class="glyphicon glyphicon-heart"
+						th:style="'color:' + ${note.mark}"></span></td>
+					<td><a class="btn btn-info"
+						th:href="@{'/newNote/' + ${note.id}}"
+						th:text="${note.id} + 'edit'"></a>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

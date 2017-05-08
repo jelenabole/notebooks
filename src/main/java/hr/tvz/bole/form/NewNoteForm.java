@@ -9,6 +9,8 @@ import hr.tvz.bole.model.User;
 public class NewNoteForm {
 
 	// XXX - Thymeleaf vraća empty iz option-a, umjesto null (objekti su null)
+	Integer id;
+	
 	@NotNull
 	User user;
 	@NotNull
@@ -17,8 +19,17 @@ public class NewNoteForm {
 	String header;
 	@Size(min = 1)
 	String text;
+	
 	String important;
 	String mark;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public User getUser() {
 		return user;

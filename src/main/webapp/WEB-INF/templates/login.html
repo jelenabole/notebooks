@@ -15,12 +15,12 @@
 </head>
 
 <body class="fullHeight">
-	<div th:insert="~{fragments/menu :: basic}"></div>
+	<div th:insert="~{fragments/menu :: login}"></div>
 	
 	<div class="container">
 		<div class="mainLogin row vertical-center-row">
 			<div class="row">
-				<h1 th:utext="#{login.userLogin}"></h1>
+				<h1 th:utext="#{login.form.loginHeader}"></h1>
 
 				<div class="col-sm-5 col-sm-offset-3">
 					<form method="POST" th:object="${userForm}">
@@ -45,7 +45,7 @@
 									th:if="${#fields.hasErrors('password')}"
 									th:errors="*{password}">error</span></td>
 							</tr>
-							<tr th:if="${error}" class="error">
+							<tr th:if="${error}">
 								<td></td>
 								<td class="error" th:utext="#{login.loginError}"></td>
 							</tr>

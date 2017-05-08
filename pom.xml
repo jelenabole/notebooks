@@ -29,7 +29,7 @@
 		</dependency>
 
 
-		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+		<!-- JavaX and Hibernate Validations -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -64,6 +64,28 @@
 			<version>3.0.2.RELEASE</version>
 		</dependency>
 
+		<!-- LOGGER -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		
+		<!-- embedded H2 database -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.3.6.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.194</version>
+		</dependency>
 	</dependencies>
-
 </project>

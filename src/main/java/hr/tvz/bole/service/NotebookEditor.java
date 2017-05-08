@@ -2,15 +2,22 @@ package hr.tvz.bole.service;
 
 import java.beans.PropertyEditorSupport;
 
-import hr.tvz.bole.MockHelper;
-import hr.tvz.bole.model.Notebook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import hr.tvz.bole.model.Notebook;
+import hr.tvz.bole.repository.NotebookRepository;
+
+@Service
 public class NotebookEditor extends PropertyEditorSupport {
 
+	@Autowired
+	NotebookRepository notebookRepository;
+	
 	@Override
 	public void setAsText(String text) {
 		Notebook currentNotebook = null;
-		for (Notebook notebook : MockHelper.mockNotebookList()) {
+		for (Notebook notebook : notebookRepository.findAll()) {
 			if (notebook.getId().equals(Integer.parseInt(text))) {
 				currentNotebook = notebook;
 				break;

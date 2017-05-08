@@ -47,16 +47,16 @@
 		class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
 		<beans:property name="prefix" value="/WEB-INF/templates/" />
 		<beans:property name="suffix" value=".html" />
-		<beans:property name="templateMode" value="HTML5" />
+		<beans:property name="templateMode" value="HTML" />
 		<!-- added <beans:property name="cacheable" value="false" /> -->
 	</beans:bean>
 
 
-
 	<!-- Language bundles and interceptors -->
-	
+	<!-- autowire="byName" = autowire-a po id-u "messageSource" -->
 	<beans:bean id="messageSource"
-		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+		autowire="byName">
 		<beans:property name="basename" value="classpath:messages" />
 		<beans:property name="fallbackToSystemLocale" value="false" />
 		<beans:property name="defaultEncoding" value="UTF-8" />

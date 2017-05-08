@@ -1,10 +1,9 @@
-package hr.tvz.bole.service;
+package hr.tvz.bole;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import hr.tvz.bole.MockHelper;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
 
@@ -24,7 +23,7 @@ public class AppService {
 		try {
 			Integer id = Integer.parseInt(userId);
 			for (User user : MockHelper.mockUserList()) {
-				if (user.getId().equals(id)) {
+				if (user.getId() == id) {
 					noteUser = user;
 					break;
 				}
