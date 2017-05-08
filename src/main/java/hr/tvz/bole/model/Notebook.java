@@ -1,18 +1,15 @@
 package hr.tvz.bole.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Notebook {
 	Integer id;
-	String name;
+	String title;
 	String description;
 	
 	public Notebook () {}
 	
-	public Notebook(Integer id, String name, String description) {
+	public Notebook(Integer id, String title, String description) {
 		this.id = id;
-		this.name = name;
+		this.title = title;
 		this.description = description;
 	}
 	
@@ -22,11 +19,11 @@ public class Notebook {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public String getDescription() {
 		return description;

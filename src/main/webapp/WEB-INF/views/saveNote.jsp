@@ -6,34 +6,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Note</title>
+<title>View Saved Form</title>
 <link rel="stylesheet" type="text/css"
 	href="<spring:url value="/resources/bootstrap.min.css" />">
 <link rel="stylesheet" type="text/css"
 	href="<spring:url value="/resources/style.css" />">
 </head>
 <body>
+	<div>
+		<p>
+			Napisao: <span>${note.user.fullName} (${note.user.username})</span> <br />
+			Bilježnica: <span> ${note.notebook.title} -
+				${note.notebook.description}</span>
+		</p>
+	</div>
 
 	<h1>${note.header}</h1>
 	<div>
-		<p>${note.text}</p>
-	</div>
-	<div>
-		<p>
-			Napisao: <span>${note.user.fullName}</span>, korisničko ime: <span>${note.user.username}</span>
-		</p>
-		<p>
-			Nalazite se u bilježnici <span title="${note.notebook.description}">
-				${note.notebook.name}</span>
-		</p>
+		<p class="centered">${note.text}</p>
 	</div>
 
 	<a href='<spring:url value="/newNote" />'>Povratak</a>
-	<a href="${pageContext.servletContext.contextPath}/newNote">
-		Povratak 2 </a>
-
-	<spring:url value="/newNote" context="labos1" var="url" />
-	<a href="${url}">Povratak 3</a>
-
 </body>
 </html>

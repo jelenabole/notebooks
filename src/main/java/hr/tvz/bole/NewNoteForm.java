@@ -1,16 +1,17 @@
 package hr.tvz.bole;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class NewNoteForm {
 	
-	@NotEmpty(message="Polje ne smije biti prazno")
+	@NotNull
 	String userId;
-	@NotEmpty(message="Polje ne smije biti prazno")
+	@NotNull
 	String notebookId;
-	@NotEmpty(message="Polje ne smije biti prazno")
+	@Size(min=1)
 	String header;
-	@NotEmpty(message="Polje ne smije biti prazno")
+	@Size(min=1)
 	String text;
 	
 	public void setUserId(String userId) {
@@ -34,6 +35,7 @@ public class NewNoteForm {
 	public String getText() {
 		return text;
 	}
+
 	public void setText(String text) {
 		this.text = text;
 	}

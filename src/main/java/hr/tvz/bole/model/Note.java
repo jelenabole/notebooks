@@ -1,8 +1,5 @@
 package hr.tvz.bole.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Note {
 	User user;
 	Notebook notebook;

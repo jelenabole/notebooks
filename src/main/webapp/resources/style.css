@@ -3,13 +3,13 @@
 body {
 	padding: 2%;
 }
+
 h1 {
 	text-align: center;
 	margin: 3%;
 }
 
 /***** FORMA ZA UNOS ******/
-
 table {
 	margin: 0 auto;
 }
@@ -26,8 +26,7 @@ label {
 	font-weight: 500;
 }
 
-input[type="submit"] {
-	display: block;
+input[type="submit"], form input[type="button"] {
 	margin: 3% auto;
 }
 
@@ -40,11 +39,23 @@ td span {
 	margin-left: 3%;
 }
 
-/**** PRIKAZ BILJEŠKE *********/
+.info-table {
+	width: 50%;
+}
 
+.info-table td:nth-child(2), .info-table th:nth-child(2) {
+	text-align: center;
+}
+
+.info-table td:nth-child(1) {
+	font-weight: 600;
+}
+
+/**** PRIKAZ BILJEŠKE *********/
 span {
 	font-weight: 600;
 }
+
 p span {
 	font-weight: bold;
 }
@@ -52,5 +63,3 @@ p span {
 .centered {
 	text-align: center;
 }
-
-
