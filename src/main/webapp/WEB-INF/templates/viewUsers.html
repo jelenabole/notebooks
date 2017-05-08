@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title th:utext="#{title.viewUsers}">Tab Title</title>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
+<script type="text/javascript" th:src="@{/resources/jquery320.js}"></script>
+<script type="text/javascript"
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<div th:insert="~{fragments/menu :: viewNotes}"></div>
+
+	<div class="viewNotes">
+		<table class="table table-striped">
+			<thead class="thead-inverse">
+				<tr>
+					<th th:utext="#{table.id}"></th>
+					<th th:utext="#{user.fullName}"></th>
+					<th th:utext="#{user.username}"></th>
+					<th th:utext="#{user.enabled}"></th>
+					<th th:utext="#{user.roles}"></th>
+					<th th:utext="#{table.actions}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.id}"></td>
+					<td th:text="${user.fullName}"></td>
+					<td th:text="${user.username}"></td>
+					<td th:text="${user.enabled} ? 'DA' : 'NE'"></td>
+					<td>Roles * TODO</td>
+					<td><a class="btn btn-warning"
+						th:href="@{'/viewUsers/' + ${user.id}}" th:text="#{button.delete}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a class="btn btn-info floatingButton" th:href="@{/newNote}"
+			th:utext="#{button.return}"></a>
+	</div>
+
+</body>
+</html>

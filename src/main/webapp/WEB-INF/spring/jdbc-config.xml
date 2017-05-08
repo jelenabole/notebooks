@@ -20,4 +20,6 @@
 		c:_-ref="jdbcTemplate" />
 	<bean class="hr.tvz.bole.repository.jdbc.JdbcUserRepository" c:_-ref="jdbcTemplate" />
 	<bean class="hr.tvz.bole.repository.jdbc.JdbcNoteRepository" c:_-ref="jdbcTemplate" />
+	<bean class="hr.tvz.bole.repository.jdbc.JdbcRoleRepository" c:_-ref="jdbcTemplate" />
+	
 </beans> 

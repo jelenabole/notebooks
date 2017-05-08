@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,22 +18,24 @@ import hr.tvz.bole.repository.NoteRepository;
 
 public class JdbcNoteRepository implements NoteRepository {
 
-	private static Logger logger = LoggerFactory.getLogger(JdbcNoteRepository.class);
 	private JdbcTemplate jdbcTemplate;
 
 	public JdbcNoteRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	// upiti:
 	// XXX - user = username, notebook = title
-	private static final String SELECT_NOTE = "SELECT notes.id, notes.header, notes.text, notes.important, notes.mark, "
+	static final String SELECT_NOTE = "SELECT notes.id, notes.header, notes.text, notes.important, notes.mark, "
 			+ "notebooks.id as notebookId, notebooks.title, notebooks.description, "
 			+ "users.id as userId, users.name, users.surname, users.username " + "FROM notes, notebooks, users "
 			+ "WHERE notes.notebook = notebooks.title AND notes.user = users.username";
-	private static final String SELECT_NOTE_BY_ID = SELECT_NOTE + " AND notes.id = ?";
-	private static final String SELECT_BILJESKA_BY_USERNAME = SELECT_NOTE + " AND notes.user = ?";
-	private static final String UPDATE_NOTE = "UPDATE notes SET header = ?, text = ?, user = ?, notebook = ?, important = ?, mark = ? WHERE id = ?";
+	static final String SELECT_NOTE_BY_ID = SELECT_NOTE + " AND notes.id = ?";
+	static final String SELECT_NOTE_BY_USERNAME = SELECT_NOTE + " AND notes.user = ?";
+	static final String UPDATE_NOTE = "UPDATE notes SET header = ?, text = ?, user = ?, notebook = ?, important = ?, mark = ? WHERE id = ?";
+	static final String DELETE_NOTE = "DELETE FROM notes WHERE id = ?";
+	static final String DELETE_NOTE_BY_NOTEBOOK = "DELETE FROM notes WHERE notebook = ?";
+	static final String DELETE_NOTE_BY_USERNAME = "DELETE FROM notes WHERE user = ?";
+	static final String COUNT_NOTES = "SELECT COUNT(*) FROM notes WHERE notebook = ?";
 
 	@Override
 	public List<Note> findAll() {
@@ -45,36 +45,29 @@ public class JdbcNoteRepository implements NoteRepository {
 	@Override
 	public Note findOne(Integer id) {
 		try {
-			logger.info("DB - find one by id: " + id);
 			return jdbcTemplate.queryForObject(SELECT_NOTE_BY_ID, new NoteRowMapper(), id);
-			// TODO - dodati ovakve greške na druga mjesta:
 		} catch (EmptyResultDataAccessException e) {
-			logger.warn("note not found - id: " + id);
 			return null;
 		}
 	}
 
 	@Override
 	public List<Note> findByUsername(String username) {
-		return jdbcTemplate.query(SELECT_BILJESKA_BY_USERNAME, new NoteRowMapper(), username);
+		return jdbcTemplate.query(SELECT_NOTE_BY_USERNAME, new NoteRowMapper(), username);
+	}
+	
+	@Override
+	public Integer getNumberOfNotes(String title) {
+		return jdbcTemplate.queryForObject(COUNT_NOTES, Integer.class, title);
+	}
+	
+	@Override
+	public Integer getNumberOfNotesForUser(String title, String username) {
+		return jdbcTemplate.queryForObject(COUNT_NOTES + " AND user = ?", Integer.class, title, username);
 	}
 
 	@Override
-	public Note save(Note note) {
-		Integer noteId = insertNoteAndReturnId(note);
-		logger.info("save new note - id: " + noteId);
-		note.setId(noteId);
-		return note;
-	}
-
-	@Override
-	public Integer update(Note note) {
-		Integer noteId = updateAndReturnId(note);
-		logger.info("update note - id: " + note.getId());
-		return noteId;
-	}
-
-	private Integer insertNoteAndReturnId(Note note) {
+	public Integer save(Note note) {
 		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("notes");
 		jdbcInsert.setGeneratedKeyName("id");
 
@@ -85,18 +78,29 @@ public class JdbcNoteRepository implements NoteRepository {
 		args.put("notebook", note.getNotebook().getTitle());
 		args.put("important", note.getImportant());
 		args.put("mark", note.getMark());
-		Integer noteId = jdbcInsert.executeAndReturnKey(args).intValue();
-		return noteId;
+
+		return jdbcInsert.executeAndReturnKey(args).intValue();
 	}
 
-	private Integer updateAndReturnId(Note note) {
+	@Override
+	public Integer update(Note note) {
 		return jdbcTemplate.update(UPDATE_NOTE, note.getHeader(), note.getText(), note.getUser().getUsername(),
 				note.getNotebook().getTitle(), note.getImportant(), note.getMark(), note.getId());
 	}
 
 	@Override
 	public void delete(Integer id) {
-		jdbcTemplate.update("DELETE FROM notes WHERE id = ?", id);
+		jdbcTemplate.update(DELETE_NOTE, id);
+	}
+
+	@Override
+	public void deleteByNotebook(String title) {
+		jdbcTemplate.update(DELETE_NOTE_BY_NOTEBOOK, title);
+	}
+
+	@Override
+	public void deleteByUsername(String username) {
+		jdbcTemplate.update(DELETE_NOTE_BY_USERNAME, username);
 	}
 
 	private static final class NoteRowMapper implements RowMapper<Note> {

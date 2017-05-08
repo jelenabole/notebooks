@@ -1,9 +1,9 @@
-INSERT INTO users (name, surname, username, password, enabled) VALUES ('Ivo', 'Ivić', 'iivic', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, password, enabled) VALUES ('Marko', 'Markić', 'mmarkic', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, password, enabled) VALUES ('Pero', 'Perić', 'pperic', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, password, enabled) VALUES ('Adminko', 'Adminić', 'adminko','$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, password, enabled) VALUES ('Admin', 'Admin', 'admin', '$2a$10$g8ihG4QVH.pdzpAk0PuCLOiRaeCQus7bDPDtqcLIw3J87cUP5pBv2', true);
-INSERT INTO users (name, surname, username, password, enabled) VALUES ('User', 'resU', 'user', '$2a$10$zp6HrNn7okDuphq38pZJie1glfzjLfOvpkpirIVJzldWufVHNFh2y', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Ivo', 'Ivić', 'iivic', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Marko', 'Markić', 'mmarkic', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Pero', 'Perić', 'pperic', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Adminko', 'Adminić', 'adminko', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Admin', 'Admin', 'admin', 'admin@tvz.hr', '$2a$10$g8ihG4QVH.pdzpAk0PuCLOiRaeCQus7bDPDtqcLIw3J87cUP5pBv2', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('User', 'resU', 'user', 'user@tvz.hr', '$2a$10$zp6HrNn7okDuphq38pZJie1glfzjLfOvpkpirIVJzldWufVHNFh2y', true);
 
 INSERT INTO user_roles (username, role) VALUES ('iivic', 'ROLE_USER');
 INSERT INTO user_roles (username, role) VALUES ('mmarkic', 'ROLE_USER');

@@ -120,32 +120,15 @@ h1 {
 	padding-left: 3%;
 }
 
-/*
-.clear {
-	clear: both;
+/*** MAIN REGISTER - sa mainLogin ***/
+.mainRegister td {
+	vertical-align: top;
 }
 
-.float-right {
-	float: right;
+.mainRegister label {
+	padding-top: 4%;
 }
 
-*/
-
-/**** PRIKAZ BILJEŠKE *********/
-
-/*
-.main span {
-	font-weight: 600;
-}
-
-p span {
-	font-weight: bold;
-}
-
-
-
-
-*/
 
 /*** dodatne klase za uređivanje bilješki ***/
 .savedNote { /* defaultna - mijenjati boju */

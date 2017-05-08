@@ -6,30 +6,31 @@ public class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	int id;
+	Integer id;
 	String username;
 	String role;
-	boolean admin;
 
 	public UserRole() {
 	};
 
-	public UserRole(String username, boolean admin) {
-		this.username = username;
-		this.admin = admin;
-	};
-
-	public UserRole(int id, String username, String role) {
+	public UserRole(Integer id, String username, String role) {
 		this.id = id;
 		this.username = username;
 		this.role = role;
 	}
+	
+	//stvaranje UserRole za session:
+	public UserRole(String username, boolean hasAdminRole) {
+		this.username = username;
+		if (hasAdminRole)
+			role = "ROLE_ADMIN";
+	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -50,16 +51,12 @@ public class UserRole implements Serializable {
 	}
 
 	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+		return role == "ROLE_ADMIN";
 	}
 
 	@Override
 	public String toString() {
-		return "USER ROLE - id: " + id + " - username: " + username + " - role: " + role + " - admin: " + admin;
+		return "USER ROLE - id: " + id + " - username: " + username + " - role: " + role;
 
 	}
 }

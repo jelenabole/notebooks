@@ -9,6 +9,7 @@ public class Notebook implements Serializable {
 	Integer id;
 	String title;
 	String description;
+	Integer numberOfNotes;
 
 	public Notebook() {
 	}
@@ -47,6 +48,14 @@ public class Notebook implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getNumberOfNotes() {
+		return numberOfNotes;
+	}
+
+	public void setNumberOfNotes(Integer numberOfNotes) {
+		this.numberOfNotes = numberOfNotes;
 	}
 
 	@Override

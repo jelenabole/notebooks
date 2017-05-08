@@ -13,25 +13,31 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
+import hr.tvz.bole.exceptions.RoleExistsForUser;
 import hr.tvz.bole.exceptions.UserExistsException;
-import hr.tvz.bole.form.RegisterForm;
+import hr.tvz.bole.form.LoginForm;
 import hr.tvz.bole.form.UserForm;
+import hr.tvz.bole.form.mapper.UserMapper;
 import hr.tvz.bole.model.User;
-import hr.tvz.bole.model.UserRole;
-import hr.tvz.bole.repository.UserRepository;
+import hr.tvz.bole.service.impl.UserService;
 
 @Controller
 public class LoginController {
 
 	@Autowired
-	UserRepository userRepository;
+	UserService userService;
 
 	@GetMapping("/login")
-	public String showLogin(Model model, UserForm userForm, HttpServletRequest request) {
-		model.addAttribute("userForm", userForm);
+	public String showLogin(Model model, @ModelAttribute LoginForm loginForm, HttpServletRequest request) {
+		model.addAttribute("userForm", loginForm);
 		model.addAttribute("error", request.getParameter("error"));
 
 		return "login";
+	}
+
+	@GetMapping("/403")
+	public String accessDeninedHanadler(Model model) {
+		return "/error/403";
 	}
 
 	// Login form with error
@@ -45,51 +51,51 @@ public class LoginController {
 
 	@GetMapping("/register")
 	public String showRegistrationForm(WebRequest request, Model model) {
-		model.addAttribute("user", new RegisterForm());
-		
+		model.addAttribute("userForm", new UserForm());
+
 		// TODO - dohvatiti popis usera - provjera (obrisati):
-		model.addAttribute("users", userRepository.findAll());
+		model.addAttribute("users", userService.findAllUsers());
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@ModelAttribute("user") @Valid RegisterForm user, BindingResult result,
-			WebRequest request, Errors errors, Model model) {
+	public String registerUser(@Valid UserForm userForm, BindingResult result, WebRequest request, Errors errors,
+			Model model) {
 		// TODO - da li je webRequest i Errors = potrebno ?!
 
-		User registered = null;
-
-		
-		
+		if (userService.checkIfUserExists(userForm.getUsername())) {
+			result.rejectValue("username", "register.exception.userExists");
+		}
 		// provjeriti greške:
 		if (result.hasErrors()) {
-			//TODO - skužit kako dohvatiti samo prvu grešku od polja "password"
-			System.out.println(result.getErrorCount());
-			System.out.println(result.getAllErrors());
-			System.out.println(result.getGlobalError());
+			// TODO - prikazati samo jednu grešku na polju email:
+			if (result.getFieldErrorCount("email") == 2) {
+				System.out.println("prikaz obje greške - polje email");
+			}
+			model.addAttribute("users", userService.findAllUsers());
 			return "register";
 		}
 
 		// ako nema grešaka, provuć formu, da li user postoji:
+		User registered = null;
 		try {
-			registered = userRepository.save(mapRegisterFormToUser(user));
+			registered = userService.saveUser(UserMapper.mapUserFormToUser(userForm));
 		} catch (UserExistsException e) {
+			// TODO - pregledat greške:
+			System.out.println("greška - user postoji");
 			result.rejectValue("username", "register.exception.userExists");
+		} catch (RoleExistsForUser e) {
+			result.rejectValue("username", "register.exception.roleExists");
 		}
+
 		if (registered == null) {
-			// TODO - obrisati grešku (dupla kada username postoji):
-			result.rejectValue("username", "register.exception.registerError");
-			model.addAttribute("users", userRepository.findAll());
+			// TODO - obrisati grešku (nikada se ne bi trebala prikazati):
+			// result.reject("user", "register.exception.registerError");
+			model.addAttribute("users", userService.findAllUsers());
 			return "register";
 		} else {
-			model.addAttribute("userRole", new UserRole(user.getName(), userRepository.hasAdminRole(user.getName())));
 			return "redirect:/login";
 		}
-	}
-
-	// TODO - pass se zapisuje kao pass,pass
-	private User mapRegisterFormToUser(RegisterForm user) {
-		return new User(null, user.getName(), user.getSurname(), user.getUsername(), user.getPassword(), true);
 	}
 
 }
