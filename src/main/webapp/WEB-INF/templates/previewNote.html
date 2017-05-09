@@ -15,11 +15,11 @@
 
 <body>
 
-	<div th:insert="~{fragments/menu :: notes}"></div>
+	<div th:insert="~{fragments/menu :: newNote}"></div>
 
 	<div class="previewNote col-sm-6 col-sm-offset-3">
 		<table class="table table-bordered previewTable"
-			th:object="${newNoteForm}">
+			th:object="${noteForm}">
 			<tr>
 				<td th:utext="#{note.form.user}"></td>
 				<td th:text="*{user.fullName}"></td>
@@ -44,9 +44,9 @@
 				: #{previewNote.table.yes}) : #{previewNote.table.no}">
 				</td> -->
 				<td th:class="*{mark}"><span
-					th:text="*{important} != null ? #{table.yes} : #{table.no}"></span>
-					<span th:if="*{mark} != null" class="glyphicon glyphicon-heart"
-					th:style="'color:' + *{mark}"></span></td>
+					th:text="*{important?.important} ? #{table.yes} : #{table.no}"></span>
+					<span th:if="*{important?.important}"
+					class="glyphicon glyphicon-heart" th:style="'color:' + *{mark}"></span></td>
 			</tr>
 			<tr>
 				<td><a class="btn btn-warning" th:href="@{/newNote}"

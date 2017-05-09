@@ -17,7 +17,7 @@ import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.RoleForm;
 
 @Controller
-@SessionAttributes({ "userRole" })
+@SessionAttributes({ "user", "userRole" })
 public class ViewUsersController {
 
 	private static Logger logger = LoggerFactory.getLogger(ViewUsersController.class);

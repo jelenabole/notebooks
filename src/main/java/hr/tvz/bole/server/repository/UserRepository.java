@@ -24,9 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@SuppressWarnings("unchecked")
 	public User save(User user);
 
-	// XXX - updates only fields: name, surname, email
-	// public void update(User user);
-
 	@Modifying
 	@Transactional
 	@Query("UPDATE User SET enabled=true WHERE id=:id")

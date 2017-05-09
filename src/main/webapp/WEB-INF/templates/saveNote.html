@@ -15,11 +15,12 @@
 
 <body>
 
-	<div th:insert="~{fragments/menu :: notes}"></div>
+	<div th:insert="~{fragments/menu :: newNote}"></div>
 
 	<div class="row">
+		<!-- th:classappend="${note.mark.name}" -->
 		<div class="savedNote col-md-8 col-md-offset-2"
-			th:classappend="${note.mark}">
+			th:style="${note.mark?.style}">
 			<p th:object="${note}">
 				<span th:utext="#{note.form.user}"></span><span class="bold"
 					th:text="*{user.fullName} + ' (' + *{user.username} + ')'"></span>

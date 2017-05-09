@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import hr.tvz.bole.enums.NoteImportance;
 import hr.tvz.bole.model.Note;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
 import hr.tvz.bole.model.UserRole;
-import hr.tvz.bole.other.enums.NoteImportance;
-import hr.tvz.bole.other.enums.NoteMarks;
 import hr.tvz.bole.server.service.MessageService;
 import hr.tvz.bole.server.service.NoteService;
 import hr.tvz.bole.server.service.NotebookService;
@@ -35,10 +34,10 @@ import hr.tvz.bole.server.service.RoleService;
 import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.editors.NotebookEditor;
 import hr.tvz.bole.web.editors.UserEditor;
-import hr.tvz.bole.web.form.NewNoteForm;
+import hr.tvz.bole.web.form.NoteForm;
 
-@SessionAttributes({ "newNoteForm", "userRole", "byNotebooks", "byImportance" })
 @Controller
+@SessionAttributes({ "user", "noteForm", "userRole", "byNotebooks", "byImportance" })
 public class NewNoteController {
 
 	private static Logger logger = LoggerFactory.getLogger(NewNoteController.class);
@@ -70,9 +69,14 @@ public class NewNoteController {
 		return new UserRole();
 	}
 
-	@ModelAttribute("newNoteForm")
-	public NewNoteForm getNewNoteForm() {
-		return new NewNoteForm();
+	// @ModelAttribute("user")
+	// public UserProjection getCurrentUser() {
+	// return new UserProjection();
+	// }
+
+	@ModelAttribute("noteForm")
+	public NoteForm getNoteForm() {
+		return new NoteForm();
 	}
 
 	@ModelAttribute("byNotebooks")
@@ -90,79 +94,76 @@ public class NewNoteController {
 	}
 
 	@GetMapping("/newNote")
-	public String prepareNewForm(@ModelAttribute NewNoteForm newNoteForm, @ModelAttribute UserRole userRole,
-			Model model, Principal principal) {
+	public String prepareNewForm(@ModelAttribute NoteForm noteForm,
+			@ModelAttribute UserRole userRole, Model model, Principal principal) {
 
-		// provjeriti korisnika i zapisati u session:
-		UserRole role = new UserRole(userService.findOneByUsername(principal.getName()),
-				roleService.hasAdminRole(principal.getName()));
-		logger.info("GET - newNote - admin role: " + role.isAdmin());
-		model.addAttribute("userRole", role);
-
-		refreshForm(model, newNoteForm);
+		logger.info("GET - newNote");
+		refreshForm(model, noteForm);
 
 		return "newNote";
 	}
 
 	@GetMapping("/newNote/{id}")
-	public String loadExistingNote(@ModelAttribute NewNoteForm newNoteForm, @PathVariable int id, Model model) {
+	public String loadExistingNote(@ModelAttribute NoteForm noteForm, @PathVariable int id,
+			Model model) {
 		logger.info("GET - editNote - note id: " + id);
 
-		mapNoteToForm(newNoteForm, noteService.findOne(id));
-
+		model.addAttribute("noteForm", noteService.getOneAsForm(id));
 		return "redirect:/newNote";
 	}
 
 	@PostMapping("/newNote")
-	public String previewAndValidateForm(@Valid NewNoteForm newNoteForm, BindingResult result, Model model) {
+	public String previewAndValidateForm(@Valid NoteForm noteForm, BindingResult result,
+			Model model) {
+		logger.info("VALIDATE - previewNote");
 
 		// XXX - ako nije oznacen ni jedan radio - nema oznake:
-		if (newNoteForm.getImportant() == null) {
-			newNoteForm.setMark(null);
+		// TODO - provjeriti, ne bi trebalo biti potrebno:
+		if (noteForm.getImportant() == null) {
+			System.out.println("VALIDATE - important == Null");
+			noteForm.setMark(null);
 		}
 		if (result.hasErrors()) {
-			refreshForm(model, newNoteForm);
+			refreshForm(model, noteForm);
 			return "newNote";
 		}
+		logger.info("POST - previewNote - note header: " + noteForm.getHeader());
 
 		return "previewNote";
 	}
 
 	@PostMapping("/saveNote")
 	public String saveForm(Model model) {
-		NewNoteForm newNoteForm = (NewNoteForm) model.asMap().get("newNoteForm");
+		NoteForm noteForm = (NoteForm) model.asMap().get("noteForm");
 		// provjera zbog refresha stranice - form obrisan:
-		if (newNoteForm.getHeader() == null) {
+		if (noteForm.getHeader() == null) {
+			logger.info("POST - saveNote - ERROR (note = null) - redirect");
 			return "redirect:/newNote";
 		}
-		logger.info("/saveNote - saving with id: " + newNoteForm.getId());
+		logger.info("POST - saveNote - saving with id: " + noteForm.getId());
 
-		Note newNote = new Note(newNoteForm);
-
-		if (newNote.getId() == null) {
-			noteService.save(newNote);
-		} else {
-			noteService.update(newNote);
-		}
-		model.addAttribute("note", newNote);
-		model.addAttribute("newNoteForm", new NewNoteForm());
+		model.addAttribute("note", noteService.save(noteForm));
+		model.addAttribute("noteForm", new NoteForm());
 
 		return "saveNote";
 	}
 
 	@GetMapping("/saveNote")
 	public String redirect() {
+		logger.info("GET - saveNote - ERROR (note = null) - redirect");
 		return "redirect:/newNote";
 	}
 
 	@GetMapping("/deleteForm")
 	public String deleteForm(Model model) {
-		model.addAttribute("newNoteForm", new NewNoteForm());
+		logger.info("GET - deleteForm");
+		model.addAttribute("noteForm", new NoteForm());
 		return "redirect:/newNote";
 	}
 
 	@GetMapping("/end-session")
 	public String endSession(SessionStatus status) {
+		logger.info("GET - endSession - ERROR - not implemented - throw NullPointerException");
 		status.setComplete();
 		throw new NullPointerException();
 		// return "redirect:/newNote";
@@ -172,29 +173,30 @@ public class NewNoteController {
 	 * Dodavanje svih potrebnih lista na ekran, ovisno o pravima korisnika.
 	 * 
 	 * @param model
-	 * @param newNoteForm
-	 *            - zbog popunjavanja korisničkog imena (ukoliko nije admin)
+	 * @param noteForm
+	 *            - zbog popunjavanja korisnickog imena (ukoliko nije admin)
 	 */
-	private void refreshForm(Model model, NewNoteForm newNoteForm) {
+	private void refreshForm(Model model, NoteForm noteForm) {
 		// TODO - pazit na dohvacanje password-a
 		UserRole role = (UserRole) model.asMap().get("userRole");
-		List<Note> listOfNotes = null;
-
 		model.addAttribute("userList", userService.findAll());
+
+		List<Note> listOfNotes = noteService.getAllPermitted(role);
 		if (role.isAdmin()) {
-			listOfNotes = noteService.findAll();
+			// listOfNotes = noteService.findAll();
 		} else {
-			newNoteForm.setUser(userService.findOne(role.getUser().getId()));
-			listOfNotes = noteService.findByUser(role.getUser().getId());
+			noteForm.setUser(userService.findOne(role.getUser().getId()));
+			// listOfNotes = noteService.findByUser(role.getUser().getId());
 		}
+
 		model.addAttribute("notebookList", notebookService.findAll());
 		model.addAttribute("listOfNotes", listOfNotes);
-		model.addAttribute("noteMarks", NoteMarks.getAllMarks());
+		model.addAttribute("noteImportance", NoteImportance.getAllImportance());
 		fillStats(model, listOfNotes);
 	}
 
 	/**
-	 * Filtriranje za statistiku (po bilježnicama i važnosti).
+	 * Filtriranje za statistiku (po biljeznicama i vaznosti).
 	 * 
 	 * @param model
 	 * @param listOfNotes
@@ -204,34 +206,15 @@ public class NewNoteController {
 		Map<String, Integer> byNotebooks = getStatsByNotebooks();
 
 		listOfNotes.forEach(e -> {
-			NoteImportance imp = NoteImportance.setImprotance(e.getImportant());
+			// TODO - prvi red nepotreban:
+			NoteImportance imp = e.getImportance();
 			byImportance.put(imp, byImportance.get(imp) + 1);
-			byNotebooks.put(e.getNotebook().getTitle(), byNotebooks.get(e.getNotebook().getTitle()) + 1);
+			byNotebooks.put(e.getNotebook().getTitle(),
+					byNotebooks.get(e.getNotebook().getTitle()) + 1);
 		});
 
 		model.addAttribute("byImportance", byImportance);
 		model.addAttribute("byNotebooks", byNotebooks);
 	}
 
-	/**
-	 * Mapira Note objekt na newNoteForm objekt (prilikom editiranja bilješke).
-	 * 
-	 * @param newNoteForm
-	 *            - forma za unos (promjenu) podataka
-	 * @param note
-	 *            - postojeći Note objekt koji se želi editirati
-	 */
-	private void mapNoteToForm(NewNoteForm newNoteForm, Note note) {
-		// TODO - popravit mapiranje mark-a (kod update-a ostaje isto)
-		// TODO - important - komplikacija zbog true/false i 1/null
-		newNoteForm.setId(note.getId());
-		newNoteForm.setUser(note.getUser());
-		newNoteForm.setNotebook(note.getNotebook());
-		newNoteForm.setHeader(note.getHeader());
-		newNoteForm.setText(note.getText());
-		if (note.getImportant() != null) {
-			newNoteForm.setImportant(note.getImportant() == true ? "1" : null);
-			newNoteForm.setMark(note.getMark());
-		}
-	}
 }

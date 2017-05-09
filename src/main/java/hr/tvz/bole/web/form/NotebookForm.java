@@ -2,13 +2,17 @@ package hr.tvz.bole.web.form;
 
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class NotebookForm {
 
 	Integer id;
 
-	@Size(min = 1)
+	@NotBlank
+	@Size(max = 50)
 	String title;
-	@Size(min = 1)
+	@NotBlank
+	@Size(max = 100)
 	String description;
 
 	public Integer getId() {

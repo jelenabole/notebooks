@@ -5,12 +5,15 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import hr.tvz.bole.enums.DBStatus;
+import hr.tvz.bole.enums.NoteImportance;
+import hr.tvz.bole.enums.NoteMark;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
 
-public class NewNoteForm {
+public class NoteForm {
 
-	// XXX - Thymeleaf vraća empty iz option-a, umjesto null (objekti su null)
+	// XXX - Thymeleaf vraca empty iz option-a, umjesto null (objekti su null)
 	Integer id;
 
 	@NotNull
@@ -18,14 +21,15 @@ public class NewNoteForm {
 	@NotNull
 	Notebook notebook;
 	@NotBlank
-	@Size(min = 1)
+	@Size(max = 100)
 	String header;
 	@NotBlank
-	@Size(min = 1)
+	@Size(max = 1000)
 	String text;
 
-	String important;
-	String mark;
+	NoteImportance important;
+	NoteMark mark;
+	DBStatus status;
 
 	public Integer getId() {
 		return id;
@@ -67,19 +71,28 @@ public class NewNoteForm {
 		this.text = text;
 	}
 
-	public String getImportant() {
+	public NoteImportance getImportant() {
 		return important;
 	}
 
-	public void setImportant(String important) {
+	public void setImportant(NoteImportance important) {
 		this.important = important;
 	}
 
-	public String getMark() {
+	public NoteMark getMark() {
 		return mark;
 	}
 
-	public void setMark(String mark) {
+	public void setMark(NoteMark mark) {
 		this.mark = mark;
 	}
+
+	public DBStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(DBStatus status) {
+		this.status = status;
+	}
+
 }

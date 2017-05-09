@@ -17,6 +17,6 @@ INSERT INTO notebooks (title, description) VALUES('Web aplikacije u Javi', 'Bilj
 INSERT INTO notebooks (title, description) VALUES('Razvoj aplikacija na Android platformi', 'Bilješke s predavanja kolegija razvoj aplikacija na Android platformi');
 INSERT INTO notebooks (title, description) VALUES('Napredne teme računalnih mreža', 'Bilješke s predavanja napredne teme računalnih mreža'); 
 
-INSERT INTO notes (header, text, user, notebook, important, mark, status) VALUES('Testni naslov', 'Testni tekst', 1, 1, false, null, 1);
-INSERT INTO notes (header, text, user, notebook, important, mark, status) VALUES('Prva bilješka', 'Tekst prve bilješke', 6, 2, true, 'red', 1); 
-INSERT INTO notes (header, text, user, notebook, important, mark, status) VALUES('Druga bilješka', 'Tekst druge bilješke', 6, 1, true, 'green', 1); 
+INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Testni naslov', 'Testni tekst', 1, 1, 'NOT_IMPORTANT', null, 'ACTIVE');
+INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Prva bilješka', 'Tekst prve bilješke', 6, 2, 'IMPORTANT', 'RED', 'NOT_ACTIVE'); 
+INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Druga bilješka', 'Tekst druge bilješke', 6, 1, 'IMPORTANT', 'GREEN', 'ACTIVE'); 

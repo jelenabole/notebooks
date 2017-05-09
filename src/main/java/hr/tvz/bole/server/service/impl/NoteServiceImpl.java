@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hr.tvz.bole.enums.DBStatus;
 import hr.tvz.bole.model.Note;
+import hr.tvz.bole.model.UserRole;
+import hr.tvz.bole.other.mapper.NoteMapper;
 import hr.tvz.bole.server.repository.NoteRepository;
 import hr.tvz.bole.server.service.NoteService;
+import hr.tvz.bole.web.form.NoteForm;
 
 @Service
 @Transactional
@@ -18,11 +22,37 @@ public class NoteServiceImpl implements NoteService {
 	NoteRepository noteRepository;
 
 	public List<Note> findAll() {
-		return noteRepository.findAll();
+		List<Note> notes = noteRepository.findAll();
+
+		return notes;
+	}
+	
+	public List<Note> getAllPermitted(UserRole role) {
+		if (role.isAdmin()) {
+			return findAll();
+		}
+		
+		return noteRepository.findAllByUserIdAndStatus(role.getUser().getId(), DBStatus.ACTIVE);
+	}
+	
+	public List<Note> getAllPermittedSorted(UserRole role) {
+		if (role.isAdmin()) {
+			return noteRepository.findAllByOrderByHeaderAsc();
+		}
+		
+		return noteRepository.findAllByUserIdAndStatusOrderByHeaderAsc(role.getUser().getId(), DBStatus.ACTIVE);
+	}
+	
+	public List<Note> getAllPermittedSortedDesc(UserRole role) {
+		if (role.isAdmin()) {
+			return noteRepository.findAllByOrderByHeaderDesc();
+		}
+		
+		return noteRepository.findAllByUserIdAndStatusOrderByHeaderDesc(role.getUser().getId(), DBStatus.ACTIVE);
 	}
 
 	public List<Note> findAllActive() {
-		return noteRepository.findAllByStatusTrue();
+		return noteRepository.findAllByStatus(DBStatus.ACTIVE);
 	}
 
 	public Note findOne(Integer id) {
@@ -37,10 +67,10 @@ public class NoteServiceImpl implements NoteService {
 		noteRepository.save(note);
 	}
 
-	// TODO - spojiti sa save:
-	public void update(Note note) {
-		// TODO - promjenilo se u save = isto?!?
+	public Note save(NoteForm noteForm) {
+		Note note = NoteMapper.mapFormToNote(noteForm);
 		noteRepository.save(note);
+		return note;
 	}
 
 	public void delete(Integer id) {
@@ -58,15 +88,28 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public Integer getNumberOfNotes(String title) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer getNumberOfNotesByNotebook(Integer id) {
+		return noteRepository.countByNotebookId(id);
+	}
+
+	// @Override
+	// public Integer getNumberOfNotesByNotebookAndByUser(Integer notebookId,
+	// Integer userId) {
+	// return noteRepository.countByNotebookIdAndUserId(notebookId, userId);
+	// }
+
+	public void changeNoteStatus(Integer id) {
+		Note note = findOne(id);
+		if (note.getStatus() == DBStatus.ACTIVE)
+			note.setStatus(DBStatus.NOT_ACTIVE);
+		else
+			note.setStatus(DBStatus.ACTIVE);
+		noteRepository.save(note);
 	}
 
 	@Override
-	public Integer getNumberOfNotesForUser(String title, String username) {
-		// TODO Auto-generated method stub
-		return null;
+	public NoteForm getOneAsForm(Integer id) {
+		return NoteMapper.mapNoteToForm(findOne(id));
 	}
 
 }

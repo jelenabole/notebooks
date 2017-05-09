@@ -1,18 +1,20 @@
 package hr.tvz.bole.web.form;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import hr.tvz.bole.web.validators.PasswordMatch;
+import hr.tvz.bole.model.User;
+import hr.tvz.bole.model.UserRole;
 
-@PasswordMatch
 public class RoleForm {
 
 	Integer id;
 
 	@NotNull
-	Integer userId;
+	User user;
 	@NotNull
-	String role;
+	@Size(max = 50)
+	UserRole role;
 
 	public Integer getId() {
 		return id;
@@ -22,19 +24,20 @@ public class RoleForm {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public String getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(String role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
+
 }

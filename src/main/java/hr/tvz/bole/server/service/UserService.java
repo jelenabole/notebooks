@@ -5,6 +5,7 @@ import java.util.List;
 import hr.tvz.bole.exceptions.RoleExistsForUser;
 import hr.tvz.bole.exceptions.UserExistsException;
 import hr.tvz.bole.model.User;
+import hr.tvz.bole.model.UserProjection;
 import hr.tvz.bole.web.form.UserForm;
 
 public interface UserService {
@@ -24,7 +25,9 @@ public interface UserService {
 	public void delete(Integer id);
 
 	public boolean checkIfUserExists(String username);
-	
+
 	public void changeEnabledStatus(Integer id);
+
+	public UserProjection getCurrentUser(String username);
 
 }

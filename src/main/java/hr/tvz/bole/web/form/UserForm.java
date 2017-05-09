@@ -2,6 +2,8 @@ package hr.tvz.bole.web.form;
 
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import hr.tvz.bole.web.validators.PasswordMatch;
 import hr.tvz.bole.web.validators.ValidEmail;
 
@@ -10,18 +12,25 @@ public class UserForm {
 
 	Integer id;
 
-	@Size(min = 1)
+	@NotBlank
+	@Size(max = 50)
 	String name;
-	@Size(min = 1)
+	@NotBlank
+	@Size(max = 50)
 	String surname;
-	@Size(min = 1)
+	@NotBlank
+	@Size(max = 50)
 	String username;
-	@Size(min = 1)
+
+	@ValidEmail
+	@NotBlank
+	@Size(max = 50)
+	private String email;
+
+	@NotBlank
+	@Size(max = 50)
 	private String password;
 	private String matchPassword;
-	@Size(min = 1)
-	@ValidEmail
-	private String email;
 
 	public Integer getId() {
 		return id;

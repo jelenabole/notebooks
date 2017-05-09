@@ -3,20 +3,35 @@ package hr.tvz.bole.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import hr.tvz.bole.web.form.NewNoteForm;
+import hr.tvz.bole.enums.DBStatus;
+import hr.tvz.bole.enums.NoteImportance;
+import hr.tvz.bole.enums.NoteMark;
 
 @Entity
 @Table(name = "notes")
 public class Note implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	@PrePersist
+	@PreUpdate
+	public void prePersist() {
+		if (importance == null)
+			importance = NoteImportance.NOT_IMPORTANT;
+		if (status == null)
+			status = DBStatus.ACTIVE;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,42 +45,13 @@ public class Note implements Serializable {
 
 	String header;
 	String text;
-	Boolean important;
-	String mark;
-	Boolean status;
 
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-
-	public Note() {
-	}
-
-	public Note(Integer id, User user, Notebook notebook, String header, String text, Boolean important, String mark) {
-		this.id = id;
-		this.user = user;
-		this.notebook = notebook;
-		this.header = header;
-		this.text = text;
-		this.important = important;
-		this.mark = mark;
-	}
-
-	// XXX - prebacit u mapper:
-	// TODO - mapper nije potreban, zbog mapera u bazi:
-	public Note(NewNoteForm newNoteForm) {
-		this.id = newNoteForm.getId();
-		this.user = newNoteForm.getUser();
-		this.notebook = newNoteForm.getNotebook();
-		this.header = newNoteForm.getHeader();
-		this.text = newNoteForm.getText();
-		this.important = newNoteForm.getImportant() != null;
-		this.mark = newNoteForm.getMark();
-	}
+	@Enumerated(EnumType.STRING)
+	NoteImportance importance;
+	@Enumerated(EnumType.STRING)
+	NoteMark mark;
+	@Enumerated(EnumType.STRING)
+	DBStatus status;
 
 	public Integer getId() {
 		return id;
@@ -107,25 +93,41 @@ public class Note implements Serializable {
 		this.text = text;
 	}
 
-	public Boolean getImportant() {
-		return important;
+	public NoteImportance getImportance() {
+		return importance;
 	}
 
-	public void setImportant(Boolean important) {
-		this.important = important;
+	public void setImportance(NoteImportance importance) {
+		this.importance = importance;
 	}
 
-	public String getMark() {
+	public NoteMark getMark() {
 		return mark;
 	}
 
-	public void setMark(String mark) {
+	public void setMark(NoteMark mark) {
 		this.mark = mark;
+	}
+
+	public DBStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(DBStatus status) {
+		this.status = status;
 	}
 
 	@Override
 	public String toString() {
-		return "NOTE - id: " + id + " - header: " + header + " - text: " + text + " - important: " + important
-				+ " - mark: " + mark + "\n\t" + user.toString() + "\n\t" + notebook.toString();
+		String string = "NOTE - id: " + id + " - header: " + header + " - text: " + text
+				+ " - important: " + importance.name();
+
+		if (mark != null)
+			string += " - mark: " + mark.name();
+
+		string += " - status: " + status.name() + "\n\t" + user.toString() + "\n\t"
+				+ notebook.toString();
+
+		return string;
 	}
 }

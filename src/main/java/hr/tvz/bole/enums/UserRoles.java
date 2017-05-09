@@ -1,15 +1,14 @@
-package hr.tvz.bole.other.enums;
+package hr.tvz.bole.enums;
 
 public enum UserRoles {
-	ADMIN(true, "ROLE_ADMIN", "role.admin"), USER(false, "ROLE_USER", "role.admin");
+	ROLE_ADMIN(true, "role.admin"),
+	ROLE_USER(false, "role.user");
 
 	private boolean adminRights;
-	private String name;
 	private String translation;
 
-	UserRoles(boolean adminRights, String name, String translation) {
+	UserRoles(boolean adminRights, String translation) {
 		this.adminRights = adminRights;
-		this.name = name;
 		this.translation = translation;
 	}
 
@@ -22,11 +21,7 @@ public enum UserRoles {
 	}
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		return this.name();
 	}
 
 	public String getTranslation() {

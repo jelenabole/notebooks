@@ -147,36 +147,6 @@ h1 {
 	padding: 5%;
 }
 
-.default {
-	border-color: black;
-	background-color: #F6F9FC;
-}
-
-.purple {
-	border-color: #7C3889;
-	background-color: #E9D3ED;
-}
-
-.red {
-	border-color: #f71914;
-	background-color: #f9bcbb;
-}
-
-.blue {
-	border-color: #3e2ecc;
-	background-color: #bac3f4;
-}
-
-.orange {
-	border-color: #ff4c00;
-	background-color: #ffa977;
-}
-
-.green {
-	border-color: #2acc35;
-	background-color: #b0ff91;
-}
-
 /*** PRIKAZ LISTE BILJEŠKI ***/
 .viewNotes table td {
 	vertical-align: middle; /* zbog ispisa grešaka */

@@ -20,7 +20,7 @@ import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.UserForm;
 
 @Controller
-@SessionAttributes({ "userRole" })
+@SessionAttributes({ "user", "userRole" })
 public class UserInfoController {
 
 	private static Logger logger = LoggerFactory.getLogger(UserInfoController.class);

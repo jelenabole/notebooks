@@ -65,12 +65,12 @@ public class UserRole implements Serializable {
 	}
 
 	public boolean isAdmin() {
-		return role == "ROLE_ADMIN";
+		return role.equals("ROLE_ADMIN");
 	}
 
 	@Override
 	public String toString() {
-		return "USER ROLE - id: " + id + " - userId: " + user + " - role: " + role;
+		return "USER ROLE - id: " + id + " - userId: " + user.getId() + " - role: " + role;
 
 	}
 }

@@ -19,8 +19,8 @@
 			<div class="container-fluid">
 				<div th:insert="~{:: header-no-collapse}"></div>
 				<div class="collapse navbar-collapse">
-					<div th:insert="~{:: loginButtons}"></div>
 					<div th:insert="~{:: language}"></div>
+					<div th:insert="~{:: loginButtons}"></div>
 				</div>
 			</div>
 		</nav>
@@ -31,14 +31,14 @@
 			<div class="container-fluid">
 				<div th:insert="~{:: header-no-collapse}"></div>
 				<div class="collapse navbar-collapse">
-					<div th:insert="~{:: registerButtons}"></div>
 					<div th:insert="~{:: language}"></div>
+					<div th:insert="~{:: registerButtons}"></div>
 				</div>
 			</div>
 		</nav>
 	</div>
 
-	<div th:fragment="notes">
+	<div th:fragment="newNote">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<div th:insert="~{:: header}"></div>
@@ -50,12 +50,12 @@
 		</nav>
 	</div>
 
-
 	<div th:fragment="viewNotes">
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<div th:insert="~{:: header}"></div>
 				<div class="collapse navbar-collapse" id="menu-collapse">
+					<div th:insert="~{:: viewLeft}"></div>
 
 					<!-- search -->
 					<form class="navbar-form navbar-left">
@@ -91,14 +91,15 @@
 
 	<!-- left links - stats -->
 	<ul th:fragment="noteStats" class="nav navbar-nav">
-		<li><a th:href="@{/end-session}" th:utext="#{menu.resetStats}">Reset</a></li>
+		<li th:insert="~{:: language}"></li>
+
 		<li class="dropdown"><a href="#" class="dropdown-toggle"
 			data-toggle="dropdown" role="button" aria-haspopup="true"
 			aria-expanded="false"><span th:utext="#{menu.statsByImportance}">Stats
 			</span><span class="caret"></span></a>
 			<ul class="dropdown-menu">
 				<li th:each="elem : ${byImportance}"><a> <span
-						th:utext="#{${elem.key.string}}">Key</span> (<span
+						th:utext="#{${elem.key.translation}}">Key</span> (<span
 						th:text="${elem.value}">Value</span>)
 				</a></li>
 				<li role="separator" class="divider"></li>
@@ -107,7 +108,17 @@
 	</ul>
 
 
-	<!-- left links - filter notes -->
+	<!-- left links - before filter -->
+	<ul th:fragment="viewLeft" class="nav navbar-nav">
+		<li th:insert="~{:: language}"></li>
+
+		<li><a href="/asc" th:utext="#{menu.sortAsc}"></a></li>
+		<li><a href="/desc" th:utext="#{menu.sortDesc}"></a></li>
+		<li><a th:href="@{${#httpServletRequest.requestURI}/asc}" th:utext="#{menu.sortAsc}"></a></li>
+		<li><a th:href="@{${#httpServletRequest.requestURI}/desc}" th:utext="#{menu.sortDesc}"></a></li>
+	</ul>
+
+	<!-- center - filter -->
 	<ul th:fragment="filterNotes" class="nav navbar-nav">
 		<li><a th:href="@{/end-session}">Gumb 1</a></li>
 		<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -142,8 +153,7 @@
 				<li><a th:href="@{/viewNotes}" th:utext="#{menu.viewNotes}">Notes</a></li>
 
 				<li role="separator" class="divider"></li>
-				<li><a href="?lang=en" th:utext="#{menu.english}"></a></li>
-				<li><a href="?lang=hr" th:utext="#{menu.croatian}"></a></li>
+				<li><a th:href="@{/end-session}" th:utext="#{menu.resetStats}">Reset</a></li>
 
 				<li role="separator" class="divider"></li>
 				<li><a th:href="@{/userInfo}" th:utext="#{menu.userInfo}">Info</a></li>
@@ -160,20 +170,20 @@
 
 
 	<!-- login buttons -->
-	<ul th:fragment="loginButtons" class="nav navbar-nav">
+	<ul th:fragment="loginButtons" class="nav navbar-nav navbar-right">
 		<li><a th:href="@{register}" role="button"
 			th:utext="#{menu.register}"></a></li>
 	</ul>
 
 
 	<!-- register buttons -->
-	<ul th:fragment="registerButtons" class="nav navbar-nav">
+	<ul th:fragment="registerButtons" class="nav navbar-nav navbar-right">
 		<li><a th:href="@{login}" role="button" th:utext="#{menu.login}"></a></li>
 	</ul>
 
 
 	<!-- choose language -->
-	<ul th:fragment="language" class="nav navbar-nav navbar-right">
+	<ul th:fragment="language" class="nav navbar-nav">
 		<li class="dropdown"><a href="#" class="dropdown-toggle"
 			data-toggle="dropdown" role="button" aria-haspopup="true"
 			aria-expanded="false"> <span class="glyphicon glyphicon-globe"></span>

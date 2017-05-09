@@ -3,13 +3,20 @@ package hr.tvz.bole.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
+
+import hr.tvz.bole.enums.UserRoles;
 
 @Entity
 @Table(name = "users")
@@ -27,9 +34,12 @@ public class User implements Serializable {
 	String password;
 	// TODO - za što služi enabled:
 	boolean enabled;
-	
-	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
-	List<UserRole> roles;
+
+	@ElementCollection(targetClass = UserRoles.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user"))
+	@Column(name = "role", nullable = false)
+	@Enumerated(EnumType.STRING)
+	List<UserRoles> roles;
 
 	public User() {
 	};
@@ -40,7 +50,7 @@ public class User implements Serializable {
 		this.name = name;
 		this.surname = surname;
 	}
-	
+
 	// findAll:
 	public User(Integer id, String username, String name, String surname, String email) {
 		this.id = id;
@@ -50,8 +60,8 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public User(Integer id, String name, String surname, String username, String email, String password,
-			boolean enabled) {
+	public User(Integer id, String name, String surname, String username, String email,
+			String password, boolean enabled) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
@@ -68,7 +78,7 @@ public class User implements Serializable {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -120,20 +130,26 @@ public class User implements Serializable {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
-	
 
-	public List<UserRole> getRoles() {
+	// public List<UserRole> getRoles() {
+	// return roles;
+	// }
+	//
+	// public void setRoles(List<UserRole> roles) {
+	// this.roles = roles;
+	// }
+
+	public List<UserRoles> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<UserRole> roles) {
+	public void setRoles(List<UserRoles> roles) {
 		this.roles = roles;
 	}
 
 	@Override
 	public String toString() {
-		return "USER - id: " + id + " - fullname: " + name + " " + surname + " - username: " + username
-				+ " - password: " + password + " - enabled: " + enabled;
+		return "USER - id: " + id + " - fullname: " + name + " " + surname + " - username: "
+				+ username + " - password: " + password + " - enabled: " + enabled;
 	}
 }

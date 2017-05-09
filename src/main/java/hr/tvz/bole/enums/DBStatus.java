@@ -1,21 +1,22 @@
-package hr.tvz.bole.other.enums;
+package hr.tvz.bole.enums;
 
 public enum DBStatus {
-	ACTIVE(0, "status.active"), NOT_ACTIVE(1, "status.notActive");
+	ACTIVE(true, "status.active"),
+	NOT_ACTIVE(false, "status.notActive");
 
-	private Integer active; // TODO - da li se prikazuje
+	private Boolean active; // TODO - da li se prikazuje
 	private String translation;
 
-	DBStatus(Integer active, String translation) {
+	DBStatus(Boolean active, String translation) {
 		this.active = active;
 		this.translation = translation;
 	}
 
-	public Integer getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(Integer active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 

@@ -14,7 +14,7 @@ import hr.tvz.bole.model.UserRole;
 import hr.tvz.bole.server.service.NoteService;
 
 @Controller
-@SessionAttributes({ "userRole" })
+@SessionAttributes({ "user", "userRole" })
 public class ViewNotesController {
 
 	private static Logger logger = LoggerFactory.getLogger(ViewNotesController.class);
@@ -23,22 +23,38 @@ public class ViewNotesController {
 	NoteService noteService;
 
 	@GetMapping("/viewNotes")
-	public String getNewForm(@ModelAttribute UserRole user, Model model) {
-		logger.info("GET - viewNotes - user id: " + user.getId());
+	public String getNewForm(@ModelAttribute UserRole userRole, Model model) {
+		logger.info("GET - view notes - get by role (" + userRole.getRole() + ")");
 
-		if (user.isAdmin()) {
-			model.addAttribute("notes", noteService.findAll());
-		} else {
-			model.addAttribute("notes", noteService.findByUser(user.getUser().getId()));
-		}
+		model.addAttribute("notes", noteService.getAllPermitted(userRole));
+
+		return "viewNotes";
+	}
+
+	@GetMapping("/viewNotes/{order}")
+	public String getNewForm(@ModelAttribute UserRole userRole, Model model,
+			@PathVariable String order) {
+		logger.info("SORT - notes - get by role (" + userRole.getRole() + ")");
+
+		if (order.equals("asc"))
+			model.addAttribute("notes", noteService.getAllPermittedSorted(userRole));
+		else
+			model.addAttribute("notes", noteService.getAllPermittedSortedDesc(userRole));
 
 		return "viewNotes";
 	}
 
 	@GetMapping("/viewNotes/{id}")
 	public String getNewForm(Model model, @PathVariable int id) {
-		logger.info("GET - deleteNote id: " + id);
+		logger.info("DELETE - note id: " + id);
 		noteService.delete(id);
+		return "redirect:/viewNotes";
+	}
+
+	@GetMapping("/changeNoteStatus/{id}")
+	public String changeStatus(Model model, @PathVariable int id) {
+		logger.info("UPDATE - change status - note id: " + id);
+		noteService.changeNoteStatus(id);
 		return "redirect:/viewNotes";
 	}
 

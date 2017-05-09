@@ -72,7 +72,14 @@
 		<property name="defaultLocale" value="hr" />
 	</bean>
 
+	<!-- interceptori - Locale & UserRole interceptors -->
+
 	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="authenticationInterceptor" class="hr.tvz.bole.web.interceptor.AuthenticationInterceptor">
+			</bean>
+		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<bean id="localeChangeInterceptor"

@@ -1,16 +1,16 @@
-package hr.tvz.bole.web.controller;
+package hr.tvz.bole.web.interceptor;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.util.NestedServletException;
+
+import hr.tvz.bole.model.UserRole;
 
 //TODO - lovi i @Valid errors
 @ControllerAdvice
@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 	// @ExceptionHandler(Throwable.class)
 	// @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	// public String exceptionInternal(final Throwable throwable, final Model
-	// model) {
+	// model) {	
 	// logger.error("Exception during execution of SpringSecurity application",
 	// throwable);
 	// String errorMessage = (throwable != null ? throwable.getMessage() :

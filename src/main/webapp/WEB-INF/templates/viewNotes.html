@@ -18,7 +18,7 @@
 <body>
 
 	<div th:insert="~{fragments/menu :: viewNotes}"></div>
-
+	
 	<div class="viewNotes">
 		<table class="table table-striped">
 			<thead class="thead-inverse">
@@ -28,6 +28,7 @@
 					<th th:utext="#{note.header}"></th>
 					<th th:utext="#{note.text}"></th>
 					<th th:utext="#{note.important}"></th>
+					<th th:utext="#{table.status}"></th>
 					<th th:utext="#{table.actions}"></th>
 				</tr>
 			</thead>
@@ -38,14 +39,18 @@
 					<td th:text="${note.notebook.title}"></td>
 					<td th:text="${note.header}"></td>
 					<td th:text="${note.text}"></td>
+					
 					<td th:class="${note.mark}"><span
-						th:text="${note.important} ? #{table.yes} : #{table.no}"></span> <span
-						th:if="${note.mark} != null" class="glyphicon glyphicon-heart"
-						th:style="'color:' + ${note.mark}"></span></td>
-					<td><a class="btn btn-sm btn-info"
+						th:text="${note.importance?.important} ? #{table.yes} : #{table.no}"></span> <span
+						th:if="${note.importance?.important}" class="glyphicon glyphicon-heart"
+						th:style="'color:' + ${note.mark.id}"></span></td>
+					<td><span th:utext="#{${note.status.translation}}"></span> <span></span></td>
+					<td><a class="btn btn-sm btn-primary"
 						th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
-						<a class="btn btn-sm btn-warning" th:href="@{'/viewNotes/' + ${note.id}}"
-						th:text="#{button.delete}"></a></td>
+						<a class="btn btn-sm btn-warning"
+						th:href="@{'/viewNotes/' + ${note.id}}" th:text="#{button.delete}"></a>
+						<a class="btn btn-sm btn-info"
+						th:href="@{'/changeNoteStatus/' + ${note.id}}" th:text="#{button.changeStatus}"></a></td>
 				</tr>
 			</tbody>
 		</table>

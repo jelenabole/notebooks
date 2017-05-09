@@ -28,19 +28,13 @@ public class NotebookServiceImpl implements NotebookService {
 
 	public List<Notebook> findAllWithNumberOfNotes() {
 		List<Notebook> notebook = notebookRepository.findAll();
-		notebook.forEach(e -> e.setNumberOfNotes(noteService.getNumberOfNotes(e.getTitle())));
+		notebook.forEach(
+				e -> e.setNumberOfNotes(noteService.getNumberOfNotesByNotebook(e.getId())));
 
 		return notebook;
 	}
 
-	public List<Notebook> findAllWithNumberOfNotesForUser(String username) {
-		List<Notebook> notebook = notebookRepository.findAll();
-		notebook.forEach(e -> e.setNumberOfNotes(noteService.getNumberOfNotesForUser(e.getTitle(), username)));
-
-		return notebook;
-	}
-
-	public Notebook findOneByTitle(String title) {
+	public Notebook findByTitle(String title) {
 		return notebookRepository.findByTitle(title);
 	}
 
@@ -51,21 +45,6 @@ public class NotebookServiceImpl implements NotebookService {
 
 	public Integer save(NotebookForm notebookForm) {
 		// TODO - vraća se id:
-		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm)).getId();
-	}
-
-	public Integer update(Notebook notebook) {
-		//TODO - promijenjeno u save:
-		return notebookRepository.save(notebook).getId();
-	}
-
-	public Integer updateWithoutTitle(NotebookForm notebookForm) {
-		// TODO - mapiranje obrisano - samo slanje parametara:
-		return notebookRepository.updateWithoutTitle(notebookForm.getId(), notebookForm.getDescription());
-	}
-
-	public Integer update(NotebookForm notebookForm) {
-		//TODO - promjenenjeno u save - vraćen id:
 		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm)).getId();
 	}
 

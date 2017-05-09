@@ -20,7 +20,7 @@ import hr.tvz.bole.server.service.NotebookService;
 import hr.tvz.bole.web.form.NotebookForm;
 
 @Controller
-@SessionAttributes({ "userRole" })
+@SessionAttributes({ "user", "userRole" })
 public class ViewNotebooksController {
 
 	private static Logger logger = LoggerFactory.getLogger(ViewNotebooksController.class);
@@ -30,8 +30,8 @@ public class ViewNotebooksController {
 
 	@GetMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
-	public String getNewForm(@ModelAttribute NotebookForm notebookForm, @ModelAttribute UserRole userRole,
-			Model model) {
+	public String getNewForm(@ModelAttribute NotebookForm notebookForm,
+			@ModelAttribute UserRole userRole, Model model) {
 		logger.info("GET - viewNotebooks");
 
 		model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
@@ -50,7 +50,7 @@ public class ViewNotebooksController {
 
 	@PostMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
-	public String getNewForm(Model model, @Valid NotebookForm notebookForm, BindingResult result) {
+	public String getNewForm(@Valid NotebookForm notebookForm, BindingResult result, Model model) {
 		logger.info("edit form - id: " + notebookForm.getId());
 
 		if (result.hasErrors()) {
@@ -58,10 +58,7 @@ public class ViewNotebooksController {
 			return "viewNotebooks";
 		}
 
-		if (notebookForm.getId() != null)
-			notebookService.updateWithoutTitle(notebookForm);
-		else
-			notebookService.save(notebookForm);
+		notebookService.save(notebookForm);
 
 		model.addAttribute("notebooks", notebookService.findAll());
 		model.addAttribute("notebookForm", new NotebookForm());
