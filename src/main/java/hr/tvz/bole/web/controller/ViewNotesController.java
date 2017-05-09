@@ -29,7 +29,7 @@ public class ViewNotesController {
 		if (user.isAdmin()) {
 			model.addAttribute("notes", noteService.findAll());
 		} else {
-			model.addAttribute("notes", noteService.findByUser(user.getUser()));
+			model.addAttribute("notes", noteService.findByUser(user.getUser().getId()));
 		}
 
 		return "viewNotes";

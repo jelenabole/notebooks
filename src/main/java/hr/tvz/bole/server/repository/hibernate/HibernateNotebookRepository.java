@@ -1,19 +1,14 @@
-package hr.tvz.bole.server.repository.impl;
+package hr.tvz.bole.server.repository.hibernate;
 
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import hr.tvz.bole.model.Notebook;
-import hr.tvz.bole.server.repository.NotebookRepository;
 
-@Repository
-@Transactional
-public class HibernateNotebookRepository implements NotebookRepository {
+public class HibernateNotebookRepository {
 
 	private SessionFactory sessionFactory;
 
@@ -31,17 +26,14 @@ public class HibernateNotebookRepository implements NotebookRepository {
 	static final String DELETE_NOTEBOOK = "DELETE FROM notebooks WHERE id = ?";
 	static final String UPDATE_NOTEBOOK_WITHOUT_TITLE = "UPDATE notebooks SET description=? WHERE id = ?";
 
-	@Override
 	public List<Notebook> findAll() {
 		return currentSession().createQuery("SELECT b FROM Notebook b", Notebook.class).getResultList();
 	}
 
-	@Override
 	public Notebook findOne(Integer id) {
 		return currentSession().find(Notebook.class, id);
 	}
 
-	@Override
 	public Notebook findOneByTitle(String title) {
 		// currentSession().findByNamedParam("FROM notebooks WHERE title =
 		// :title", "title", (Object) title).list();
@@ -57,25 +49,21 @@ public class HibernateNotebookRepository implements NotebookRepository {
 		return (Notebook) currentSession().createQuery("FROM notebooks WHERE title = :title").list().get(0);
 	}
 
-	@Override
 	public Integer save(Notebook notebook) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Integer update(Notebook notebook) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public Integer updateWithoutTitle(Notebook notebook) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void delete(Integer id) {
 		// TODO Auto-generated method stub
 

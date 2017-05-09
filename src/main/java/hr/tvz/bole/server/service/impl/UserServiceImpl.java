@@ -33,12 +33,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public User findOne(Integer id) {
-		return userRepository.findOne(id);
+		return userRepository.findById(id);
 	}
 
 	// TODO - nepotrebno ?!
 	public User findOneByUsername(String username) {
-		return userRepository.findOneByUsername(username);
+		return userRepository.findByUsername(username);
 	}
 
 	public User save(User user) throws UserExistsException, RoleExistsForUser {
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(PasswordGenerator.generatePassword(user.getPassword()));
 		userRepository.save(user);
 
-		roleService.saveRole(new UserRole(null, user.getId(), "ROLE_USER"));
+		roleService.saveRole(new UserRole(null, user, "ROLE_USER"));
 
 		return user;
 	}
@@ -60,7 +60,8 @@ public class UserServiceImpl implements UserService {
 		}
 
 		User user = UserMapper.mapUserFormToUser(userForm);
-		userRepository.update(user);
+		// TODO - update
+		userRepository.save(user);
 		return user;
 	}
 
@@ -73,13 +74,23 @@ public class UserServiceImpl implements UserService {
 		// obrisati role i bilješke korisnika:
 		roleService.deleteAllRolesForUser(id);
 		noteService.deleteByUser(id);
-		userRepository.delete(id);
+		userRepository.deleteById(id);
 	}
 
 	public boolean checkIfUserExists(String username) {
-		if (userRepository.findOneByUsername(username) == null)
+		if (userRepository.findByUsername(username) == null)
 			return false;
 		return true;
+	}
+
+	@Override
+	public void changeEnabledStatus(Integer id) {
+		//check current status:
+		if (userRepository.findById(id).isEnabled()) {
+			userRepository.disableUser(id);
+		} else {
+			userRepository.enableUser(id);
+		}
 	}
 
 }

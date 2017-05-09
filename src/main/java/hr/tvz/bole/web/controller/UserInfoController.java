@@ -31,7 +31,7 @@ public class UserInfoController {
 	@GetMapping("/userInfo")
 	public String getUserInfo(@SessionAttribute UserRole userRole, Model model) {
 		logger.info("GET - info o korisniku: " + userRole.getUser());
-		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(userRole.getUser()));
+		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(userRole.getUser().getId()));
 
 		model.addAttribute("userForm", userForm);
 		return "userInfo";

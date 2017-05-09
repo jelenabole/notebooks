@@ -9,7 +9,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value> /WEB-INF/spring/root-context.xml,
 			/WEB-INF/spring/security-config.xml
-			/WEB-INF/spring/hibernate-config.xml</param-value>
+			/WEB-INF/spring/data-jpa-config.xml</param-value>
 	</context-param>
 
 	<!-- novi filter za autentificiranje zahtjeva -->

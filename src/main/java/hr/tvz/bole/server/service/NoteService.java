@@ -6,6 +6,7 @@ import hr.tvz.bole.model.Note;
 
 public interface NoteService {
 
+	//TODO - promijenjeno da se dohvaćaju samo sa status active
 	public List<Note> findAll();
 
 	public Note findOne(Integer id);

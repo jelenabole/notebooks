@@ -24,5 +24,7 @@ public interface UserService {
 	public void delete(Integer id);
 
 	public boolean checkIfUserExists(String username);
+	
+	public void changeEnabledStatus(Integer id);
 
 }

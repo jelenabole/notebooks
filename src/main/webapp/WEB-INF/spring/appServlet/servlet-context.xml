@@ -12,8 +12,6 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security.xsd">
 
-	<!-- added security - jedina razlika -->
-
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->

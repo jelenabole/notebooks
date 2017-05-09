@@ -32,6 +32,15 @@ public class Note implements Serializable {
 	String text;
 	Boolean important;
 	String mark;
+	Boolean status;
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 
 	public Note() {
 	}

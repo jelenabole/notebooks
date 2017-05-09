@@ -30,11 +30,13 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	public UserRole findOneRoleForUser(Integer userId, String role) {
-		return roleRepository.findOne(userId, role);
+		return roleRepository.findByUserIdAndRoleLike(userId, role);
+		//TODO - obrisana funkcija
+//		return new UserRole();
 	}
 
 	public UserRole saveRole(UserRole role) throws RoleExistsForUser {
-		if (hasRole(role.getUser(), role.getRole())) {
+		if (hasRole(role.getUser().getId(), role.getRole())) {
 			throw new RoleExistsForUser("Role " + role.getRole() + " exists for the user " + role.getUser());
 		}
 
@@ -44,15 +46,15 @@ public class RoleServiceImpl implements RoleService {
 
 	// TODO - kod brisanja paziti da korisnik ima barem jednu rolu ?!
 	public void deleteRole(Integer id) {
-		roleRepository.delete(id);
+		roleRepository.deleteById(id);
 	}
 
 	public void deleteAllRolesForUser(Integer userId) {
-		roleRepository.deleteAllByUserId(userId);
+		roleRepository.deleteAllByUser(userId);
 	}
 
 	public boolean hasRole(Integer userId, String userRole) {
-		if (roleRepository.findOne(userId, userRole) == null)
+		if (roleRepository.findByUserIdAndRoleLike(userId, userRole) == null)
 			return false;
 		return true;
 	}

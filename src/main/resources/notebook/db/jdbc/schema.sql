@@ -35,6 +35,7 @@ CREATE TABLE notes (
 	notebook INT NOT NULL,
 	important TINYINT DEFAULT 0,
 	mark VARCHAR(20) DEFAULT NULL,
+	status TINYINT DEFAULT 1,
 	FOREIGN KEY (user) REFERENCES users (id),
 	FOREIGN KEY (notebook) REFERENCES notebooks (id)
 );

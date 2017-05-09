@@ -41,32 +41,37 @@ public class NotebookServiceImpl implements NotebookService {
 	}
 
 	public Notebook findOneByTitle(String title) {
-		return notebookRepository.findOneByTitle(title);
+		return notebookRepository.findByTitle(title);
 	}
 
 	public Integer save(Notebook notebook) {
-		return notebookRepository.save(notebook);
+		// TODO - vraća se id:
+		return notebookRepository.save(notebook).getId();
 	}
 
 	public Integer save(NotebookForm notebookForm) {
-		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm));
+		// TODO - vraća se id:
+		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm)).getId();
 	}
 
 	public Integer update(Notebook notebook) {
-		return notebookRepository.update(notebook);
+		//TODO - promijenjeno u save:
+		return notebookRepository.save(notebook).getId();
 	}
 
 	public Integer updateWithoutTitle(NotebookForm notebookForm) {
-		return notebookRepository.updateWithoutTitle(NotebookMapper.mapFormToNotebook(notebookForm));
+		// TODO - mapiranje obrisano - samo slanje parametara:
+		return notebookRepository.updateWithoutTitle(notebookForm.getId(), notebookForm.getDescription());
 	}
 
 	public Integer update(NotebookForm notebookForm) {
-		return notebookRepository.update(NotebookMapper.mapFormToNotebook(notebookForm));
+		//TODO - promjenenjeno u save - vraćen id:
+		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm)).getId();
 	}
 
 	public void delete(Integer id) {
 		noteService.deleteByNotebook(id);
-		notebookRepository.delete(id);
+		notebookRepository.deleteById(id);
 	}
 
 }

@@ -2,19 +2,22 @@ package hr.tvz.bole.server.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import hr.tvz.bole.model.UserRole;
 
-public interface RoleRepository {
+public interface RoleRepository extends JpaRepository<UserRole, Long>{
 
 	public List<UserRole> findAll();
 
-	public UserRole findOne(Integer userId, String role);
+	public UserRole findByUserIdAndRoleLike(Integer userId, String role);
 
 	public List<UserRole> findAllByUser(Integer id);
 
-	public void save(UserRole userRole);
+	@SuppressWarnings("unchecked")
+	public UserRole save(UserRole userRole);
 
-	public void delete(Integer id);
+	public void deleteById(Integer id);
 
-	public void deleteAllByUserId(Integer userId);
+	public void deleteAllByUser(Integer userId);
 }

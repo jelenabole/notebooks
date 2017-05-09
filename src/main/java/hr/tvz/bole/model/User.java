@@ -1,11 +1,14 @@
 package hr.tvz.bole.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +27,9 @@ public class User implements Serializable {
 	String password;
 	// TODO - za što služi enabled:
 	boolean enabled;
+	
+	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
+	List<UserRole> roles;
 
 	public User() {
 	};
@@ -62,8 +68,8 @@ public class User implements Serializable {
 	public Integer getId() {
 		return id;
 	}
-
-	public void setId(int id) {
+	
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -113,6 +119,16 @@ public class User implements Serializable {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	
+	
+
+	public List<UserRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<UserRole> roles) {
+		this.roles = roles;
 	}
 
 	@Override

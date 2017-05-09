@@ -12,9 +12,7 @@ public class NewNoteForm {
 
 	// XXX - Thymeleaf vraća empty iz option-a, umjesto null (objekti su null)
 	Integer id;
-	
-	
-	
+
 	@NotNull
 	User user;
 	@NotNull
@@ -25,7 +23,7 @@ public class NewNoteForm {
 	@NotBlank
 	@Size(min = 1)
 	String text;
-	
+
 	String important;
 	String mark;
 

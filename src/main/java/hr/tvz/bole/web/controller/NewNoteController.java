@@ -94,7 +94,7 @@ public class NewNoteController {
 			Model model, Principal principal) {
 
 		// provjeriti korisnika i zapisati u session:
-		UserRole role = new UserRole(userService.findOneByUsername(principal.getName()).getId(),
+		UserRole role = new UserRole(userService.findOneByUsername(principal.getName()),
 				roleService.hasAdminRole(principal.getName()));
 		logger.info("GET - newNote - admin role: " + role.isAdmin());
 		model.addAttribute("userRole", role);
@@ -184,8 +184,8 @@ public class NewNoteController {
 		if (role.isAdmin()) {
 			listOfNotes = noteService.findAll();
 		} else {
-			newNoteForm.setUser(userService.findOne(role.getUser()));
-			listOfNotes = noteService.findByUser(role.getUser());
+			newNoteForm.setUser(userService.findOne(role.getUser().getId()));
+			listOfNotes = noteService.findByUser(role.getUser().getId());
 		}
 		model.addAttribute("notebookList", notebookService.findAll());
 		model.addAttribute("listOfNotes", listOfNotes);

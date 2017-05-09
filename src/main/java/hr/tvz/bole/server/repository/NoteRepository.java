@@ -2,28 +2,44 @@ package hr.tvz.bole.server.repository;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+
 import hr.tvz.bole.model.Note;
 
-public interface NoteRepository {
+public interface NoteRepository extends JpaRepository<Note, Long> {
 
 	public List<Note> findAll();
 
-	public Note findOne(Integer id);
+	public List<Note> findAllByStatusTrue();
 
-	public List<Note> findByUser(Integer userId);
+	public Note findById(Integer id);
 
-	public void save(Note note);
+	public List<Note> findByUserId(Integer userId);
 
-	public void update(Note note);
+	@SuppressWarnings("unchecked")
+	public Note save(Note note);
 
-	public void delete(Integer id);
+	// public void update(Note note);
+	@Modifying
+	@Transactional
+	public void deleteById(Integer id);
 
-	public void deleteByNotebook(Integer id);
+	@Modifying
+	@Transactional
+	public void deleteByNotebookId(Integer id);
 
-	public void deleteByUser(Integer id);
+	@Modifying
+	@Transactional
+	public void deleteByUserId(Integer id);
 
-	public Integer getNumberOfNotes(String title);
+	//TODO - ove dvije funkcije nisu implementirane
+//	@Query("SELECT COUNT() Notes SET description=:description WHERE id = :id")
+//	public Integer getNumberOfNotes(String title);
 
-	//XXX - nepotrebno?!
-	public Integer getNumberOfNotesForUser(String title, String username);
+	// XXX - nepotrebno?!
+//	@Query("UPDATE notebooks SET description=:description WHERE id = :id")
+//	public Integer getNumberOfNotesForUser(String title, String username);
 }

@@ -21,12 +21,16 @@ public class NoteServiceImpl implements NoteService {
 		return noteRepository.findAll();
 	}
 
+	public List<Note> findAllActive() {
+		return noteRepository.findAllByStatusTrue();
+	}
+
 	public Note findOne(Integer id) {
-		return noteRepository.findOne(id);
+		return noteRepository.findById(id);
 	}
 
 	public List<Note> findByUser(Integer id) {
-		return noteRepository.findByUser(id);
+		return noteRepository.findByUserId(id);
 	}
 
 	public void save(Note note) {
@@ -35,21 +39,22 @@ public class NoteServiceImpl implements NoteService {
 
 	// TODO - spojiti sa save:
 	public void update(Note note) {
-		noteRepository.update(note);
+		// TODO - promjenilo se u save = isto?!?
+		noteRepository.save(note);
 	}
 
 	public void delete(Integer id) {
-		noteRepository.delete(id);
+		noteRepository.deleteById(id);
 	}
 
 	@Override
 	public void deleteByNotebook(Integer id) {
-		noteRepository.deleteByNotebook(id);
+		noteRepository.deleteByNotebookId(id);
 	}
 
 	@Override
 	public void deleteByUser(Integer id) {
-		noteRepository.deleteByUser(id);
+		noteRepository.deleteByUserId(id);
 	}
 
 	@Override

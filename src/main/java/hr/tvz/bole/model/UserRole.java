@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,20 +19,22 @@ public class UserRole implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
-	Integer user;
+	@ManyToOne
+	@JoinColumn(name = "user")
+	User user;
 	String role;
 
 	public UserRole() {
 	};
 
-	public UserRole(Integer id, Integer user, String role) {
+	public UserRole(Integer id, User user, String role) {
 		this.id = id;
 		this.user = user;
 		this.role = role;
 	}
 
 	// stvaranje UserRole za session:
-	public UserRole(Integer user, boolean hasAdminRole) {
+	public UserRole(User user, boolean hasAdminRole) {
 		this.user = user;
 		if (hasAdminRole)
 			role = "ROLE_ADMIN";
@@ -44,11 +48,11 @@ public class UserRole implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(Integer user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
