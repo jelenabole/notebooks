@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import hr.tvz.bole.exceptions.RoleExistsForUser;
 import hr.tvz.bole.exceptions.UserExistsException;
 import hr.tvz.bole.model.User;
-import hr.tvz.bole.model.UserProjection;
+import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.UserRole;
 import hr.tvz.bole.other.PasswordGenerator;
 import hr.tvz.bole.other.mapper.UserMapper;
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserProjection getCurrentUser(String username) {
+	public CurrentUser getCurrentUser(String username) {
 		return UserMapper.mapUserToCurrentUser(userRepository.findByUsername(username));
 	}
 

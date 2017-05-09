@@ -41,36 +41,6 @@ public class User implements Serializable {
 	@Enumerated(EnumType.STRING)
 	List<UserRoles> roles;
 
-	public User() {
-	};
-
-	public User(Integer id, String username, String name, String surname) {
-		this.id = id;
-		this.username = username;
-		this.name = name;
-		this.surname = surname;
-	}
-
-	// findAll:
-	public User(Integer id, String username, String name, String surname, String email) {
-		this.id = id;
-		this.username = username;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-	}
-
-	public User(Integer id, String name, String surname, String username, String email,
-			String password, boolean enabled) {
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.enabled = enabled;
-	}
-
 	public String getFullName() {
 		return name + " " + surname;
 	}

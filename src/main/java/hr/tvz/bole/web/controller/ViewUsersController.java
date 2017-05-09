@@ -17,7 +17,7 @@ import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.RoleForm;
 
 @Controller
-@SessionAttributes({ "user", "userRole" })
+@SessionAttributes({ "currentUser" })
 public class ViewUsersController {
 
 	private static Logger logger = LoggerFactory.getLogger(ViewUsersController.class);
@@ -30,19 +30,19 @@ public class ViewUsersController {
 	public String getNewForm(Model model) {
 		logger.info("GET - viewUsers");
 
-		//TODO - poslati enum (role)
+		// TODO - poslati enum (role)
 		model.addAttribute("users", userService.findAll());
 		model.addAttribute("roleForm", new RoleForm());
 		return "viewUsers";
 	}
-	
+
 	@PostMapping("/viewUsers")
 	@Secured({ "ROLE_ADMIN" })
 	public String addNewRole(@Valid RoleForm roleForm, Model model) {
 		logger.info("POST - viewUsers - add new Role");
-		
-		//TODO - dodati novu rolu u bazu
-		
+
+		// TODO - dodati novu rolu u bazu
+
 		model.addAttribute("users", userService.findAll());
 
 		return "viewUsers";
@@ -56,7 +56,7 @@ public class ViewUsersController {
 		userService.delete(id);
 		return "redirect:/viewUsers";
 	}
-	
+
 	@GetMapping("/enableUser/{id}")
 	@Secured("ROLE_ADMIN")
 	public String changeEnableStatus(Model model, @PathVariable int id) {

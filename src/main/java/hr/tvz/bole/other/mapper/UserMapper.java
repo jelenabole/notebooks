@@ -1,7 +1,7 @@
 package hr.tvz.bole.other.mapper;
 
 import hr.tvz.bole.model.User;
-import hr.tvz.bole.model.UserProjection;
+import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.web.form.UserForm;
 
 public class UserMapper {
@@ -31,7 +31,7 @@ public class UserMapper {
 		return user;
 	}
 
-	public static User mapCurrentUserToUser(UserProjection currentUser) {
+	public static User mapCurrentUserToUser(CurrentUser currentUser) {
 		User user = new User();
 		user.setId(currentUser.getId());
 		user.setUsername(currentUser.getUsername());
@@ -40,8 +40,8 @@ public class UserMapper {
 		return user;
 	}
 
-	public static UserProjection mapUserToCurrentUser(User user) {
-		UserProjection currentUser = new UserProjection();
+	public static CurrentUser mapUserToCurrentUser(User user) {
+		CurrentUser currentUser = new CurrentUser();
 		currentUser.setId(user.getId());
 		currentUser.setUsername(user.getUsername());
 		currentUser.setRoles(user.getRoles());

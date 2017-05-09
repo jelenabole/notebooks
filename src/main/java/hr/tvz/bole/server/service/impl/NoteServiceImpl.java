@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hr.tvz.bole.enums.DBStatus;
+import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.Note;
-import hr.tvz.bole.model.UserRole;
 import hr.tvz.bole.other.mapper.NoteMapper;
 import hr.tvz.bole.server.repository.NoteRepository;
 import hr.tvz.bole.server.service.NoteService;
@@ -26,29 +26,28 @@ public class NoteServiceImpl implements NoteService {
 
 		return notes;
 	}
-	
-	public List<Note> getAllPermitted(UserRole role) {
-		if (role.isAdmin()) {
+
+	public List<Note> getAllPermitted(CurrentUser user) {
+		if (user.isAdmin())
 			return findAll();
-		}
-		
-		return noteRepository.findAllByUserIdAndStatus(role.getUser().getId(), DBStatus.ACTIVE);
+
+		return noteRepository.findAllByUserIdAndStatus(user.getId(), DBStatus.ACTIVE);
 	}
-	
-	public List<Note> getAllPermittedSorted(UserRole role) {
-		if (role.isAdmin()) {
+
+	public List<Note> getAllPermittedSorted(CurrentUser user) {
+		if (user.isAdmin())
 			return noteRepository.findAllByOrderByHeaderAsc();
-		}
-		
-		return noteRepository.findAllByUserIdAndStatusOrderByHeaderAsc(role.getUser().getId(), DBStatus.ACTIVE);
+
+		return noteRepository.findAllByUserIdAndStatusOrderByHeaderAsc(user.getId(),
+				DBStatus.ACTIVE);
 	}
-	
-	public List<Note> getAllPermittedSortedDesc(UserRole role) {
-		if (role.isAdmin()) {
+
+	public List<Note> getAllPermittedSortedDesc(CurrentUser user) {
+		if (user.isAdmin())
 			return noteRepository.findAllByOrderByHeaderDesc();
-		}
-		
-		return noteRepository.findAllByUserIdAndStatusOrderByHeaderDesc(role.getUser().getId(), DBStatus.ACTIVE);
+
+		return noteRepository.findAllByUserIdAndStatusOrderByHeaderDesc(user.getId(),
+				DBStatus.ACTIVE);
 	}
 
 	public List<Note> findAllActive() {

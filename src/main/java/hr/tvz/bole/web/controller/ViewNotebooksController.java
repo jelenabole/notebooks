@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import hr.tvz.bole.model.UserRole;
 import hr.tvz.bole.server.service.NotebookService;
 import hr.tvz.bole.web.form.NotebookForm;
 
 @Controller
-@SessionAttributes({ "user", "userRole" })
+@SessionAttributes({ "currentUser" })
 public class ViewNotebooksController {
 
 	private static Logger logger = LoggerFactory.getLogger(ViewNotebooksController.class);
@@ -30,40 +29,40 @@ public class ViewNotebooksController {
 
 	@GetMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
-	public String getNewForm(@ModelAttribute NotebookForm notebookForm,
-			@ModelAttribute UserRole userRole, Model model) {
-		logger.info("GET - viewNotebooks");
+	public String getNewForm(@ModelAttribute NotebookForm notebookForm, Model model) {
+		logger.info("GET - view notebooks");
 
 		model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 
 		return "viewNotebooks";
 	}
 
-	@GetMapping("/viewNotebooks/{id}")
-	@Secured("ROLE_ADMIN")
-	public String getNewForm(Model model, @PathVariable int id) {
-		// TODO - nekakvo upozorenje prije nastavka!
-		logger.info("GET - deleteNotebook id: " + id);
-		notebookService.delete(id);
-		return "redirect:/viewNotebooks";
-	}
-
 	@PostMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
-	public String getNewForm(@Valid NotebookForm notebookForm, BindingResult result, Model model) {
-		logger.info("edit form - id: " + notebookForm.getId());
+	public String editExistingNotebook(@Valid NotebookForm notebookForm, BindingResult result,
+			Model model) {
+		logger.info("EDIT - notebook id: " + notebookForm.getId());
 
 		if (result.hasErrors()) {
-			model.addAttribute("notebooks", notebookService.findAll());
+			model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 			return "viewNotebooks";
 		}
 
 		notebookService.save(notebookForm);
 
-		model.addAttribute("notebooks", notebookService.findAll());
+		model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 		model.addAttribute("notebookForm", new NotebookForm());
 
 		return "viewNotebooks";
+	}
+
+	@GetMapping("/deleteNotebook/{id}")
+	@Secured("ROLE_ADMIN")
+	public String deleteNotebook(@PathVariable int id, Model model) {
+		// TODO - nekakvo upozorenje prije nastavka!
+		logger.info("DELETE - notebook id: " + id);
+		notebookService.delete(id);
+		return "redirect:/viewNotebooks";
 	}
 
 }

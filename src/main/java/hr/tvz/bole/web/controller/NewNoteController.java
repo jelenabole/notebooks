@@ -1,6 +1,5 @@
 package hr.tvz.bole.web.controller;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +22,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import hr.tvz.bole.enums.NoteImportance;
+import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.Note;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
-import hr.tvz.bole.model.UserRole;
 import hr.tvz.bole.server.service.MessageService;
 import hr.tvz.bole.server.service.NoteService;
 import hr.tvz.bole.server.service.NotebookService;
@@ -37,7 +36,7 @@ import hr.tvz.bole.web.editors.UserEditor;
 import hr.tvz.bole.web.form.NoteForm;
 
 @Controller
-@SessionAttributes({ "user", "noteForm", "userRole", "byNotebooks", "byImportance" })
+@SessionAttributes({ "currentUser", "noteForm", "byNotebooks", "byImportance" })
 public class NewNoteController {
 
 	private static Logger logger = LoggerFactory.getLogger(NewNoteController.class);
@@ -64,16 +63,6 @@ public class NewNoteController {
 		binder.registerCustomEditor(Notebook.class, notebookEditor);
 	}
 
-	@ModelAttribute("userRole")
-	public UserRole getUserRole() {
-		return new UserRole();
-	}
-
-	// @ModelAttribute("user")
-	// public UserProjection getCurrentUser() {
-	// return new UserProjection();
-	// }
-
 	@ModelAttribute("noteForm")
 	public NoteForm getNoteForm() {
 		return new NoteForm();
@@ -94,8 +83,7 @@ public class NewNoteController {
 	}
 
 	@GetMapping("/newNote")
-	public String prepareNewForm(@ModelAttribute NoteForm noteForm,
-			@ModelAttribute UserRole userRole, Model model, Principal principal) {
+	public String prepareNewForm(@ModelAttribute NoteForm noteForm, Model model) {
 
 		logger.info("GET - newNote");
 		refreshForm(model, noteForm);
@@ -177,16 +165,13 @@ public class NewNoteController {
 	 *            - zbog popunjavanja korisnickog imena (ukoliko nije admin)
 	 */
 	private void refreshForm(Model model, NoteForm noteForm) {
-		// TODO - pazit na dohvacanje password-a
-		UserRole role = (UserRole) model.asMap().get("userRole");
+		CurrentUser currentUser = (CurrentUser) model.asMap().get("currentUser");
+
 		model.addAttribute("userList", userService.findAll());
 
-		List<Note> listOfNotes = noteService.getAllPermitted(role);
-		if (role.isAdmin()) {
-			// listOfNotes = noteService.findAll();
-		} else {
-			noteForm.setUser(userService.findOne(role.getUser().getId()));
-			// listOfNotes = noteService.findByUser(role.getUser().getId());
+		List<Note> listOfNotes = noteService.getAllPermitted(currentUser);
+		if (!currentUser.isAdmin()) {
+			noteForm.setUser(userService.findOne(currentUser.getId()));
 		}
 
 		model.addAttribute("notebookList", notebookService.findAll());

@@ -19,7 +19,7 @@ public class NotebookForm {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -39,7 +39,4 @@ public class NotebookForm {
 		this.description = description;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
 }

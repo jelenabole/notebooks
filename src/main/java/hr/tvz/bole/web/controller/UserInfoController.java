@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import hr.tvz.bole.model.UserRole;
+import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.other.mapper.UserMapper;
 import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.UserForm;
 
 @Controller
-@SessionAttributes({ "user", "userRole" })
+@SessionAttributes({ "user" })
 public class UserInfoController {
 
 	private static Logger logger = LoggerFactory.getLogger(UserInfoController.class);
@@ -29,16 +29,17 @@ public class UserInfoController {
 	UserService userService;
 
 	@GetMapping("/userInfo")
-	public String getUserInfo(@SessionAttribute UserRole userRole, Model model) {
-		logger.info("GET - info o korisniku: " + userRole.getUser());
-		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(userRole.getUser().getId()));
+	public String getUserInfo(@SessionAttribute CurrentUser user, Model model) {
+		logger.info("GET - info o korisniku: " + user.getUsername());
+		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(user.getId()));
 
 		model.addAttribute("userForm", userForm);
 		return "userInfo";
 	}
 
 	@PostMapping("/userInfo")
-	public String updateUserInfo(@ModelAttribute @Valid UserForm userForm, BindingResult result, Model model) {
+	public String updateUserInfo(@ModelAttribute @Valid UserForm userForm, BindingResult result,
+			Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", userForm);
 			return "userInfo";

@@ -2,8 +2,8 @@ package hr.tvz.bole.server.service;
 
 import java.util.List;
 
+import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.Note;
-import hr.tvz.bole.model.UserRole;
 import hr.tvz.bole.web.form.NoteForm;
 
 public interface NoteService {
@@ -14,9 +14,11 @@ public interface NoteService {
 
 	public List<Note> findByUser(Integer id);
 
-	public List<Note> getAllPermittedSorted(UserRole role);
+	public List<Note> getAllPermitted(CurrentUser user);
 
-	public List<Note> getAllPermittedSortedDesc(UserRole role);
+	public List<Note> getAllPermittedSorted(CurrentUser user);
+
+	public List<Note> getAllPermittedSortedDesc(CurrentUser user);
 
 	public void save(Note note);
 
@@ -34,7 +36,5 @@ public interface NoteService {
 
 	// XXX - funkcije s mapiranjima (u forme):
 	public NoteForm getOneAsForm(Integer id);
-
-	public List<Note> getAllPermitted(UserRole role);
 
 }

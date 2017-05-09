@@ -48,7 +48,7 @@
 					<td><a class="btn btn-sm btn-primary"
 						th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
 						<a class="btn btn-sm btn-warning"
-						th:href="@{'/viewNotes/' + ${note.id}}" th:text="#{button.delete}"></a>
+						th:href="@{'/deleteNote/' + ${note.id}}" th:text="#{button.delete}"></a>
 						<a class="btn btn-sm btn-info"
 						th:href="@{'/changeNoteStatus/' + ${note.id}}" th:text="#{button.changeStatus}"></a></td>
 				</tr>

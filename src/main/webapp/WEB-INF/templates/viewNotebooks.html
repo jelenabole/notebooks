@@ -15,7 +15,7 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
-<body onload="$('.newForm').hide();">
+<body onload="checkForm();">
 
 	<div th:insert="~{fragments/menu :: viewNotes}"></div>
 
@@ -25,7 +25,7 @@
 				<table class="noteForm">
 					<tr>
 						<td><label for="title" th:utext="#{notebook.form.title}"></label></td>
-						<td><input id="title" th:field="*{title}" disabled
+						<td><input id="title" th:field="*{title}"
 							th:class="${#fields.hasErrors('title')}? 'form-control has-error' : 'form-control'" />
 							<span class="error" th:if="${#fields.hasErrors('title')}"
 							th:errors="*{title}"></span>
@@ -77,9 +77,8 @@
 					<td><a class="btn btn-sm btn-info"
 						th:attr="onclick='javascript:editNotebook(\'' + ${notebook.id} + '\', \'' + ${notebook.title} + '\', \'' + ${notebook.description} + '\');'"
 						th:text="#{button.edit}"></a> <a class="btn btn-sm btn-warning"
-						th:href="@{'/viewNotebooks/' + ${notebook.id}}"
-						th:text="#{button.delete}"></a>
-						<!-- th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'" --></td>
+						th:href="@{'/deleteNotebook/' + ${notebook.id}}"
+						th:text="#{button.delete}"></a> <!-- th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'" --></td>
 				</tr>
 			</tbody>
 		</table>
@@ -95,11 +94,15 @@
 			$("#id").val(id);
 			$("#title").val(title);
 			$("#description").val(description);
-			// 			$("#id").val(id);
-			//na cancel obrisati sva polja = id je hidden polje
-			// 			console.log("noteForm: " + noteForm);
-			//dohvati notebookForm, prekopiraj objekt u njega
+		}
 
+		var checkForm = function() {
+			if ($("#id").val() != "" || $("#title").val() != ""
+					|| $("#description").val() != "") {
+				showForm();
+			} else {
+				hideForm();
+			}
 		}
 
 		var hideForm = function() {

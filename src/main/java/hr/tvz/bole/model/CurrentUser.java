@@ -5,13 +5,23 @@ import java.util.List;
 
 import hr.tvz.bole.enums.UserRoles;
 
-public class UserProjection implements Serializable {
+public class CurrentUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	Integer id;
 	String username;
 	List<UserRoles> roles;
+
+	// XXX - easier check:
+	public Boolean isAdmin() {
+		return roles.stream().filter(e -> {
+			if (e.name().equals(UserRoles.ROLE_ADMIN.name()))
+				return true;
+			else
+				return false;
+		}).count() == 1;
+	}
 
 	public Integer getId() {
 		return id;

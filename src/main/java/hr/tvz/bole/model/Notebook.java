@@ -20,25 +20,10 @@ public class Notebook implements Serializable {
 	Integer id;
 	String title;
 	String description;
-	
-	//TODO - skip while importing from database:
+
+	// XXX - skip while importing from database:
 	@Transient
 	Integer numberOfNotes;
-
-	public Notebook() {
-	}
-
-	public Notebook(String title, String description) {
-		this.title = title;
-		this.description = description;
-	}
-
-	// TODO - popraviti u bazi da koristimo ID-eve:
-	public Notebook(Integer id, String title, String description) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-	}
 
 	public Integer getId() {
 		return id;
