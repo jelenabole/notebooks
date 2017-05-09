@@ -15,14 +15,14 @@ CREATE  TABLE users (
 
 CREATE TABLE user_roles (
 	id int(11) IDENTITY PRIMARY KEY,
-	username varchar(50) NOT NULL,
+	user INT NOT NULL,
 	role varchar(50) NOT NULL,
-	FOREIGN KEY (username) REFERENCES users (username)
+	FOREIGN KEY (user) REFERENCES users (id)
 );
 
 CREATE TABLE notebooks (
-	id INT(11) AUTO_INCREMENT,
-	title VARCHAR(50) PRIMARY KEY,
+	id INT(11) IDENTITY PRIMARY KEY,
+	title VARCHAR(50),
 	description VARCHAR(100) NOT NULL
 );
 
@@ -31,10 +31,10 @@ CREATE TABLE notes (
 	id INT(11) IDENTITY PRIMARY KEY,
 	header VARCHAR(100),
 	text VARCHAR(1000),
-	user VARCHAR(50) NOT NULL,
-	notebook VARCHAR(50) NOT NULL,
+	user INT NOT NULL,
+	notebook INT NOT NULL,
 	important TINYINT DEFAULT 0,
 	mark VARCHAR(20) DEFAULT NULL,
-	FOREIGN KEY (user) REFERENCES users (username),
-	FOREIGN KEY (notebook) REFERENCES notebooks (title)
+	FOREIGN KEY (user) REFERENCES users (id),
+	FOREIGN KEY (notebook) REFERENCES notebooks (id)
 );

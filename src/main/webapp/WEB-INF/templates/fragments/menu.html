@@ -146,17 +146,16 @@
 				<li><a href="?lang=hr" th:utext="#{menu.croatian}"></a></li>
 
 				<li role="separator" class="divider"></li>
-				<li><a th:href="@{|user/${#authentication.name}|}"
-					th:utext="#{menu.userInfo}">Info</a></li>
+				<li><a th:href="@{/userInfo}" th:utext="#{menu.userInfo}">Info</a></li>
 				<li><a th:href="@{/logout}" th:utext="#{menu.logout}">Logout</a></li>
 			</ul></li>
 	</ul>
 
 
-	<!-- ??? -->
+	<!-- header -->
 	<div th:fragment="header-no-collapse" class="navbar-header">
-		<a class="navbar-brand" th:href="@{newNote}"
-			th:utext="#{menu.header}">Menu Title</a>
+		<a class="navbar-brand" th:href="@{newNote}" th:utext="#{menu.header}">Menu
+			Title</a>
 	</div>
 
 

@@ -52,6 +52,11 @@
 		</div>
 	</div>
 
+	<!-- 
+	<a class="btn btn-info" onclick="showForm()" th:text="#{button.add}"></a>
+ 	-->
+
+
 	<div class="viewNotes">
 		<table class="table table-striped">
 			<thead class="thead-inverse">
@@ -69,12 +74,12 @@
 					<td th:text="${notebook.title}"></td>
 					<td th:text="${notebook.description}"></td>
 					<td th:text="${notebook.numberOfNotes}"></td>
-					<td><a class="btn btn-info"
+					<td><a class="btn btn-sm btn-info"
 						th:attr="onclick='javascript:editNotebook(\'' + ${notebook.id} + '\', \'' + ${notebook.title} + '\', \'' + ${notebook.description} + '\');'"
-						th:text="#{button.edit}"></a> <a class="btn btn-warning"
+						th:text="#{button.edit}"></a> <a class="btn btn-sm btn-warning"
 						th:href="@{'/viewNotebooks/' + ${notebook.id}}"
-						th:text="#{button.delete}"
-						th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'"></a></td>
+						th:text="#{button.delete}"></a>
+						<!-- th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'" --></td>
 				</tr>
 			</tbody>
 		</table>

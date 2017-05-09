@@ -2,10 +2,20 @@ package hr.tvz.bole.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
 	String name;
 	String surname;
@@ -18,18 +28,20 @@ public class User implements Serializable {
 	public User() {
 	};
 
-	public User(String username, String name, String surname) {
-		this.username = username;
-		this.name = name;
-		this.surname = surname;
-	}
-
-	// TODO - popraviti u bazi da postoji ID:
 	public User(Integer id, String username, String name, String surname) {
 		this.id = id;
 		this.username = username;
 		this.name = name;
 		this.surname = surname;
+	}
+	
+	// findAll:
+	public User(Integer id, String username, String name, String surname, String email) {
+		this.id = id;
+		this.username = username;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
 	}
 
 	public User(Integer id, String name, String surname, String username, String email, String password,

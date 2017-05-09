@@ -38,7 +38,7 @@
 					<td th:text="${user.username}"></td>
 					<td th:text="${user.enabled} ? 'DA' : 'NE'"></td>
 					<td>Roles * TODO</td>
-					<td><a class="btn btn-warning"
+					<td><a class="btn btn-sm btn-warning"
 						th:href="@{'/viewUsers/' + ${user.id}}" th:text="#{button.delete}"></a></td>
 				</tr>
 			</tbody>

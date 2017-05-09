@@ -75,17 +75,41 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.5</version>
 		</dependency>
-		
+
 		<!-- embedded H2 database -->
-		<dependency>
+		<dependency> <!-- needed for validations ?!?! -->
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>4.3.6.RELEASE</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.194</version>
+		</dependency>
+
+		<!-- hibernate -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>4.3.6.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.9.Final</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.3.0.Final</version>
 		</dependency>
 	</dependencies>
 </project>

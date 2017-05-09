@@ -33,7 +33,7 @@
 			<password-encoder hash="bcrypt" />
 			<jdbc-user-service data-source-ref="dataSource"
 				users-by-username-query="SELECT username, password, enabled FROM users WHERE username = ?"
-				authorities-by-username-query="SELECT username, role FROM user_roles WHERE username = ?" />
+				authorities-by-username-query="SELECT u.username, r.role FROM users u, user_roles r WHERE u.id = r.user AND u.username = ?" />
 		</authentication-provider>
 	</authentication-manager>
 

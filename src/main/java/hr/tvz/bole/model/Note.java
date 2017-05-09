@@ -2,15 +2,32 @@ package hr.tvz.bole.model;
 
 import java.io.Serializable;
 
-import hr.tvz.bole.form.NewNoteForm;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
+import hr.tvz.bole.web.form.NewNoteForm;
+
+@Entity
+@Table(name = "notes")
 public class Note implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
+	@ManyToOne
+	@JoinColumn(name = "user")
 	User user;
+	@ManyToOne
+	@JoinColumn(name = "notebook")
 	Notebook notebook;
+
 	String header;
 	String text;
 	Boolean important;

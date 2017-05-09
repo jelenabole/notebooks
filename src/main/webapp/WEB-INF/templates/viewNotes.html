@@ -42,9 +42,9 @@
 						th:text="${note.important} ? #{table.yes} : #{table.no}"></span> <span
 						th:if="${note.mark} != null" class="glyphicon glyphicon-heart"
 						th:style="'color:' + ${note.mark}"></span></td>
-					<td><a class="btn btn-info"
+					<td><a class="btn btn-sm btn-info"
 						th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
-						<a class="btn btn-warning" th:href="@{'/viewNotes/' + ${note.id}}"
+						<a class="btn btn-sm btn-warning" th:href="@{'/viewNotes/' + ${note.id}}"
 						th:text="#{button.delete}"></a></td>
 				</tr>
 			</tbody>

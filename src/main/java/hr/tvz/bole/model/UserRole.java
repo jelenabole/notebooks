@@ -2,26 +2,36 @@ package hr.tvz.bole.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "user_roles")
 public class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
-	String username;
+	Integer user;
 	String role;
 
 	public UserRole() {
 	};
 
-	public UserRole(Integer id, String username, String role) {
+	public UserRole(Integer id, Integer user, String role) {
 		this.id = id;
-		this.username = username;
+		this.user = user;
 		this.role = role;
 	}
-	
-	//stvaranje UserRole za session:
-	public UserRole(String username, boolean hasAdminRole) {
-		this.username = username;
+
+	// stvaranje UserRole za session:
+	public UserRole(Integer user, boolean hasAdminRole) {
+		this.user = user;
 		if (hasAdminRole)
 			role = "ROLE_ADMIN";
 	}
@@ -34,12 +44,12 @@ public class UserRole implements Serializable {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public Integer getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(Integer user) {
+		this.user = user;
 	}
 
 	public String getRole() {
@@ -56,7 +66,7 @@ public class UserRole implements Serializable {
 
 	@Override
 	public String toString() {
-		return "USER ROLE - id: " + id + " - username: " + username + " - role: " + role;
+		return "USER ROLE - id: " + id + " - userId: " + user + " - role: " + role;
 
 	}
 }

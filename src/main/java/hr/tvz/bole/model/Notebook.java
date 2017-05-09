@@ -2,13 +2,27 @@ package hr.tvz.bole.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "notebooks")
 public class Notebook implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer id;
 	String title;
 	String description;
+	
+	//TODO - skip while importing from database:
+	@Transient
 	Integer numberOfNotes;
 
 	public Notebook() {

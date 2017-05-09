@@ -23,8 +23,7 @@
 
 	<div class="mainNote">
 		<div class="row">
-			<h1 th:utext="#{header.newNote}"
-				class="col-sm-3 col-sm-offset-2">header</h1>
+			<h1 th:utext="#{header.newNote}" class="col-sm-3 col-sm-offset-2">header</h1>
 		</div>
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-1">
@@ -33,22 +32,16 @@
 						<tr>
 							<td><label for="user" th:utext="#{note.form.user}"></label></td>
 							<td><select id="user" th:field="*{user}"
-								sec:authorize="hasRole('ROLE_ADMIN')"
+								th:disabled="!${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
 								th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'">
-									<option value="-1" selected
-										th:utext="#{note.form.chooseUser}"></option>
+									<option value="-1" selected th:utext="#{note.form.chooseUser}"></option>
 									<option th:each="user : ${userList}" th:value="${user.id}"
 										th:text="${user.fullName}"></option>
-							</select> <input id="user" th:field="*{user.fullName}"
-								sec:authorize="!hasRole('ROLE_ADMIN')" disabled
-								th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'" />
-
-								<span class="error" th:if="${#fields.hasErrors('user')}"
+							</select><span class="error" th:if="${#fields.hasErrors('user')}"
 								th:errors="*{user}"></span>
 						</tr>
 						<tr>
-							<td><label for="notebook"
-								th:utext="#{note.form.notebook}"></label></td>
+							<td><label for="notebook" th:utext="#{note.form.notebook}"></label></td>
 							<td><select id="notebook" th:field="*{notebook}"
 								th:class="${#fields.hasErrors('notebook')}? 'form-control has-error' : 'form-control'">
 									<option value="-1" th:utext="#{note.form.chooseNotebook}">something</option>
@@ -61,9 +54,8 @@
 							<td><label for="header" th:utext="#{note.form.title}"></label></td>
 							<td><input id="header" th:field="*{header}"
 								th:class="${#fields.hasErrors('header')}? 'form-control has-error' : 'form-control'"
-								th:placeholder="#{note.form.enterTitle}" /> <span
-								class="error" th:if="${#fields.hasErrors('header')}"
-								th:errors="*{header}">error</span></td>
+								th:placeholder="#{note.form.enterTitle}" /> <span class="error"
+								th:if="${#fields.hasErrors('header')}" th:errors="*{header}">error</span></td>
 						</tr>
 						<tr>
 							<td><label for="text" th:utext="#{note.form.text}"></label></td>
@@ -77,12 +69,10 @@
 							<td></td>
 							<td><label class="block"><input id="important"
 									type="checkbox" value="1" th:field="*{important}"
-									th:checked="'true'" /> <span
-									th:utext="#{note.important}"></span></label> <!-- boje - ralzičite oznake -->
-
-								<label class="marks" th:each="noteMark : ${noteMarks}">
-									<input type="radio" th:field="*{mark}"
-									th:value="${noteMark.name}" /> <span
+									th:checked="'true'" /> <span th:utext="#{note.important}"></span></label>
+								<!-- boje - ralzičite oznake --> <label class="marks"
+								th:each="noteMark : ${noteMarks}"> <input type="radio"
+									th:field="*{mark}" th:value="${noteMark.name}" /> <span
 									th:utext="#{${noteMark.translation}}"></span>
 							</label></td>
 						</tr>
@@ -104,7 +94,7 @@
 					<thead class="thead-inverse">
 						<tr>
 							<th th:utext="#{note.notebook}"></th>
-							<th th:utext="#{note.numberOfNotes}"></th>
+							<th th:utext="#{note.enteredNotes}"></th>
 						</tr>
 					</thead>
 					<tbody>
