@@ -20,7 +20,7 @@ import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.UserForm;
 
 @Controller
-@SessionAttributes({ "user" })
+@SessionAttributes({ "currentUser" })
 public class UserInfoController {
 
 	private static Logger logger = LoggerFactory.getLogger(UserInfoController.class);
@@ -29,9 +29,9 @@ public class UserInfoController {
 	UserService userService;
 
 	@GetMapping("/userInfo")
-	public String getUserInfo(@SessionAttribute CurrentUser user, Model model) {
-		logger.info("GET - info o korisniku: " + user.getUsername());
-		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(user.getId()));
+	public String getUserInfo(@SessionAttribute CurrentUser currentUser, Model model) {
+		logger.info("GET - info o korisniku: " + currentUser.getUsername());
+		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(currentUser.getId()));
 
 		model.addAttribute("userForm", userForm);
 		return "userInfo";

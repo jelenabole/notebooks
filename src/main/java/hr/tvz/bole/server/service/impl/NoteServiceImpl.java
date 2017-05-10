@@ -12,6 +12,7 @@ import hr.tvz.bole.model.Note;
 import hr.tvz.bole.other.mapper.NoteMapper;
 import hr.tvz.bole.server.repository.NoteRepository;
 import hr.tvz.bole.server.service.NoteService;
+import hr.tvz.bole.web.form.FilterForm;
 import hr.tvz.bole.web.form.NoteForm;
 
 @Service
@@ -109,6 +110,122 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public NoteForm getOneAsForm(Integer id) {
 		return NoteMapper.mapNoteToForm(findOne(id));
+	}
+
+	@Override
+	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser) {
+		System.out.println(filterForm.getOrderBy());
+		System.out.println(filterForm.getOrderDirection());
+		System.out.println(filterForm.getSearchBy());
+
+		List<Note> listOfNotes;
+		if (currentUser.isAdmin())
+			listOfNotes = getFilteredForAdmin(filterForm);
+		else
+			listOfNotes = getFilteredForUser(filterForm, currentUser.getId());
+
+		if (filterForm.getSearchBy().isEmpty())
+			return listOfNotes;
+		else
+			// TODO - filtrirati:
+			return listOfNotes;
+	}
+
+	private List<Note> getFilteredForUser(FilterForm filterForm, Integer userId) {
+		switch (filterForm.getOrderDirection()) {
+			case "asc":
+				switch (filterForm.getOrderBy()) {
+					case "notebook":
+						return noteRepository.findAllByUserIdAndStatusOrderByNotebookAsc(userId,
+								DBStatus.ACTIVE);
+					case "header":
+						return noteRepository.findAllByUserIdAndStatusOrderByHeaderAsc(userId,
+								DBStatus.ACTIVE);
+					case "text":
+						return noteRepository.findAllByUserIdAndStatusOrderByTextAsc(userId,
+								DBStatus.ACTIVE);
+					case "importance":
+						return noteRepository.findAllByUserIdAndStatusOrderByImportanceAsc(userId,
+								DBStatus.ACTIVE);
+					case "mark":
+						return noteRepository.findAllByUserIdAndStatusOrderByMarkAsc(userId,
+								DBStatus.ACTIVE);
+					default:
+						return noteRepository.findAllByUserIdAndStatus(userId, DBStatus.ACTIVE);
+
+				}
+			case "desc":
+				switch (filterForm.getOrderBy()) {
+					case "notebook":
+						return noteRepository.findAllByUserIdAndStatusOrderByNotebookDesc(userId,
+								DBStatus.ACTIVE);
+					case "header":
+						return noteRepository.findAllByUserIdAndStatusOrderByHeaderDesc(userId,
+								DBStatus.ACTIVE);
+					case "text":
+						return noteRepository.findAllByUserIdAndStatusOrderByTextDesc(userId,
+								DBStatus.ACTIVE);
+					case "importance":
+						return noteRepository.findAllByUserIdAndStatusOrderByImportanceDesc(userId,
+								DBStatus.ACTIVE);
+					case "mark":
+						return noteRepository.findAllByUserIdAndStatusOrderByMarkDesc(userId,
+								DBStatus.ACTIVE);
+					default:
+						return noteRepository.findAllByUserIdAndStatusOrderByIdDesc(userId,
+								DBStatus.ACTIVE);
+				}
+
+		}
+		return null;
+	}
+
+	private List<Note> getFilteredForAdmin(FilterForm filterForm) {
+		switch (filterForm.getOrderDirection()) {
+			case "asc":
+				switch (filterForm.getOrderBy()) {
+					case "userName":
+						return noteRepository.findAllByOrderByUserNameAscUserSurnameAsc();
+					case "userSurname":
+						return noteRepository.findAllByOrderByUserSurnameAscUserNameAsc();
+					case "notebook":
+						return noteRepository.findAllByOrderByNotebookTitleAsc();
+					case "header":
+						return noteRepository.findAllByOrderByHeaderAsc();
+					case "text":
+						return noteRepository.findAllByOrderByTextAsc();
+					case "importance":
+						return noteRepository.findAllByOrderByImportanceAsc();
+					case "mark":
+						return noteRepository.findAllByOrderByMarkAsc();
+					case "status":
+						return noteRepository.findAllByOrderByStatusAsc();
+					default:
+						return noteRepository.findAll();
+				}
+			case "desc":
+				switch (filterForm.getOrderBy()) {
+					case "userName":
+						return noteRepository.findAllByOrderByUserNameDescUserSurnameDesc();
+					case "userSurname":
+						return noteRepository.findAllByOrderByUserSurnameDescUserNameDesc();
+					case "notebook":
+						return noteRepository.findAllByOrderByNotebookTitleDesc();
+					case "header":
+						return noteRepository.findAllByOrderByHeaderDesc();
+					case "text":
+						return noteRepository.findAllByOrderByTextDesc();
+					case "importance":
+						return noteRepository.findAllByOrderByImportanceDesc();
+					case "mark":
+						return noteRepository.findAllByOrderByMarkDesc();
+					case "status":
+						return noteRepository.findAllByOrderByStatusDesc();
+					default:
+						return noteRepository.findAllByOrderByIdDesc();
+				}
+		}
+		return null;
 	}
 
 }

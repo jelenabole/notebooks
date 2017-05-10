@@ -21,7 +21,8 @@
 
 	<div class="mainNote newForm">
 		<div class="col-sm-4 col-sm-offset-4">
-			<form method="POST" th:object="${notebookForm}" class="notebookForm">
+			<form th:action="@{/saveNotebook}" method="POST"
+				th:object="${notebookForm}" class="notebookForm">
 				<table class="noteForm">
 					<tr>
 						<td><label for="title" th:utext="#{notebook.form.title}"></label></td>

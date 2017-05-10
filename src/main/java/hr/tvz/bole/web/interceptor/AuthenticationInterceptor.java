@@ -59,8 +59,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 		if (currentUser == null) {
 			currentUser = userService.getCurrentUser(request.getUserPrincipal().getName());
 			request.getSession().setAttribute("currentUser", currentUser);
+			logger.info("INTERCEPTOR - logged in as: " + currentUser.getUsername());
 		}
-		logger.info("INTERCEPTOR - logged in as: " + currentUser.getUsername());
 		
 		return true;
 	}

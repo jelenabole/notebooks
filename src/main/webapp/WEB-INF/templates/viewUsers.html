@@ -21,7 +21,8 @@
 
 	<div class="mainNote newForm">
 		<div class="col-sm-4 col-sm-offset-4">
-			<form method="POST" th:object="${roleForm}" class="roleForm">
+			<form th:action="@{/saveRole}" method="POST"
+				th:object="${roleForm}" class="roleForm">
 				<table class="noteForm">
 					<tr>
 						<td><label for="user" th:utext="#{user.username}"></label></td>
@@ -72,9 +73,9 @@
 						th:text="${user.enabled} ? #{table.disable} : #{table.enable}"></a></td>
 					<td><span th:each="role : ${user.roles}"><span
 							th:utext="#{${role.translation}}"></span> </span></td>
-					<td><a class="btn btn-sm btn-warning"
+					<td><a th:if="${user.id} != ${currentUser.id}" class="btn btn-sm btn-warning"
 						th:href="@{'/viewUsers/' + ${user.id}}" th:text="#{button.delete}"></a>
-						<a class="btn btn-sm btn-info" th:text="#{button.editRoles}"
+						<a th:if="${user.id} != ${currentUser.id}" class="btn btn-sm btn-info" th:text="#{button.editRoles}"
 						th:attr="onclick='javascript:editRole(\'' + ${user} + '\');'">Roles</a></td>
 				</tr>
 			</tbody>

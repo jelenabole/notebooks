@@ -4,6 +4,7 @@ import java.util.List;
 
 import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.Note;
+import hr.tvz.bole.web.form.FilterForm;
 import hr.tvz.bole.web.form.NoteForm;
 
 public interface NoteService {
@@ -36,5 +37,8 @@ public interface NoteService {
 
 	// XXX - funkcije s mapiranjima (u forme):
 	public NoteForm getOneAsForm(Integer id);
+
+	//filtered:
+	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser);
 
 }

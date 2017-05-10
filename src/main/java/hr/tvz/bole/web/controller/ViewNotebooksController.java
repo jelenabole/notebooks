@@ -1,5 +1,8 @@
 package hr.tvz.bole.web.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -16,10 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hr.tvz.bole.server.service.NotebookService;
+import hr.tvz.bole.web.form.FilterForm;
 import hr.tvz.bole.web.form.NotebookForm;
 
 @Controller
-@SessionAttributes({ "currentUser" })
+@SessionAttributes({ "currentUser", "filterForm" })
 public class ViewNotebooksController {
 
 	private static Logger logger = LoggerFactory.getLogger(ViewNotebooksController.class);
@@ -27,11 +31,21 @@ public class ViewNotebooksController {
 	@Autowired
 	NotebookService notebookService;
 
+	@ModelAttribute("filterForm")
+	public FilterForm getFilterForm() {
+		List<String> orderByList = Arrays.asList("title", "description", "numberOfNotes");
+		String objectName = "notebook";
+
+		return new FilterForm(orderByList, objectName);
+	}
+
 	@GetMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
 	public String getNewForm(@ModelAttribute NotebookForm notebookForm, Model model) {
 		logger.info("GET - view notebooks");
 
+		// poslati za filtere:
+		model.addAttribute("filterForm", getFilterForm());
 		model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 
 		return "viewNotebooks";
@@ -39,21 +53,29 @@ public class ViewNotebooksController {
 
 	@PostMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
+	public String filterNotebooks(@ModelAttribute FilterForm filterForm, Model model) {
+		logger.info("GET - view notebooks");
+
+		model.addAttribute("notes", notebookService.getFilteredNotes(filterForm));
+
+		return "viewNotes";
+	}
+
+	@PostMapping("/saveNotebook")
+	@Secured("ROLE_ADMIN")
 	public String editExistingNotebook(@Valid NotebookForm notebookForm, BindingResult result,
 			Model model) {
-		logger.info("EDIT - notebook id: " + notebookForm.getId());
+		logger.info("EDIT/NEW - notebook id: " + notebookForm.getId());
 
 		if (result.hasErrors()) {
 			model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 			return "viewNotebooks";
 		}
-
 		notebookService.save(notebookForm);
 
-		model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 		model.addAttribute("notebookForm", new NotebookForm());
 
-		return "viewNotebooks";
+		return "redirect:/viewNotebooks";
 	}
 
 	@GetMapping("/deleteNotebook/{id}")

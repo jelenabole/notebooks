@@ -4,8 +4,9 @@ import java.util.List;
 
 import hr.tvz.bole.exceptions.RoleExistsForUser;
 import hr.tvz.bole.exceptions.UserExistsException;
-import hr.tvz.bole.model.User;
 import hr.tvz.bole.model.CurrentUser;
+import hr.tvz.bole.model.User;
+import hr.tvz.bole.web.form.FilterForm;
 import hr.tvz.bole.web.form.UserForm;
 
 public interface UserService {
@@ -29,5 +30,7 @@ public interface UserService {
 	public void changeEnabledStatus(Integer id);
 
 	public CurrentUser getCurrentUser(String username);
+
+	public List<User> getFilteredNotes(FilterForm filterForm);
 
 }

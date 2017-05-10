@@ -18,15 +18,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
 	public List<Note> findAllByUserIdAndStatus(Integer userId, DBStatus status);
 
-	// sortirane:
-	public List<Note> findAllByOrderByHeaderAsc();
-
-	public List<Note> findAllByUserIdAndStatusOrderByHeaderAsc(Integer userId, DBStatus status);
-
-	public List<Note> findAllByOrderByHeaderDesc();
-
-	public List<Note> findAllByUserIdAndStatusOrderByHeaderDesc(Integer userId, DBStatus status);
-
 	public Note findById(Integer id);
 
 	public List<Note> findByUserId(Integer userId);
@@ -48,10 +39,65 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
 	public Integer countByNotebookId(Integer id);
 
-	// public Integer countByNotebookIdAndUserId(Integer notebookId, Integer
-	// userId);
+	// sort Asc - Admin:
+	public List<Note> findAllByOrderByUserNameAscUserSurnameAsc();
 
-	// @Query("SELECT COUNT(u) FROM User u WHERE u.name=?1")
-	// Long aMethodNameOrSomething(String name);
+	public List<Note> findAllByOrderByUserSurnameAscUserNameAsc();
+
+	public List<Note> findAllByOrderByNotebookTitleAsc();
+
+	public List<Note> findAllByOrderByHeaderAsc();
+
+	public List<Note> findAllByOrderByTextAsc();
+
+	public List<Note> findAllByOrderByImportanceAsc();
+
+	public List<Note> findAllByOrderByMarkAsc();
+
+	public List<Note> findAllByOrderByStatusAsc();
+
+	// sort Asc - User:
+	public List<Note> findAllByUserIdAndStatusOrderByNotebookAsc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByHeaderAsc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByTextAsc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByImportanceAsc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByMarkAsc(Integer userId, DBStatus status);
+
+	// sort Desc - Admin:
+	public List<Note> findAllByOrderByIdDesc();
+
+	public List<Note> findAllByOrderByUserNameDescUserSurnameDesc();
+
+	public List<Note> findAllByOrderByUserSurnameDescUserNameDesc();
+
+	public List<Note> findAllByOrderByNotebookTitleDesc();
+
+	public List<Note> findAllByOrderByHeaderDesc();
+
+	public List<Note> findAllByOrderByTextDesc();
+
+	public List<Note> findAllByOrderByImportanceDesc();
+
+	public List<Note> findAllByOrderByMarkDesc();
+
+	public List<Note> findAllByOrderByStatusDesc();
+
+	// sort Desc - User:
+	public List<Note> findAllByUserIdAndStatusOrderByIdDesc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByNotebookDesc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByHeaderDesc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByTextDesc(Integer userId, DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByImportanceDesc(Integer userId,
+			DBStatus status);
+
+	public List<Note> findAllByUserIdAndStatusOrderByMarkDesc(Integer userId, DBStatus status);
 
 }
