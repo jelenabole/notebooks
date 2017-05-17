@@ -101,14 +101,6 @@ public class User implements Serializable {
 		this.enabled = enabled;
 	}
 
-	// public List<UserRole> getRoles() {
-	// return roles;
-	// }
-	//
-	// public void setRoles(List<UserRole> roles) {
-	// this.roles = roles;
-	// }
-
 	public List<UserRoles> getRoles() {
 		return roles;
 	}
@@ -122,4 +114,26 @@ public class User implements Serializable {
 		return "USER - id: " + id + " - fullname: " + name + " " + surname + " - username: "
 				+ username + " - password: " + password + " - enabled: " + enabled;
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		if (!(other instanceof User))
+			return false;
+
+		User user = (User) other;
+		System.out.println("USER hash equals - id: " + id.equals(user.id));
+		return (id.equals(user.id) && username.equals(user.username));
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 31 + id.hashCode();
+		hash = hash * 31 + username.hashCode();
+
+		return hash;
+	}
+
 }

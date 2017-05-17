@@ -53,16 +53,15 @@
 							th:errors="*{email}">error</span></td>
 					</tr>
 					<tr>
-						<td><label for="matchPassword"
-							th:utext="#{user.form.newPassword}"></label></td>
-						<td><input type="password" name="matchPassword"
-							id="matchPassword" th:field="*{matchPassword}"
-							class="form-control" th:placeholder="#{user.newPassword}" /></td>
+						<td><label for="password" th:utext="#{user.form.newPassword}"></label></td>
+						<td><input type="password" name="password" id="password"
+							th:field="*{newPassword}" class="form-control"
+							th:placeholder="#{user.newPassword}" /></td>
 					</tr>
 					<tr>
-						<td><input type="hidden" name="id" id="id" th:field="*{id}"
-							class="form-control" />
-							<span th:if="${saved}" th:utext="#{message.changesSaved}"></span></td>
+						<td><input type="hidden" th:field="*{id}" /> <input
+							type="hidden" th:field="*{password}" /> <span th:if="${saved}"
+							th:utext="#{message.changesSaved}"></span></td>
 						<td><input type="submit" name="register"
 							th:value="#{button.save}" class="btn btn-success"></td>
 					</tr>

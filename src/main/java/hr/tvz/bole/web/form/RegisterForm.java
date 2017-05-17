@@ -1,15 +1,14 @@
 package hr.tvz.bole.web.form;
 
-import java.util.List;
-
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import hr.tvz.bole.enums.UserRoles;
+import hr.tvz.bole.web.validators.PasswordMatch;
 import hr.tvz.bole.web.validators.ValidEmail;
 
-public class UserForm {
+@PasswordMatch
+public class RegisterForm {
 
 	Integer id;
 
@@ -26,13 +25,12 @@ public class UserForm {
 	@ValidEmail
 	@NotBlank
 	@Size(max = 50)
-	String email;
+	private String email;
 
-	// TODO - pass potreban samo kad si osoba sama sprema podatke
-	String password;
-	String newPassword;
-
-	List<UserRoles> roles;
+	@NotBlank
+	@Size(max = 50)
+	private String password;
+	private String matchPassword;
 
 	public Integer getId() {
 		return id;
@@ -74,12 +72,12 @@ public class UserForm {
 		this.password = password;
 	}
 
-	public String getNewPassword() {
-		return newPassword;
+	public String getMatchPassword() {
+		return matchPassword;
 	}
 
-	public void setNewPassword(String newPassword) {
-		this.newPassword = newPassword;
+	public void setMatchPassword(String matchPassword) {
+		this.matchPassword = matchPassword;
 	}
 
 	public String getEmail() {
@@ -88,14 +86,6 @@ public class UserForm {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public List<UserRoles> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<UserRoles> roles) {
-		this.roles = roles;
 	}
 
 }

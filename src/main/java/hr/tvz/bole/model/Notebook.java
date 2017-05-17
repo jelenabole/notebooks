@@ -61,4 +61,25 @@ public class Notebook implements Serializable {
 	public String toString() {
 		return "NOTEBOOK - id: " + id + " - title: " + title + " - description: " + description;
 	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		if (!(other instanceof Notebook))
+			return false;
+
+		Notebook notebook = (Notebook) other;
+		System.out.println("NOTEBOOK hash equals - id: " + id.equals(notebook.id));
+		return (id.equals(notebook.id) && title.equals(notebook.title));
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 31 + id.hashCode();
+		hash = hash * 31 + title.hashCode();
+
+		return hash;
+	}
 }

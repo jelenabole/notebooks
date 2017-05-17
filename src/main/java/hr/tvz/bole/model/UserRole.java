@@ -71,6 +71,28 @@ public class UserRole implements Serializable {
 	@Override
 	public String toString() {
 		return "USER ROLE - id: " + id + " - userId: " + user.getId() + " - role: " + role;
+	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		if (!(other instanceof UserRole))
+			return false;
+
+		UserRole role = (UserRole) other;
+		System.out.println("ROLE hash equals - id: " + id.equals(role.id));
+		return (id.equals(role.id) && user.getId().equals(role.getUser().getId())
+				&& role.equals(role.role));
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 1;
+		hash = hash * 31 + id.hashCode();
+		hash = hash * 31 + user.getId().hashCode();
+		hash = hash * 31 + role.hashCode();
+
+		return hash;
 	}
 }

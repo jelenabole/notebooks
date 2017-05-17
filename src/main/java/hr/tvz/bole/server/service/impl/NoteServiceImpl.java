@@ -2,6 +2,8 @@ package hr.tvz.bole.server.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import hr.tvz.bole.web.form.NoteForm;
 @Service
 @Transactional
 public class NoteServiceImpl implements NoteService {
+
+	private static Logger logger = LoggerFactory.getLogger(NoteServiceImpl.class);
 
 	@Autowired
 	NoteRepository noteRepository;
@@ -114,21 +118,23 @@ public class NoteServiceImpl implements NoteService {
 
 	@Override
 	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser) {
-		System.out.println(filterForm.getOrderBy());
-		System.out.println(filterForm.getOrderDirection());
-		System.out.println(filterForm.getSearchBy());
+		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
+				+ " (" + filterForm.getSearchBy() + ")");
 
-		List<Note> listOfNotes;
+		if (!filterForm.getSearchBy().isEmpty()) {
+			return noteRepository
+					.findAllByUserUsernameContainingOrNotebookTitleContainingOrHeaderContainingOrTextContaining(
+							filterForm.getSearchBy(), filterForm.getSearchBy(),
+							filterForm.getSearchBy(), filterForm.getSearchBy());
+		}
+
+		List<Note> notes;
 		if (currentUser.isAdmin())
-			listOfNotes = getFilteredForAdmin(filterForm);
+			notes = getFilteredForAdmin(filterForm);
 		else
-			listOfNotes = getFilteredForUser(filterForm, currentUser.getId());
+			notes = getFilteredForUser(filterForm, currentUser.getId());
 
-		if (filterForm.getSearchBy().isEmpty())
-			return listOfNotes;
-		else
-			// TODO - filtrirati:
-			return listOfNotes;
+		return notes;
 	}
 
 	private List<Note> getFilteredForUser(FilterForm filterForm, Integer userId) {
@@ -177,6 +183,7 @@ public class NoteServiceImpl implements NoteService {
 				}
 
 		}
+		logger.error("notebook filter (user) - return NULL");
 		return null;
 	}
 
@@ -225,6 +232,7 @@ public class NoteServiceImpl implements NoteService {
 						return noteRepository.findAllByOrderByIdDesc();
 				}
 		}
+		logger.error("notebook filter (admin) - return NULL");
 		return null;
 	}
 

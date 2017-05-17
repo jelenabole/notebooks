@@ -175,7 +175,7 @@ public class NewNoteController {
 		}
 
 		model.addAttribute("notebookList", notebookService.findAll());
-		model.addAttribute("listOfNotes", listOfNotes);
+//		model.addAttribute("listOfNotes", listOfNotes);
 		model.addAttribute("noteImportance", NoteImportance.getAllImportance());
 		fillStats(model, listOfNotes);
 	}

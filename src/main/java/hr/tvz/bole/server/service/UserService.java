@@ -31,6 +31,6 @@ public interface UserService {
 
 	public CurrentUser getCurrentUser(String username);
 
-	public List<User> getFilteredNotes(FilterForm filterForm);
+	public List<User> getFilteredUsers(FilterForm filterForm);
 
 }

@@ -30,7 +30,7 @@ public class UserInfoController {
 
 	@GetMapping("/userInfo")
 	public String getUserInfo(@SessionAttribute CurrentUser currentUser, Model model) {
-		logger.info("GET - info o korisniku: " + currentUser.getUsername());
+		logger.info("GET - user info: " + currentUser.getUsername());
 		UserForm userForm = UserMapper.mapUserToUserForm(userService.findOne(currentUser.getId()));
 
 		model.addAttribute("userForm", userForm);
@@ -46,7 +46,7 @@ public class UserInfoController {
 		}
 
 		userService.update(userForm);
-		logger.info("POST - update korisnika: " + userForm.getUsername());
+		logger.info("UPDATE - user: " + userForm.getUsername());
 
 		model.addAttribute("saved", true);
 		return "userInfo";

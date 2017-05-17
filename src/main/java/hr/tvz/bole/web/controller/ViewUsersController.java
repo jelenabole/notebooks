@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.FilterForm;
-import hr.tvz.bole.web.form.RoleForm;
+import hr.tvz.bole.web.form.UserForm;
 
 @Controller
 @SessionAttributes({ "currentUser", "filterForm" })
@@ -35,6 +36,7 @@ public class ViewUsersController {
 		List<String> orderByList = Arrays.asList("name", "surname", "username", "email", "enabled",
 				"roles");
 		String objectName = "user";
+
 		return new FilterForm(orderByList, objectName);
 	}
 
@@ -48,7 +50,7 @@ public class ViewUsersController {
 
 		// TODO - poslati enum (role)
 		model.addAttribute("users", userService.findAll());
-		model.addAttribute("roleForm", new RoleForm());
+		model.addAttribute("userForm", new UserForm());
 		return "viewUsers";
 	}
 
@@ -57,21 +59,26 @@ public class ViewUsersController {
 	public String filterUsers(@ModelAttribute FilterForm filterForm, Model model) {
 		logger.info("GET - view users");
 
-		model.addAttribute("notes", userService.getFilteredNotes(filterForm));
-
-		return "viewNotes";
-	}
-
-	@PostMapping("/saveRole")
-	@Secured({ "ROLE_ADMIN" })
-	public String addNewRole(@Valid RoleForm roleForm, Model model) {
-		logger.info("POST - viewUsers - add new Role");
-
-		// TODO - dodati novu rolu u bazu
-
-		model.addAttribute("users", userService.findAll());
+		model.addAttribute("userForm", new UserForm());
+		model.addAttribute("users", userService.getFilteredUsers(filterForm));
 
 		return "viewUsers";
+	}
+
+	@PostMapping("/saveUser")
+	@Secured({ "ROLE_ADMIN" })
+	public String addNewUser(@Valid UserForm userForm, BindingResult result, Model model) {
+		logger.info("SAVE - user");
+
+		if (result.hasErrors()) {
+			model.addAttribute("users", userService.findAll());
+			return "viewUsers";
+		}
+
+		userService.update(userForm);
+		model.addAttribute("users", userService.findAll());
+
+		return "redirect:/viewUsers";
 	}
 
 	@GetMapping("/viewUsers/{id}")

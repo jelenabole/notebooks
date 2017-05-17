@@ -23,7 +23,7 @@
 				<h1 th:utext="#{header.register}">form</h1>
 
 				<div class="col-sm-5 col-sm-offset-3">
-					<form method="POST" th:object="${userForm}">
+					<form method="POST" th:object="${registerForm}">
 						<table>
 							<tr>
 								<td><label for="name" th:utext="#{user.form.name}"></label></td>
@@ -76,7 +76,7 @@
 									th:placeholder="#{user.password}" /> <span class="error"
 									th:if="${#fields.hasErrors('password')}"
 									th:errors="*{password}">error</span> <span class="error"
-									th:if="${#fields.hasErrors('global')}" th:errors="${userForm}">error</span></td>
+									th:if="${#fields.hasErrors('global')}" th:errors="${registerForm}">error</span></td>
 							</tr>
 							<tr>
 								<td></td>

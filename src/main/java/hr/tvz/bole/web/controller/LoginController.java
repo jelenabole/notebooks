@@ -21,7 +21,7 @@ import hr.tvz.bole.model.User;
 import hr.tvz.bole.other.mapper.UserMapper;
 import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.LoginForm;
-import hr.tvz.bole.web.form.UserForm;
+import hr.tvz.bole.web.form.RegisterForm;
 
 @Controller
 public class LoginController {
@@ -49,7 +49,7 @@ public class LoginController {
 	@GetMapping("/register")
 	public String showRegistrationForm(WebRequest request, Model model) {
 		logger.info("GET - register");
-		model.addAttribute("userForm", new UserForm());
+		model.addAttribute("registerForm", new RegisterForm());
 
 		// TODO - dohvatiti popis usera - provjera (obrisati):
 		// model.addAttribute("users", userService.findAll());
@@ -57,12 +57,12 @@ public class LoginController {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@Valid UserForm userForm, BindingResult result, WebRequest request,
+	public String registerUser(@Valid RegisterForm registerForm, BindingResult result, WebRequest request,
 			Errors errors, Model model) {
 		// TODO - da li je webRequest i Errors = potrebno ?!
 		logger.info("POST - register");
 
-		if (userService.checkIfUserExists(userForm.getUsername())) {
+		if (userService.checkIfUserExists(registerForm.getUsername())) {
 			result.rejectValue("username", "register.exception.userExists");
 		}
 		// provjeriti greske:
@@ -75,7 +75,7 @@ public class LoginController {
 		// ako nema gresaka, provuc formu, da li user postoji:
 		User registered = null;
 		try {
-			registered = userService.save(UserMapper.mapUserFormToUser(userForm));
+			registered = userService.save(UserMapper.mapRegisterFormToUser(registerForm));
 		} catch (UserExistsException e) {
 			// TODO - greska nije potrebna (provjereno iznad):
 			logger.info("POST - register - error - username exists");
@@ -91,7 +91,7 @@ public class LoginController {
 			model.addAttribute("users", userService.findAll());
 			return "register";
 		} else {
-			logger.info("POST - register user: " + userForm.getUsername());
+			logger.info("POST - register user: " + registerForm.getUsername());
 			return "redirect:/login";
 		}
 	}

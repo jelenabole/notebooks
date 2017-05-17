@@ -21,21 +21,52 @@
 
 	<div class="mainNote newForm">
 		<div class="col-sm-4 col-sm-offset-4">
-			<form th:action="@{/saveRole}" method="POST"
-				th:object="${roleForm}" class="roleForm">
+			<form th:action="@{/saveUser}" method="POST" th:object="${userForm}"
+				class="userForm">
+
 				<table class="noteForm">
 					<tr>
-						<td><label for="user" th:utext="#{user.username}"></label></td>
-						<td><input type="text" id="user" th:field="*{user}"
-							th:value="*{user?.username}" class="form-control" /></td>
+						<td><label for="name" th:utext="#{user.name}"></label></td>
+						<td><input type="text" name="name" id="name"
+							th:field="*{name}"
+							th:class="${#fields.hasErrors('name')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('name')}"
+							th:errors="*{name}">error</span></td>
+					</tr>
+
+					<tr>
+						<td><label for="surname" th:utext="#{user.surname}"></label></td>
+						<td><input type="text" name="surname" id="surname"
+							th:field="*{surname}"
+							th:class="${#fields.hasErrors('surname')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('surname')}"
+							th:errors="*{surname}">error</span></td>
 					</tr>
 					<tr>
-						<td><label for="user" th:utext="#{user.role}"></label></td>
-						<td><input id="role" th:field="*{role}" class="form-control" /></td>
+						<td><label for="username" th:utext="#{user.username}"></label></td>
+						<td><input type="text" name="username" id="username"
+							th:field="*{username}" class="form-control" readonly /></td>
 					</tr>
 					<tr>
-						<td><input type="text" id="id" hidden="hidden"
-							th:field="*{id}" /></td>
+						<td><label for="email" th:utext="#{user.email}"></label></td>
+						<td><input type="text" name="email" id="email"
+							th:field="*{email}"
+							th:class="${#fields.hasErrors('email')}? 'form-control has-error' : 'form-control'" />
+							<span class="error" th:if="${#fields.hasErrors('email')}"
+							th:errors="*{email}">error</span></td>
+					</tr>
+					<tr>
+						<td><label th:utext="#{user.roles}"></label></td>
+						<td><label
+							th:each="role : ${T(hr.tvz.bole.enums.UserRoles).values()}">
+								<input type="checkbox" th:field="*{roles}" th:value="${role}" />
+								<span th:utext="#{${role.translation}}"></span>
+						</label></td>
+					</tr>
+					<tr>
+						<td><input type="hidden" id="id" th:field="*{id}" /><input
+							type="hidden" id="password" th:field="*{password}"
+							th:value="*{password}" /></td>
 						<td><input type="submit" name="saveButton"
 							th:value="#{button.save}" class="btn btn-success" /> <a
 							class="btn btn-warning" onclick="hideForm()"> <span
@@ -53,7 +84,8 @@
 			<thead class="thead-inverse">
 				<tr>
 					<th th:utext="#{table.id}"></th>
-					<th th:utext="#{user.fullName}"></th>
+					<th th:utext="#{user.name}"></th>
+					<th th:utext="#{user.surname}"></th>
 					<th th:utext="#{user.username}"></th>
 					<th th:utext="#{user.email}"></th>
 					<th th:utext="#{user.enabled}"></th>
@@ -64,7 +96,8 @@
 			<tbody>
 				<tr th:each="user : ${users}">
 					<td th:text="${user.id}"></td>
-					<td th:text="${user.fullName}"></td>
+					<td th:text="${user.name}"></td>
+					<td th:text="${user.surname}"></td>
 					<td th:text="${user.username}"></td>
 					<td th:text="${user.email}"></td>
 					<td><a th:if="${user.id} != ${currentUser.id}"
@@ -73,10 +106,13 @@
 						th:text="${user.enabled} ? #{table.disable} : #{table.enable}"></a></td>
 					<td><span th:each="role : ${user.roles}"><span
 							th:utext="#{${role.translation}}"></span> </span></td>
-					<td><a th:if="${user.id} != ${currentUser.id}" class="btn btn-sm btn-warning"
+					<td><a th:if="${user.id} != ${currentUser.id}"
+						class="btn btn-sm btn-warning"
 						th:href="@{'/viewUsers/' + ${user.id}}" th:text="#{button.delete}"></a>
-						<a th:if="${user.id} != ${currentUser.id}" class="btn btn-sm btn-info" th:text="#{button.editRoles}"
-						th:attr="onclick='javascript:editRole(\'' + ${user} + '\');'">Roles</a></td>
+						<a th:if="${user.id} != ${currentUser.id}"
+						class="btn btn-sm btn-info" th:text="#{button.edit}"
+						th:attr="onclick='javascript:editUser(\'' + ${user.id} + '\', \'' + ${user.name} + '\', \'' + ${user.surname}
+						+ '\', \'' + ${user.username} +  '\', \'' + ${user.password} + '\', \'' + ${user.email} + '\', \'' + ${user.roles} + '\');'">Roles</a></td>
 				</tr>
 			</tbody>
 		</table>
@@ -86,11 +122,23 @@
 	</div>
 
 	<script type="text/javascript">
-		function editRole(id, username) {
+		function editUser(id, name, surname, username, pass, email, roles) {
 			showForm();
-			console.log("funkcija: " + id);
+			console.log("funkcija: ");
+			console.log("roles: " + roles);
+			for (var i = 0; i < roles.length; i++) {
+				console.log(roles[i]);
+			}
 			$("#id").val(id);
+			$("#name").val(name);
+			$("#surname").val(surname);
 			$("#username").val(username);
+			$("#password").val(pass);
+			$("#email").val(email);
+
+			roles = roles.replace(/[|]| /g, '');
+			var array = roles.split(",");
+			$(".roles").val(array);
 		}
 
 		var checkForm = function() {

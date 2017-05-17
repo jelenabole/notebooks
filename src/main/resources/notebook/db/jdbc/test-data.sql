@@ -1,7 +1,7 @@
-INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Ivo', 'Ivić', 'iivic', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Marko', 'Markić', 'mmarkic', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Pero', 'Perić', 'pperic', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
-INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Adminko', 'Adminić', 'adminko', 'email@tvz.hr', '$2a$10$NO8fr78xuYNksefvUXhb8edsglRjqZeIJ0ScISS49zvrh/iRiEoYy', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Ivo', 'Ivić', 'iivic', 'email@tvz.hr', '$2a$10$qJkps5.KYiFmQ7JUsr2Hieu8mguX0F1ye5cfDOjqYTbR6REdb836y', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Marko', 'Markić', 'mmarkic', 'email@tvz.hr', '$2a$10$qJkps5.KYiFmQ7JUsr2Hieu8mguX0F1ye5cfDOjqYTbR6REdb836y', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Pero', 'Perić', 'pperic', 'email@tvz.hr', '$2a$10$qJkps5.KYiFmQ7JUsr2Hieu8mguX0F1ye5cfDOjqYTbR6REdb836y', true);
+INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Adminko', 'Adminić', 'adminko', 'email@tvz.hr', '$2a$10$qJkps5.KYiFmQ7JUsr2Hieu8mguX0F1ye5cfDOjqYTbR6REdb836y', true);
 INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('Admin', 'Admin', 'admin', 'admin@tvz.hr', '$2a$10$g8ihG4QVH.pdzpAk0PuCLOiRaeCQus7bDPDtqcLIw3J87cUP5pBv2', true);
 INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('User', 'resU', 'user', 'user@tvz.hr', '$2a$10$zp6HrNn7okDuphq38pZJie1glfzjLfOvpkpirIVJzldWufVHNFh2y', true);
 
@@ -25,7 +25,7 @@ INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUE
 INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Cras interdum', 'Nam sed elementum nunc.', 3, 3, 'IMPORTANT', 'DEFAULT', 'NOT_ACTIVE');
 INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Donec facilisis', 'Tortor ut diam auctor.', 3, 3, 'NOT_IMPORTANT', null, 'ACTIVE');
 INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Class aptent', 'Felis ac tellus euismod.', 4, 2, 'IMPORTANT', 'PURPLE', 'ACTIVE');
-INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Vestibulum luctus', 'Nam vitae urna ut lacus rhoncus.', 4, 2, 'NOT_IMPORTANT', null, 'ACTIVE');
+INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Vestibulum luctus', 'Nam vitae urna ut lacus rhoncus.', 4, 1, 'NOT_IMPORTANT', null, 'ACTIVE');
 INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Praesent commodo', 'Fusce id felis finibus.', 4, 3, 'IMPORTANT', 'BLUE', 'NOT_ACTIVE');
 INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Pellentesque habitant', 'Cras dictum felis a justo interdum.', 5, 1, 'IMPORTANT', 'ORANGE', 'ACTIVE');
 INSERT INTO notes (header, text, user, notebook, importance, mark, status) VALUES('Quisque malesuada', 'Praesent volutpat mollis semper.', 5, 2, 'NOT_IMPORTANT', null, 'NOT_ACTIVE');

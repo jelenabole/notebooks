@@ -43,4 +43,31 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Transactional
 	public Long deleteById(Integer id);
 
+	// XXX -sortiranje:
+	public List<User> findAllByOrderByNameAsc();
+
+	public List<User> findAllByOrderBySurnameAsc();
+
+	public List<User> findAllByOrderByUsernameAsc();
+
+	public List<User> findAllByOrderByEmailAsc();
+
+	public List<User> findAllByOrderByEnabledAsc();
+
+	public List<User> findAllByOrderByIdDesc();
+
+	public List<User> findAllByOrderByNameDesc();
+
+	public List<User> findAllByOrderBySurnameDesc();
+
+	public List<User> findAllByOrderByUsernameDesc();
+
+	public List<User> findAllByOrderByEmailDesc();
+
+	public List<User> findAllByOrderByEnabledDesc();
+
+	// filter - search by:
+	public List<User> findAllByNameContainingOrSurnameContainingOrUsernameContainingOrEmailContaining(
+			String str1, String str2, String str3, String str4);
+
 }

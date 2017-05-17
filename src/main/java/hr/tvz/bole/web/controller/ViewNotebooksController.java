@@ -53,12 +53,13 @@ public class ViewNotebooksController {
 
 	@PostMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
-	public String filterNotebooks(@ModelAttribute FilterForm filterForm, Model model) {
+	public String filterNotebooks(@ModelAttribute NotebookForm notebookForm,
+			@ModelAttribute FilterForm filterForm, Model model) {
 		logger.info("GET - view notebooks");
 
-		model.addAttribute("notes", notebookService.getFilteredNotes(filterForm));
+		model.addAttribute("notebooks", notebookService.getFilteredNotebooks(filterForm));
 
-		return "viewNotes";
+		return "viewNotebooks";
 	}
 
 	@PostMapping("/saveNotebook")
