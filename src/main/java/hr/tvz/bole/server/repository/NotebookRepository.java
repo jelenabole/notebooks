@@ -27,7 +27,9 @@ public interface NotebookRepository extends JpaRepository<Notebook, Long> {
 	public List<Notebook> findAllByOrderByTitleDesc();
 
 	public List<Notebook> findAllByOrderByDescriptionDesc();
-	public List<Notebook> findAllByTitleContainingOrDescriptionContaining(String str1, String str2);
-	public List<Notebook> findAllByTitleContainingOrDescriptionContainingOrderByIdDesc(String str1, String str2);
+	
+	public List<Notebook> findAllByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String str1, String str2);
+	public List<Notebook> findAllByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrderByIdDesc(String str1, String str2);
+
 
 }

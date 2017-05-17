@@ -101,7 +101,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 	public List<Note> findAllByUserIdAndStatusOrderByMarkDesc(Integer userId, DBStatus status);
 
 	// filter - search by:
-	public List<Note> findAllByUserUsernameContainingOrNotebookTitleContainingOrHeaderContainingOrTextContaining(
-			String str1, String str2, String str3, String str4);
+	public List<Note> findAllByUserNameContainingIgnoreCaseOrUserSurnameContainingIgnoreCaseOrNotebookTitleContainingIgnoreCaseOrHeaderContainingIgnoreCaseOrTextContainingIgnoreCase(
+			String str1, String str2, String str3, String str4, String str5);
 
 }

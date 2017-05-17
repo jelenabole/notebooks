@@ -123,9 +123,10 @@ public class NoteServiceImpl implements NoteService {
 
 		if (!filterForm.getSearchBy().isEmpty()) {
 			return noteRepository
-					.findAllByUserUsernameContainingOrNotebookTitleContainingOrHeaderContainingOrTextContaining(
+					.findAllByUserNameContainingIgnoreCaseOrUserSurnameContainingIgnoreCaseOrNotebookTitleContainingIgnoreCaseOrHeaderContainingIgnoreCaseOrTextContainingIgnoreCase(
 							filterForm.getSearchBy(), filterForm.getSearchBy(),
-							filterForm.getSearchBy(), filterForm.getSearchBy());
+							filterForm.getSearchBy(), filterForm.getSearchBy(),
+							filterForm.getSearchBy());
 		}
 
 		List<Note> notes;

@@ -67,7 +67,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	public List<User> findAllByOrderByEnabledDesc();
 
 	// filter - search by:
-	public List<User> findAllByNameContainingOrSurnameContainingOrUsernameContainingOrEmailContaining(
+	public List<User> findAllByNameContainingIgnoreCaseOrSurnameContainingIgnoreCaseOrUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(
 			String str1, String str2, String str3, String str4);
 
 }

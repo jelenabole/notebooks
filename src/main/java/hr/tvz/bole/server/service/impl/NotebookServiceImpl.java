@@ -62,7 +62,7 @@ public class NotebookServiceImpl implements NotebookService {
 
 		if (!filterForm.getSearchBy().isEmpty()) {
 			List<Notebook> notebooks = notebookRepository
-					.findAllByTitleContainingOrDescriptionContaining(filterForm.getSearchBy(),
+					.findAllByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(filterForm.getSearchBy(),
 							filterForm.getSearchBy());
 			return getNumberOfNotes(notebooks);
 		}

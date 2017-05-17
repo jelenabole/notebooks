@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
 		if (!filterForm.getSearchBy().isEmpty()) {
 			return userRepository
-					.findAllByNameContainingOrSurnameContainingOrUsernameContainingOrEmailContaining(
+					.findAllByNameContainingIgnoreCaseOrSurnameContainingIgnoreCaseOrUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(
 							filterForm.getSearchBy(), filterForm.getSearchBy(),
 							filterForm.getSearchBy(), filterForm.getSearchBy());
 		}
