@@ -11,10 +11,12 @@ public interface NotebookService {
 	public List<Notebook> findAll();
 
 	public List<Notebook> findAllWithNumberOfNotes();
+	
+	public Notebook findOne(Integer id);
 
-	public Integer save(Notebook notebook);
+	public Notebook save(Notebook notebook);
 
-	public Integer save(NotebookForm notebookForm);
+	public Notebook save(NotebookForm notebookForm);
 
 	public void delete(Integer id);
 

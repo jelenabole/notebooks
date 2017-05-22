@@ -21,7 +21,7 @@ public interface NoteService {
 
 	public List<Note> getAllPermittedSortedDesc(CurrentUser user);
 
-	public void save(Note note);
+	public Note save(Note note);
 
 	public Note save(NoteForm noteForm);
 
@@ -38,7 +38,7 @@ public interface NoteService {
 	// XXX - funkcije s mapiranjima (u forme):
 	public NoteForm getOneAsForm(Integer id);
 
-	//filtered:
+	// filtered:
 	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser);
 
 }

@@ -18,7 +18,7 @@
 
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
-	<context:component-scan base-package="hr.tvz.bole.web" />
+	<context:component-scan base-package="hr.tvz.bole.web,hr.tvz.bole.rest" />
 	<security:global-method-security
 		secured-annotations="enabled" />
 

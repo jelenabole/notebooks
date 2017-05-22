@@ -39,15 +39,17 @@ public class NotebookServiceImpl implements NotebookService {
 
 		return notebooks;
 	}
-
-	public Integer save(Notebook notebook) {
-		// TODO - vraća se id:
-		return notebookRepository.save(notebook).getId();
+	
+	public Notebook findOne(Integer id) {
+		return notebookRepository.findById(id);
 	}
 
-	public Integer save(NotebookForm notebookForm) {
-		// TODO - vraća se id:
-		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm)).getId();
+	public Notebook save(Notebook notebook) {
+		return notebookRepository.save(notebook);
+	}
+
+	public Notebook save(NotebookForm notebookForm) {
+		return notebookRepository.save(NotebookMapper.mapFormToNotebook(notebookForm));
 	}
 
 	public void delete(Integer id) {
@@ -62,8 +64,8 @@ public class NotebookServiceImpl implements NotebookService {
 
 		if (!filterForm.getSearchBy().isEmpty()) {
 			List<Notebook> notebooks = notebookRepository
-					.findAllByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(filterForm.getSearchBy(),
-							filterForm.getSearchBy());
+					.findAllByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+							filterForm.getSearchBy(), filterForm.getSearchBy());
 			return getNumberOfNotes(notebooks);
 		}
 
@@ -71,7 +73,7 @@ public class NotebookServiceImpl implements NotebookService {
 
 		// TODO - dodati number of notes, osim u slučaju sortiranja po toj
 		// koloni (već napravljeno):
-//		notebooks.forEach(e -> System.out.println(e));
+		// notebooks.forEach(e -> System.out.println(e));
 		if (!filterForm.getOrderBy().equals("numberOfNotes")) {
 			notebooks = getNumberOfNotes(notebooks);
 		}

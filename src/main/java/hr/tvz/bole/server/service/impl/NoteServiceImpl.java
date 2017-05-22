@@ -67,8 +67,8 @@ public class NoteServiceImpl implements NoteService {
 		return noteRepository.findByUserId(id);
 	}
 
-	public void save(Note note) {
-		noteRepository.save(note);
+	public Note save(Note note) {
+		return noteRepository.save(note);
 	}
 
 	public Note save(NoteForm noteForm) {

@@ -7,6 +7,8 @@
 <title th:utext="#{title.viewNotebooks}">Tab Title</title>
 <meta charset="UTF-8">
 
+<script type="text/javascript" th:src="@{/resources/js/viewNotebooks.js}"></script>
+
 <link rel="stylesheet" type="text/css"
 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
@@ -44,7 +46,7 @@
 							th:field="*{id}" /></td>
 						<td><input type="submit" name="saveButton"
 							th:value="#{button.save}" class="btn btn-success" /> <a
-							class="btn btn-warning" onclick="hideForm()"> <span
+							class="btn btn-warning" onclick="deleteForm()"> <span
 								th:utext="#{button.cancel}"></span>
 						</a></td>
 					</tr>
@@ -53,10 +55,8 @@
 		</div>
 	</div>
 
-	<!-- 
-	<a class="btn btn-info" onclick="showForm()" th:text="#{button.add}"></a>
- 	-->
 
+	<a class="btn btn-info" onclick="showForm()" th:text="#{button.add}"></a>
 
 	<div class="viewNotes">
 		<table class="table table-striped">
@@ -76,10 +76,11 @@
 					<td th:text="${notebook.description}"></td>
 					<td th:text="${notebook.numberOfNotes}"></td>
 					<td><a class="btn btn-sm btn-info"
-						th:attr="onclick='javascript:editNotebook(\'' + ${notebook.id} + '\', \'' + ${notebook.title} + '\', \'' + ${notebook.description} + '\');'"
+						th:attr="onclick='javascript:getNotebook(\'' + ${notebook.id} + '\');'"
 						th:text="#{button.edit}"></a> <a class="btn btn-sm btn-warning"
 						th:href="@{'/deleteNotebook/' + ${notebook.id}}"
 						th:text="#{button.delete}"></a> <!-- th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'" --></td>
+				<!-- th:attr="onclick='javascript:editNotebook(\'' + ${notebook.id} + '\', \'' + ${notebook.title} + '\', \'' + ${notebook.description} + '\');'" -->
 				</tr>
 			</tbody>
 		</table>
@@ -87,32 +88,6 @@
 		<a class="btn btn-info floatingButton" th:href="@{/newNote}"
 			th:utext="#{button.return}"></a>
 	</div>
-
-	<script type="text/javascript">
-		function editNotebook(id, title, description) {
-			showForm();
-			console.log("funkcija: " + id);
-			$("#id").val(id);
-			$("#title").val(title);
-			$("#description").val(description);
-		}
-
-		var checkForm = function() {
-			if ($("#id").val() != "" || $("#title").val() != ""
-					|| $("#description").val() != "") {
-				showForm();
-			} else {
-				hideForm();
-			}
-		}
-
-		var hideForm = function() {
-			$(".newForm").hide();
-		}
-		var showForm = function() {
-			$(".newForm").show();
-		}
-	</script>
 
 </body>
 </html>
