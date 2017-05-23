@@ -138,6 +138,28 @@ public class NoteServiceImpl implements NoteService {
 		return notes;
 	}
 
+	@Override
+	public List<Note> getNotesAjax(FilterForm filterForm, CurrentUser user) {
+		logger.info(
+				"order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection());
+
+		// ako nema parametara, vrati sve za tog korisnika:
+		// null se šalje (u orderBy) samo na onload:
+		if (filterForm.getOrderBy() == null) {
+			if (user.isAdmin())
+				return findAll();
+			else
+				return getAllPermitted(user);
+		}
+
+		List<Note> notes;
+		if (user.isAdmin())
+			notes = getFilteredForAdmin(filterForm);
+		else
+			notes = getFilteredForUser(filterForm, user.getId());
+		return notes;
+	}
+
 	private List<Note> getFilteredForUser(FilterForm filterForm, Integer userId) {
 		switch (filterForm.getOrderDirection()) {
 			case "asc":

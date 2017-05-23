@@ -11,6 +11,9 @@ public class FilterForm {
 	String orderDirection;
 	String searchBy;
 
+	public FilterForm() {
+	}
+
 	public FilterForm(List<String> orderByList, String objectName) {
 		this.orderByList = orderByList;
 		this.object = objectName;

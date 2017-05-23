@@ -40,5 +40,8 @@ public interface NoteService {
 
 	// filtered:
 	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser);
+	
+	//XXX - Ajax get Notes:
+	public List<Note> getNotesAjax(FilterForm filterForm, CurrentUser currentUser);
 
 }
