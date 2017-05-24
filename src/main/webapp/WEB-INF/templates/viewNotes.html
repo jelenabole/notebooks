@@ -21,16 +21,11 @@
 
 	<div th:insert="~{fragments/menu :: viewNotes}"></div>
 
-	<div th:insert="~{fragments/tables :: notesTable-java}"></div>
+	<!-- <div th:insert="~{fragments/tables :: notesTable-java}"></div> -->
 
+	<!-- AJAX tablica - get fragment through @Controller -->
+	<div id="results"></div>
 
-	<div class="viewNotes">
-		<table class="table table-striped" id="result">
-			<thead th:insert="~{fragments/tables :: notesTableHead}"></thead>
-			<tbody></tbody>
-		</table>
-	</div>
-	
 	<a class="btn btn-info floatingButton" th:href="@{/newNote}"
 		th:utext="#{button.return}"></a>
 </body>

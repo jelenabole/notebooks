@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hr.tvz.bole.model.CurrentUser;
+import hr.tvz.bole.model.Note;
 import hr.tvz.bole.server.service.NoteService;
 import hr.tvz.bole.web.form.FilterForm;
 
@@ -49,9 +51,20 @@ public class ViewNotesController {
 		// poslati za filtere:
 		model.addAttribute("filterForm", getFilterForm(model));
 
-		model.addAttribute("notes", noteService.getAllPermitted(currentUser));
+//		model.addAttribute("notes", noteService.getAllPermitted(currentUser));
 
 		return "viewNotes";
+	}
+	
+	//XXX - AJAX - filter/sort - fragment:
+	@PostMapping("/notes/search")
+	public String searchNotes(@SessionAttribute CurrentUser currentUser,
+			@RequestBody FilterForm filterForm, Model model) {
+		logger.info("GET/POST - search notes - get by role (" + currentUser.getRoles() + ")");
+		
+		model.addAttribute("notes", noteService.getNotesAjax(filterForm, currentUser));
+
+		return "fragments/tables :: viewNotesTable";
 	}
 
 	@PostMapping("/viewNotes")

@@ -3,8 +3,8 @@ function editNotebook(id, title, description) {
 	showForm();
 	console.log("funkcija: " + id);
 	$("#id").val(id);
-	$("#title").val(title);
-	$("#description").val(description);
+	$("#header").val(header);
+	$("#text").val(text);
 }
 
 // get all notes (with filter):
@@ -13,7 +13,8 @@ function filterNotes() {
 	form["orderBy"] = $("#orderBy").val();
 	form["orderDirection"] = $(".filterForm input[type='radio']:checked").val()
 	form["searchBy"] = $("#searchBy").val();
-
+	
+//	console.log(form);
 	getNotes(form);
 }
 
@@ -26,22 +27,60 @@ function getAll() {
 }
 
 function getNotes(form) {
+	console.log(form);
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
-		url : "api/note",
+		url : "notes/search",
 		data : JSON.stringify(form),
-		dataType : 'json',
 		timeout : 100000,
 		success : function(data) {
-			console.log("SUCCESS: ", data);
-			var notes = data;
-			display(notes);
+			console.log("SUCCESS");
+//			console.log("SUCCESS: ", data);
+			$("#results").html(data);
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
-			// display funkcija ne radi:
-			// display(e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
+}
+
+function deleteNote(id) {
+	$.ajax({
+		type : "DELETE",
+		contentType : "application/json",
+		url : "api/note/" + id,
+		timeout : 100000,
+		success : function(data) {
+			console.log("SUCCESS: ", data);
+			filterNotes();
+//			$("#results").replaceWith(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
+}
+
+function changeStatus(id) {
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : "api/note/changeStatus/" + id,
+		timeout : 100000,
+		success : function(data) {
+			console.log("SUCCESS: ", data);
+			filterNotes();
+//			$("#results").replaceWith(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
 		},
 		done : function(e) {
 			console.log("DONE");
@@ -72,7 +111,6 @@ function getNote(id) {
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
-			display(e);
 		},
 		done : function(e) {
 			console.log("DONE");
@@ -82,19 +120,19 @@ function getNote(id) {
 	showForm();
 }
 
-
+/*************** EDIT FORMA ***************/
 
 // provjera pri učitavanju stranice (zbog validacija):
 var checkForm = function() {
-	if ($("#id").val() != "" || $("#title").val() != ""
-			|| $("#description").val() != "") {
+	if ($("#id").val() != "" || $("#header").val() != ""
+			|| $("#text").val() != "") {
 		showForm();
 	} else {
 		hideForm();
 	}
 }
 
-// gumb odustani:
+//gumb odustani:
 var deleteForm = function() {
 	$("#id").val("");
 	$("#title").val("");
@@ -109,11 +147,10 @@ var showForm = function() {
 	$(".newForm").show();
 }
 
-function display(notes) {
+//za prikaz iz JSON-a:
+function displayOld(notes) {
 	console.log("display");
 	
-	var json = "<h4>Ajax Response</h4><pre>" + JSON.stringify(notes)
-			+ "</pre>";
 	var result = "";
 	for (var i = 0; i < notes.length; i++) {
 		result += "<tr>";

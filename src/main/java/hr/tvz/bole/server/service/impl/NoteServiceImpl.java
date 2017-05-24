@@ -1,6 +1,7 @@
 package hr.tvz.bole.server.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,8 +141,8 @@ public class NoteServiceImpl implements NoteService {
 
 	@Override
 	public List<Note> getNotesAjax(FilterForm filterForm, CurrentUser user) {
-		logger.info(
-				"order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection());
+		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
+				+ " (" + filterForm.getSearchBy() + ")");
 
 		// ako nema parametara, vrati sve za tog korisnika:
 		// null se šalje (u orderBy) samo na onload:
@@ -157,6 +158,18 @@ public class NoteServiceImpl implements NoteService {
 			notes = getFilteredForAdmin(filterForm);
 		else
 			notes = getFilteredForUser(filterForm, user.getId());
+
+		String search = filterForm.getSearchBy().toLowerCase();
+		notes = notes.stream()
+				.filter(e -> (e.getUser().getName().toLowerCase().contains(search)
+						|| e.getUser().getSurname().toLowerCase().contains(search)
+						|| e.getNotebook().getTitle().toLowerCase().contains(search)
+						|| e.getHeader().toLowerCase().contains(search)
+						|| e.getText().toLowerCase().contains(search)
+				// || e.getMark().getName().toLowerCase().contains(search)
+				// || e.getStatus().name().toLowerCase().contains(search)
+				// || e.getImportance().name().toLowerCase().contains(search)
+				)).collect(Collectors.toList());
 		return notes;
 	}
 
