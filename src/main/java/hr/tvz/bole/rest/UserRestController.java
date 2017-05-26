@@ -56,4 +56,10 @@ public class UserRestController {
 		userService.delete(id);
 	}
 
+	@GetMapping("/changeStatus/{id}")
+	public void changeEnabledStatus(@PathVariable Integer id) {
+		logger.info("GET - enable/disable user id: " + id);
+		userService.changeEnabledStatus(id);
+	}
+
 }

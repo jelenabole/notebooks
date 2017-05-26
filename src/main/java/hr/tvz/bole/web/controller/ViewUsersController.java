@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import hr.tvz.bole.exceptions.RoleExistsForUser;
+import hr.tvz.bole.exceptions.UserExistsException;
+import hr.tvz.bole.other.mapper.UserMapper;
 import hr.tvz.bole.server.service.UserService;
 import hr.tvz.bole.web.form.FilterForm;
 import hr.tvz.bole.web.form.UserForm;
@@ -42,60 +46,80 @@ public class ViewUsersController {
 
 	@GetMapping("/viewUsers")
 	@Secured({ "ROLE_ADMIN" })
-	public String getNewForm(Model model) {
-		logger.info("GET - viewUsers");
+	public String getUsers(Model model) {
+		logger.info("GET - view users");
 
 		// poslati za filtere:
 		model.addAttribute("filterForm", getFilterForm());
 
 		// TODO - poslati enum (role)
-		model.addAttribute("users", userService.findAll());
-		model.addAttribute("userForm", new UserForm());
+		// model.addAttribute("users", userService.findAll());
+		// model.addAttribute("userForm", new UserForm());
 		return "viewUsers";
 	}
 
-	@PostMapping("/viewUsers")
+	/**** OSTALE METODE VRAĆAJU FRAGMENTE STRANICE ****/
+
+	// XXX - AJAX - edit:
+	@GetMapping("/user/edit/{id}")
 	@Secured("ROLE_ADMIN")
-	public String filterUsers(@ModelAttribute FilterForm filterForm, Model model) {
-		logger.info("GET - view users");
+	public String loadUser(@PathVariable Integer id, Model model) {
+		logger.info("EDIT - view users");
 
-		model.addAttribute("userForm", new UserForm());
-		model.addAttribute("users", userService.getFilteredUsers(filterForm));
+		// TODO - getOneAsForm - mapiranje staviti u servis:
+		model.addAttribute("userForm", UserMapper.mapUserToUserForm(userService.findOne(id)));
 
-		return "viewUsers";
+		return "fragments/forms :: userForm";
 	}
 
-	@PostMapping("/saveUser")
-	@Secured({ "ROLE_ADMIN" })
-	public String addNewUser(@Valid UserForm userForm, BindingResult result, Model model) {
-		logger.info("SAVE - user");
+	// XXX - AJAX - new:
+	@GetMapping("/user/new")
+	@Secured("ROLE_ADMIN")
+	public String createUser(Model model) {
+		logger.info("NEW - view users");
+		model.addAttribute("userForm", new UserForm());
+
+		return "fragments/forms :: userForm";
+	}
+
+	// XXX - AJAX - remove form (cancel):
+	@GetMapping("/user/removeForm")
+	@Secured("ROLE_ADMIN")
+	public String removeForm(Model model) {
+		logger.info("REMOVE FORM - view users");
+		model.addAttribute("userForm", new UserForm());
+
+		return "fragments/forms :: empty";
+	}
+
+	// XXX - AJAX - save:
+	@PostMapping("/user/save")
+	@Secured("ROLE_ADMIN")
+	public String saveUser(@Valid @RequestBody UserForm userForm, BindingResult result, Model model)
+			throws RoleExistsForUser, UserExistsException {
+		logger.info("VALIDATE - view users");
 
 		if (result.hasErrors()) {
-			model.addAttribute("users", userService.findAll());
-			return "viewUsers";
+			model.addAttribute("userForm", userForm);
+			return "fragments/forms :: userForm";
 		}
 
-		userService.update(userForm);
-		model.addAttribute("users", userService.findAll());
+		logger.info("SAVE - view users");
 
-		return "redirect:/viewUsers";
+		// TODO - ubaciti mapper u servis:
+		userService.save(UserMapper.mapUserFormToUser(userForm));
+		return "fragments/forms :: empty";
 	}
 
-	@GetMapping("/viewUsers/{id}")
+	// XXX - AJAX - filter/sort:
+	@PostMapping("/users/search")
 	@Secured("ROLE_ADMIN")
-	public String deleteUser(Model model, @PathVariable int id) {
-		// TODO - nekakvo upozorenje prije nastavka!
-		logger.info("GET - deleteUser id: " + id);
-		userService.delete(id);
-		return "redirect:/viewUsers";
-	}
+	public String searchNotes(@RequestBody FilterForm filterForm, Model model) {
+		logger.info("GET/POST - search users");
 
-	@GetMapping("/enableUser/{id}")
-	@Secured("ROLE_ADMIN")
-	public String changeEnableStatus(Model model, @PathVariable int id) {
-		logger.info("GET - enable/disable user id: " + id);
-		userService.changeEnabledStatus(id);
-		return "redirect:/viewUsers";
+		model.addAttribute("notebooks", userService.getFilteredUsers(filterForm));
+
+		return "fragments/tables :: viewUsersTable";
 	}
 
 }

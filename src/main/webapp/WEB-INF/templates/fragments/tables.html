@@ -143,5 +143,44 @@
 		</table>
 	</div>
 
+	<div class="viewUsersTable">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th th:utext="#{table.id}"></th>
+					<th th:utext="#{user.name}"></th>
+					<th th:utext="#{user.surname}"></th>
+					<th th:utext="#{user.username}"></th>
+					<th th:utext="#{user.email}"></th>
+					<th th:utext="#{user.enabled}"></th>
+					<th th:utext="#{user.roles}"></th>
+					<th th:utext="#{table.actions}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.id}"></td>
+					<td th:text="${user.name}"></td>
+					<td th:text="${user.surname}"></td>
+					<td th:text="${user.username}"></td>
+					<td th:text="${user.email}"></td>
+					<td><a th:if="${user.id} != ${currentUser.id}"
+						th:class="${user.enabled} ? 'btn btn-sm btn-warning' : 'btn btn-sm btn-success'"
+						th:href="@{'/enableUser/' + ${user.id}}"
+						th:text="${user.enabled} ? #{table.disable} : #{table.enable}"></a></td>
+					<td><span th:each="role : ${user.roles}"><span
+							th:utext="#{${role.translation}}"></span> </span></td>
+					<td><a th:if="${user.id} != ${currentUser.id}"
+						class="btn btn-sm btn-primary" th:text="#{button.edit}"
+						th:attr="onclick='javascript:getOne(\'' + ${user.id} + '\');'">Edit</a>
+						<a th:if="${user.id} != ${currentUser.id}"
+						class="btn btn-sm btn-danger"
+						th:attr="onclick='javascript:deleteUser(\'' + ${user.id} + '\');'"
+						th:text="#{button.delete}"></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 </body>
 </html>

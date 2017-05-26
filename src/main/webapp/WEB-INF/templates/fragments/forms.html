@@ -13,6 +13,7 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+	<!--  obrisati method POST  -->
 
 	<div th:fragment="newButton">
 		<div class="col-xs-12">
@@ -140,6 +141,62 @@
 				<tr>
 					<td><input type="text" id="id" hidden="hidden"
 						th:field="*{id}" /></td>
+					<td><a class="btn btn-success" onclick="saveForm()"> <span
+							th:utext="#{button.save}"></span>
+					</a> <a class="btn btn-warning" onclick="deleteForm()"> <span
+							th:utext="#{button.cancel}"></span>
+					</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+
+	<div th:fragment="userForm" class="newForm col-sm-offset-3 col-sm-5">
+		<form th:object="${userForm}" class="userForm">
+			<table class="noteForm">
+				<tr>
+					<td><label for="name" th:utext="#{user.name}"></label></td>
+					<td><input type="text" name="name" id="name"
+						th:field="*{name}"
+						th:class="${#fields.hasErrors('name')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}">error</span></td>
+				</tr>
+
+				<tr>
+					<td><label for="surname" th:utext="#{user.surname}"></label></td>
+					<td><input type="text" name="surname" id="surname"
+						th:field="*{surname}"
+						th:class="${#fields.hasErrors('surname')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('surname')}"
+						th:errors="*{surname}">error</span></td>
+				</tr>
+				<tr>
+					<td><label for="username" th:utext="#{user.username}"></label></td>
+					<td><input type="text" name="username" id="username"
+						th:field="*{username}" class="form-control" readonly /></td>
+				</tr>
+				<tr>
+					<td><label for="email" th:utext="#{user.email}"></label></td>
+					<td><input type="text" name="email" id="email"
+						th:field="*{email}"
+						th:class="${#fields.hasErrors('email')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('email')}"
+						th:errors="*{email}">error</span></td>
+				</tr>
+				<tr>
+					<td><label th:utext="#{user.roles}"></label></td>
+					<td><label
+						th:each="role : ${T(hr.tvz.bole.enums.UserRoles).values()}">
+							<input type="checkbox" th:field="*{roles}" th:value="${role}" />
+							<span th:utext="#{${role.translation}}"></span>
+					</label></td>
+				</tr>
+				<tr>
+					<td><input type="hidden" id="id" th:field="*{id}" /><input
+						type="hidden" id="password" th:field="*{password}"
+						th:value="*{password}" /></td>
 					<td><a class="btn btn-success" onclick="saveForm()"> <span
 							th:utext="#{button.save}"></span>
 					</a> <a class="btn btn-warning" onclick="deleteForm()"> <span
