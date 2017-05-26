@@ -1,20 +1,11 @@
-//stara funkcija:
-function editNotebook(id, title, description) {
-	showForm();
-	console.log("funkcija: " + id);
-	$("#id").val(id);
-	$("#header").val(header);
-	$("#text").val(text);
-}
-
 // get all notes (with filter):
-function filterNotes() {
+function filter() {
 	var form = {};
 	form["orderBy"] = $("#orderBy").val();
 	form["orderDirection"] = $(".filterForm input[type='radio']:checked").val()
 	form["searchBy"] = $("#searchBy").val();
-	
-//	console.log(form);
+
+	// console.log(form);
 	getNotes(form);
 }
 
@@ -36,8 +27,94 @@ function getNotes(form) {
 		timeout : 100000,
 		success : function(data) {
 			console.log("SUCCESS");
-//			console.log("SUCCESS: ", data);
+			// console.log("SUCCESS: ", data);
 			$("#results").html(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
+}
+
+// edit (get) one:
+function getOne(id) {
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : "note/edit/" + id,
+		timeout : 100000,
+		success : function(data) {
+			console.log("SUCCESS");
+			// console.log("SUCCESS: ", data);
+			$("#form").html(data);
+			showForm();
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
+}
+
+// add new - open form
+function addNew() {
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : "note/new",
+		timeout : 100000,
+		success : function(data) {
+			console.log("SUCCESS");
+			// console.log("SUCCESS: ", data);
+			$("#form").html(data);
+			showForm();
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
+}
+
+// save (or update):
+function saveForm() {
+	// prikupi podatke:
+	var noteForm = {};
+	noteForm["id"] = $("#id").val();
+	// user i notebook ID:
+	noteForm["user"] = $("#user").val();
+	noteForm["notebook"] = $("#notebook").val();
+
+	noteForm["header"] = $("#header").val();
+	noteForm["text"] = $("#text").val();
+	noteForm["important"] = $(".newForm input[type='checkbox']:checked").val() == undefined ? null
+			: "IMPORTANT";
+	noteForm["mark"] = $(".newForm input[type='radio']:checked").val() == undefined ? null
+			: $(".newForm input[type='radio']:checked").val();
+
+	console.log("OBJECT: ", noteForm);
+	$.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "note/save",
+		data : JSON.stringify(noteForm),
+		timeout : 100000,
+		success : function(data) {
+			console.log("SUCCESS");
+			// console.log("SUCCESS: ", data);
+			$("#form").html(data);
+			// tek nakon validacije se sprema objekt:
+			// save(note);
+			// deleteForm();
+			// i zove funkcija za filter:
+//			filter();
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
@@ -56,8 +133,8 @@ function deleteNote(id) {
 		timeout : 100000,
 		success : function(data) {
 			console.log("SUCCESS: ", data);
-			filterNotes();
-//			$("#results").replaceWith(data);
+			filter();
+			deleteForm();
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
@@ -76,8 +153,8 @@ function changeStatus(id) {
 		timeout : 100000,
 		success : function(data) {
 			console.log("SUCCESS: ", data);
-			filterNotes();
-//			$("#results").replaceWith(data);
+			filter();
+			deleteForm();
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
@@ -88,42 +165,24 @@ function changeStatus(id) {
 	});
 }
 
-// get one:
-function getNote(id) {
-	$.ajax({
-		type : "GET",
-		contentType : "application/json",
-		url : "api/note/" + id,
-		data : order,
-		dataType : 'json',
-		timeout : 100000,
-		success : function(data) {
-			console.log("SUCCESS: ", data);
-			var note = data;
+/** ************* EDIT FORMA ************** */
 
-			// $("#id").val(note.id);
-			// $("#title").val(notebook.title);
-			// $("#description").val(notebook.description);
-			// $("#description").val(notebook.description);
-			// $("#description").val(notebook.description);
-			// $("#description").val(notebook.description);
-			// $("#description").val(notebook.description);
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
-	});
+// ne koristi se:
+function fillForm(data) {
+	$("#id").val(data.id);
+	$("#user").val(data.user.fullname);
+	$("#notebook").val(data.notebook.title);
+	$("#header").val(data.header);
+	$("#text").val(data.text);
 
 	showForm();
 }
 
-/*************** EDIT FORMA ***************/
-
+// nije napisana do kraja:
 // provjera pri učitavanju stranice (zbog validacija):
+// ovo nije potrebno.. ?? (zbog fragmenata):
 var checkForm = function() {
+	// ne vrti se na onload - ne postoje id-evi:
 	if ($("#id").val() != "" || $("#header").val() != ""
 			|| $("#text").val() != "") {
 		showForm();
@@ -132,49 +191,23 @@ var checkForm = function() {
 	}
 }
 
-//gumb odustani:
+// gumb odustani:
 var deleteForm = function() {
 	$("#id").val("");
-	$("#title").val("");
-	$("#description").val("");
+	$("#user").val("");
+	$("#notebook").val("");
+	$("#header").val("");
+	$("#text").val("");
 	hideForm();
 }
 
+// nepotrebne (dohvaća se forma) ??
 var hideForm = function() {
 	$(".newForm").hide();
+	$("#addButton").show();
+
 }
 var showForm = function() {
 	$(".newForm").show();
-}
-
-//za prikaz iz JSON-a:
-function displayOld(notes) {
-	console.log("display");
-	
-	var result = "";
-	for (var i = 0; i < notes.length; i++) {
-		result += "<tr>";
-		result += "<td sec:authorize=\"hasRole('ROLE_ADMIN')\">" + notes[i].id + "</td>";
-		result += "<td sec:authorize=\"hasRole('ROLE_ADMIN')\">" + notes[i].user.name + " " + notes[i].user.surname + "</td>";
-		result += "<td>" + notes[i].notebook.title + "</td>";
-		result += "<td>" + notes[i].header + "</td>";
-		result += "<td>" + notes[i].text + "</td>";
-		
-		result += "<td class=" + notes[i].mark + ">" + notes[i].importance + "</td>";
-//		<td th:class="${note.mark}"><span
-//		th:text="${note.importance?.important} ? #{table.yes} : #{table.no}"></span>
-//		<span th:if="${note.importance?.important}"
-//		class="glyphicon glyphicon-heart"
-//		th:style="'color:' + ${note.mark.id}"></span></td>
-		
-		result += "<td sec:authorize=\"hasRole('ROLE_ADMIN')\">" + notes[i].status + "</td>";
-//		<td sec:authorize="hasRole('ROLE_ADMIN')">${note.status.translation}}"></span> <span></span></td>
-		
-		//gumbi:
-		result += "<td><a class=\"btn btn-sm btn-primary\" th:href=\"@{'/newNote/'" + notes[i].id + "\" th:text=\"#{button.edit}\"></a>";
-		result += "<a class=\"btn btn-sm btn-warning\" th:href=\"@{'/deleteNote/'" + notes[i].id + "\" th:text=\"#{button.delete}\"></a>";
-		result += "<a sec:authorize=\"hasRole('ROLE_ADMIN')\" class=\"btn btn-sm btn-info\" th:href=\"@{'/changeNoteStatus/'" + notes[i].id + "\" th:text=\"#{button.changeStatus}\"></a></td>";
-	}
-
-	$("#result tbody").html(result);
+	$("#addButton").hide();
 }

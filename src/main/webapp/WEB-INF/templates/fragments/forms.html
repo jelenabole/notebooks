@@ -14,6 +14,105 @@
 </head>
 <body>
 
+	<div th:fragment="newButton">
+		<div class="col-xs-12">
+			<a id="addButton" class="btn btn-info" onclick="addNew()"
+				th:text="#{button.add}"></a>
+		</div>
+	</div>
+
+	<div th:fragment="noteForm" class="newForm col-sm-4 col-sm-offset-4">
+		<form method="POST" th:object="${noteForm}" class="noteForm"
+			onload="checked();">
+			<table class="noteForm">
+				<tr>
+					<td><label for="user" th:utext="#{note.form.user}"></label></td>
+					<td><select id="user" th:field="*{user}"
+						th:disabled="!${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+						th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'">
+							<option value="0" selected th:utext="#{note.form.chooseUser}"></option>
+							<option th:each="user : ${userList}" th:value="${user.id}"
+								th:text="${user.fullName}"></option>
+					</select><span class="error" th:if="${#fields.hasErrors('user')}"
+						th:errors="*{user}"></span>
+				</tr>
+				<tr>
+					<td><label for="notebook" th:utext="#{note.form.notebook}"></label></td>
+					<td><select id="notebook" th:field="*{notebook}"
+						th:class="${#fields.hasErrors('notebook')}? 'form-control has-error' : 'form-control'">
+							<option value="0" th:utext="#{note.form.chooseNotebook}">something</option>
+							<option th:each="notebook : ${notebookList}"
+								th:value="${notebook.id}" th:text="${notebook.title}"></option>
+					</select> <span class="error" th:if="${#fields.hasErrors('notebook')}"
+						th:errors="*{notebook}">error</span></td>
+				</tr>
+				<tr>
+					<td><label for="header" th:utext="#{note.form.title}"></label></td>
+					<td><input id="header" th:field="*{header}"
+						th:class="${#fields.hasErrors('header')}? 'form-control has-error' : 'form-control'"
+						th:placeholder="#{note.form.enterTitle}" /> <span class="error"
+						th:if="${#fields.hasErrors('header')}" th:errors="*{header}">error</span></td>
+				</tr>
+				<tr>
+					<td><label for="text" th:utext="#{note.form.text}"></label></td>
+					<td><textarea id="text" th:field="*{text}"
+							th:class="${#fields.hasErrors('text')}? 'form-control has-error' : 'form-control'"
+							th:placeholder="#{note.form.enterText}">
+						</textarea> <span class="error" th:if="${#fields.hasErrors('text')}"
+						th:errors="*{text}">error</span></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><label class="block"
+						th:each="noteImportance : ${noteImportance}"> <input
+							type="checkbox" th:id="${noteImportance.id}"
+							th:field="*{important}" th:value="${noteImportance.name}" /> <span
+							th:utext="#{${noteImportance.translation}}"></span>
+					</label> <label class="marks"
+						th:each="noteMark : ${T(hr.tvz.bole.enums.NoteMark).values()}">
+							<input type="radio" th:field="*{mark}" th:value="${noteMark}" />
+							<span th:utext="#{${noteMark.translation}}"></span>
+					</label></td>
+				</tr>
+				<tr>
+					<td><input type="text" id="id" hidden="hidden"
+						th:field="*{id}" /></td>
+					<td><a class="btn btn-success" onclick="saveForm()"> <span
+							th:utext="#{button.save}"></span>
+					</a> <a class="btn btn-warning" onclick="deleteForm()"> <span
+							th:utext="#{button.cancel}"></span>
+					</a></td>
+				</tr>
+			</table>
+		</form>
+
+		<div th:replace="~{ :: importanceScript}"></div>
+	</div>
+
+	<div th:fragment="importanceScript">
+		<script>
+			$("#important").click(function() {
+				console.log("check radio buttons");
+				checked();
+			});
+
+			var checked = function() {
+				if ($("#important").is(":checked")) {
+					$(".marks").show();
+					//ako ni jedan nije označen, označiti prvi (default):
+					if ($(".marks input[type=radio]:checked")[0] == undefined) {
+						$(".marks input[type=radio]")[0].checked = true;
+					}
+				} else {
+					$(".marks").hide();
+					//ako je označen jedan, odznačiti ga:
+					if ($(".marks input[type=radio]:checked")[0] != undefined) {
+						$(".marks input[type=radio]:checked")[0].checked = false;
+					}
+				}
+			}
+		</script>
+	</div>
 
 
 </body>

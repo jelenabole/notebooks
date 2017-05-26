@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -270,6 +272,12 @@ public class NoteServiceImpl implements NoteService {
 		}
 		logger.error("notebook filter (admin) - return NULL");
 		return null;
+	}
+
+	@Override
+	public Page<Note> getFirstFew(Integer numberOfNotes) {
+		// dohvati prvih par
+		return noteRepository.findAll(new PageRequest(0, numberOfNotes));
 	}
 
 }

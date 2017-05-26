@@ -21,12 +21,19 @@
 
 	<div th:insert="~{fragments/menu :: viewNotes}"></div>
 
+
+	<!-- obrisati ovu formu (popunjavanje preko js ne radi zbog editora -->
+	<!--  <div th:replace="~{fragments/forms :: noteForm}"></div> -->
+
+	<div id="form"></div>
+
+	<div th:replace="~{fragments/forms :: newButton}"></div>
+
 	<!-- <div th:insert="~{fragments/tables :: notesTable-java}"></div> -->
 
 	<!-- AJAX tablica - get fragment through @Controller -->
 	<div id="results"></div>
 
-	<a class="btn btn-info floatingButton" th:href="@{/newNote}"
-		th:utext="#{button.return}"></a>
+	<div th:replace="~{fragments/menu :: footer}"></div>
 </body>
 </html>

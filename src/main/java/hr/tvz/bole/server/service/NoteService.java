@@ -2,6 +2,8 @@ package hr.tvz.bole.server.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.Note;
 import hr.tvz.bole.web.form.FilterForm;
@@ -43,5 +45,7 @@ public interface NoteService {
 	
 	//XXX - Ajax get Notes:
 	public List<Note> getNotesAjax(FilterForm filterForm, CurrentUser currentUser);
+
+	public Page<Note> getFirstFew(Integer numberOfNotes);
 
 }

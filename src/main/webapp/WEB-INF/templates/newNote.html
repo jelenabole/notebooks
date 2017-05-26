@@ -123,27 +123,7 @@
 		</div>
 	</div>
 
-	<script>
-		$("#important").click(function() {
-			console.log("check radio buttons");
-			checked();
-		});
+	<div th:insert="~{fragments/forms :: importanceScript}"></div>
 
-		var checked = function() {
-			if ($("#important").is(":checked")) {
-				$(".marks").show();
-				//ako ni jedan nije označen, označiti prvi (default):
-				if ($(".marks input[type=radio]:checked")[0] == undefined) {
-					$(".marks input[type=radio]")[0].checked = true;
-				}
-			} else {
-				$(".marks").hide();
-				//ako je označen jedan, odznačiti ga:
-				if ($(".marks input[type=radio]:checked")[0] != undefined) {
-					$(".marks input[type=radio]:checked")[0].checked = false;
-				}
-			}
-		}
-	</script>
 </body>
 </html>

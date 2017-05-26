@@ -46,6 +46,7 @@
 							th:style="'color:' + ${note.mark.id}"></span></td>
 						<td sec:authorize="hasRole('ROLE_ADMIN')"><span
 							th:utext="#{${note.status.translation}}"></span> <span></span></td>
+
 						<td><a class="btn btn-sm btn-primary"
 							th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
 							<a class="btn btn-sm btn-warning"
@@ -94,21 +95,20 @@
 							th:style="'color:' + ${note.mark.id}"></span></td>
 						<td sec:authorize="hasRole('ROLE_ADMIN')"><span
 							th:utext="#{${note.status.translation}}"></span> <span></span></td>
-						<td><a class="btn btn-sm btn-primary"
+
+						<td><a sec:authorize="!hasRole('ROLE_ADMIN')"
+							class="btn btn-sm btn-primary"
 							th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
-							<a class="btn btn-sm btn-warning"
+
+							<a sec:authorize="hasRole('ROLE_ADMIN')"
+							class="btn btn-sm btn-primary"
+							th:attr="onclick='javascript:getOne(\'' + ${note.id} + '\');'"
+							th:text="#{button.edit}"></a> <a class="btn btn-sm btn-danger"
 							th:attr="onclick='javascript:deleteNote(\'' + ${note.id} + '\');'"
 							th:text="#{button.delete}"></a> <a
 							sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-sm btn-info"
 							th:attr="onclick='javascript:changeStatus(\'' + ${note.id} + '\');'"
 							th:text="#{button.changeStatus}"></a></td>
-
-						<!-- 
-							th:href="@{'/deleteNote/' + ${note.id}}"
-							 -->
-						<!-- 
-							th:href="@{'/changeNoteStatus/' + ${note.id}}"
-							 -->
 					</tr>
 				</tbody>
 			</table>
