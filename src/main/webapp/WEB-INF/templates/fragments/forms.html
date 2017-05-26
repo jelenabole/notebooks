@@ -21,18 +21,19 @@
 		</div>
 	</div>
 
-	<div th:fragment="noteForm" class="newForm col-sm-4 col-sm-offset-4">
-		<form method="POST" th:object="${noteForm}" class="noteForm"
-			onload="checked();">
-			<table class="noteForm">
+	<div th:fragment="empty"></div>
+
+	<div th:fragment="noteForm" class="newForm col-sm-offset-3 col-sm-5">
+		<form method="POST" th:object="${noteForm}" class="noteForm">
+			<table>
 				<tr>
 					<td><label for="user" th:utext="#{note.form.user}"></label></td>
 					<td><select id="user" th:field="*{user}"
 						th:disabled="!${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
 						th:class="${#fields.hasErrors('user')}? 'form-control has-error' : 'form-control'">
-							<option value="0" selected th:utext="#{note.form.chooseUser}"></option>
+							<option value="-1" selected th:utext="#{note.form.chooseUser}">choose</option>
 							<option th:each="user : ${userList}" th:value="${user.id}"
-								th:text="${user.fullName}"></option>
+								th:attr='data-object=${user.ajax}' th:text="${user.fullName}"></option>
 					</select><span class="error" th:if="${#fields.hasErrors('user')}"
 						th:errors="*{user}"></span>
 				</tr>
@@ -40,9 +41,10 @@
 					<td><label for="notebook" th:utext="#{note.form.notebook}"></label></td>
 					<td><select id="notebook" th:field="*{notebook}"
 						th:class="${#fields.hasErrors('notebook')}? 'form-control has-error' : 'form-control'">
-							<option value="0" th:utext="#{note.form.chooseNotebook}">something</option>
+							<option value="-1" th:utext="#{note.form.chooseNotebook}">choose</option>
 							<option th:each="notebook : ${notebookList}"
-								th:value="${notebook.id}" th:text="${notebook.title}"></option>
+								th:attr='data-object=${notebook.ajax}' th:value="${notebook.id}"
+								th:text="${notebook.title}"></option>
 					</select> <span class="error" th:if="${#fields.hasErrors('notebook')}"
 						th:errors="*{notebook}">error</span></td>
 				</tr>
@@ -111,6 +113,8 @@
 					}
 				}
 			}
+
+			checked();
 		</script>
 	</div>
 

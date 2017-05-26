@@ -1,15 +1,4 @@
-// get all notes (with filter):
-function filter() {
-	var form = {};
-	form["orderBy"] = $("#orderBy").val();
-	form["orderDirection"] = $(".filterForm input[type='radio']:checked").val()
-	form["searchBy"] = $("#searchBy").val();
-
-	// console.log(form);
-	getNotes(form);
-}
-
-// get all notes (on-load):
+// get notes (on-load):
 function getAll() {
 	getNotes(form = {
 		orderBy : null,
@@ -17,8 +6,19 @@ function getAll() {
 	});
 }
 
+// get notes (with filter):
+function filter() {
+	var form = {};
+	form["orderBy"] = $("#orderBy").val();
+	form["orderDirection"] = $(".filterForm input[type='radio']:checked").val()
+	form["searchBy"] = $("#searchBy").val();
+
+	getNotes(form);
+}
+
+// get notes - ajax:
 function getNotes(form) {
-	console.log(form);
+	// console.log(form);
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
@@ -26,80 +26,42 @@ function getNotes(form) {
 		data : JSON.stringify(form),
 		timeout : 100000,
 		success : function(data) {
-			console.log("SUCCESS");
+			console.log("GET ALL");
 			// console.log("SUCCESS: ", data);
-			$("#results").html(data);
+			$("#table").html(data);
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
 		}
 	});
 }
 
 // edit (get) one:
 function getOne(id) {
-	$.ajax({
-		type : "GET",
-		contentType : "application/json",
-		url : "note/edit/" + id,
-		timeout : 100000,
-		success : function(data) {
-			console.log("SUCCESS");
-			// console.log("SUCCESS: ", data);
-			$("#form").html(data);
-			showForm();
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
+	$.get("note/edit/" + id, function(data) {
+		console.log("GET FOR EDIT");
+		// console.log("SUCCESS: ", data);
+		$("#form").html(data);
+		showForm();
 	});
 }
 
-// add new - open form
+// add new - new form
 function addNew() {
-	$.ajax({
-		type : "GET",
-		contentType : "application/json",
-		url : "note/new",
-		timeout : 100000,
-		success : function(data) {
-			console.log("SUCCESS");
-			// console.log("SUCCESS: ", data);
-			$("#form").html(data);
-			showForm();
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
+	$.get("note/new", function(data) {
+		console.log("CREATE NEW");
+		// console.log("SUCCESS: ", data);
+		$("#form").html(data);
+		showForm();
 	});
 }
 
 // save (or update):
 function saveForm() {
-	// prikupi podatke:
-	var noteForm = {};
-	noteForm["id"] = $("#id").val();
-	// user i notebook ID:
-	noteForm["user"] = $("#user").val();
-	noteForm["notebook"] = $("#notebook").val();
+	// get data from form:
+	var noteForm = getNoteInfo();
 
-	noteForm["header"] = $("#header").val();
-	noteForm["text"] = $("#text").val();
-	noteForm["important"] = $(".newForm input[type='checkbox']:checked").val() == undefined ? null
-			: "IMPORTANT";
-	noteForm["mark"] = $(".newForm input[type='radio']:checked").val() == undefined ? null
-			: $(".newForm input[type='radio']:checked").val();
-
-	console.log("OBJECT: ", noteForm);
+	// console.log("OBJECT: ", noteForm);
 	$.ajax({
 		type : "POST",
 		contentType : "application/json",
@@ -107,107 +69,80 @@ function saveForm() {
 		data : JSON.stringify(noteForm),
 		timeout : 100000,
 		success : function(data) {
-			console.log("SUCCESS");
+			console.log("VALIDATED");
 			// console.log("SUCCESS: ", data);
 			$("#form").html(data);
-			// tek nakon validacije se sprema objekt:
-			// save(note);
-			// deleteForm();
-			// i zove funkcija za filter:
-//			filter();
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
+
+			if (data == "<div></div>") {
+				console.log("SAVED");
+				filter();
+				hideForm();
+			} else {
+				console.log("ERRORS");
+			}
 		}
 	});
 }
 
+// delete note:
 function deleteNote(id) {
 	$.ajax({
 		type : "DELETE",
-		contentType : "application/json",
 		url : "api/note/" + id,
-		timeout : 100000,
 		success : function(data) {
-			console.log("SUCCESS: ", data);
-			filter();
+			console.log("DELETED ID: ", id);
 			deleteForm();
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
+			filter();
 		}
 	});
 }
 
+// change DB status:
 function changeStatus(id) {
-	$.ajax({
-		type : "GET",
-		contentType : "application/json",
-		url : "api/note/changeStatus/" + id,
-		timeout : 100000,
-		success : function(data) {
-			console.log("SUCCESS: ", data);
-			filter();
-			deleteForm();
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
+	$.get("api/note/changeStatus/" + id, function(data) {
+		console.log("CHANGE STATUS FOR: ", id);
+		deleteForm();
+		filter();
 	});
 }
 
-/** ************* EDIT FORMA ************** */
+// get info from form:
+var getNoteInfo = function() {
+	var noteForm = {};
+	noteForm["id"] = $("#id").val();
+	noteForm["header"] = $("#header").val();
+	noteForm["text"] = $("#text").val();
 
-// ne koristi se:
-function fillForm(data) {
-	$("#id").val(data.id);
-	$("#user").val(data.user.fullname);
-	$("#notebook").val(data.notebook.title);
-	$("#header").val(data.header);
-	$("#text").val(data.text);
+	var user = $("#user").find('option:selected').data("object");
+	noteForm["user"] = user;
+	var notebook = $("#notebook").find('option:selected').data("object");
+	noteForm["notebook"] = notebook;
+	
+	noteForm["important"] = $(".newForm input[type='checkbox']:checked").val() == undefined ? null
+			: "IMPORTANT";
+	noteForm["mark"] = $(".newForm input[type='radio']:checked").val() == undefined ? null
+			: $(".newForm input[type='radio']:checked").val();
 
-	showForm();
+	return noteForm;
 }
 
-// nije napisana do kraja:
-// provjera pri učitavanju stranice (zbog validacija):
-// ovo nije potrebno.. ?? (zbog fragmenata):
-var checkForm = function() {
-	// ne vrti se na onload - ne postoje id-evi:
-	if ($("#id").val() != "" || $("#header").val() != ""
-			|| $("#text").val() != "") {
-		showForm();
-	} else {
-		hideForm();
-	}
-}
-
-// gumb odustani:
+// delete form (cancel bttn):
 var deleteForm = function() {
-	$("#id").val("");
-	$("#user").val("");
-	$("#notebook").val("");
-	$("#header").val("");
-	$("#text").val("");
-	hideForm();
+	$.get("note/removeForm", function(data) {
+		console.log("REMOVE FORM");
+		$("#form").html(data);
+		hideForm();
+	});
 }
 
-// nepotrebne (dohvaća se forma) ??
+/** ************* SKRIVANJE FORME ************** */
+
 var hideForm = function() {
-	$(".newForm").hide();
+	// $(".newForm").hide();
 	$("#addButton").show();
 
 }
 var showForm = function() {
-	$(".newForm").show();
+	// $(".newForm").show();
 	$("#addButton").hide();
 }

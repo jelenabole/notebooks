@@ -40,11 +40,8 @@ public interface NoteService {
 	// XXX - funkcije s mapiranjima (u forme):
 	public NoteForm getOneAsForm(Integer id);
 
-	// filtered:
+	// XXX - Ajax - filter notes:
 	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser);
-	
-	//XXX - Ajax get Notes:
-	public List<Note> getNotesAjax(FilterForm filterForm, CurrentUser currentUser);
 
 	public Page<Note> getFirstFew(Integer numberOfNotes);
 

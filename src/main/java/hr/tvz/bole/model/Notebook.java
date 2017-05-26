@@ -70,7 +70,6 @@ public class Notebook implements Serializable {
 			return false;
 
 		Notebook notebook = (Notebook) other;
-		System.out.println("NOTEBOOK hash equals - id: " + id.equals(notebook.id));
 		return (id.equals(notebook.id) && title.equals(notebook.title));
 	}
 
@@ -81,5 +80,15 @@ public class Notebook implements Serializable {
 		hash = hash * 31 + title.hashCode();
 
 		return hash;
+	}
+
+	public String getAjax() {
+		String temp = "{";
+		temp += "\"id\":\"" + id + "\",";
+		temp += "\"title\":\"" + title + "\",";
+		temp += "\"description\":\"" + description;
+		temp += "\"}";
+
+		return temp;
 	}
 }

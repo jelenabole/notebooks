@@ -32,7 +32,6 @@ public class User implements Serializable {
 	String username;
 	String email;
 	String password;
-	// TODO - za što služi enabled:
 	boolean enabled;
 
 	@ElementCollection(targetClass = UserRoles.class, fetch = FetchType.EAGER)
@@ -123,7 +122,6 @@ public class User implements Serializable {
 			return false;
 
 		User user = (User) other;
-		System.out.println("USER hash equals - id: " + id.equals(user.id));
 		return (id.equals(user.id) && username.equals(user.username));
 	}
 
@@ -134,6 +132,18 @@ public class User implements Serializable {
 		hash = hash * 31 + username.hashCode();
 
 		return hash;
+	}
+
+	public String getAjax() {
+		String temp = "{";
+		temp += "\"id\":\"" + id + "\",";
+		// TODO - name i surname nije potrebno ?!:
+		temp += "\"name\":\"" + name + "\",";
+		temp += "\"surname\":\"" + surname + "\",";
+		temp += "\"username\":\"" + username;
+		temp += "\"}";
+
+		return temp;
 	}
 
 }

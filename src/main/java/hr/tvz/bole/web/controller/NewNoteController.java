@@ -26,7 +26,6 @@ import hr.tvz.bole.model.CurrentUser;
 import hr.tvz.bole.model.Note;
 import hr.tvz.bole.model.Notebook;
 import hr.tvz.bole.model.User;
-import hr.tvz.bole.server.service.MessageService;
 import hr.tvz.bole.server.service.NoteService;
 import hr.tvz.bole.server.service.NotebookService;
 import hr.tvz.bole.server.service.RoleService;
@@ -54,8 +53,6 @@ public class NewNoteController {
 	UserEditor userEditor;
 	@Autowired
 	NotebookEditor notebookEditor;
-	@Autowired
-	MessageService message;
 
 	@InitBinder
 	public void dataBinding(WebDataBinder binder) {
@@ -175,7 +172,7 @@ public class NewNoteController {
 		}
 
 		model.addAttribute("notebookList", notebookService.findAll());
-//		model.addAttribute("listOfNotes", listOfNotes);
+		// model.addAttribute("listOfNotes", listOfNotes);
 		model.addAttribute("noteImportance", NoteImportance.getAllImportance());
 		fillStats(model, listOfNotes);
 	}

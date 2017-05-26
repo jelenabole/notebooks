@@ -120,29 +120,7 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser currentUser) {
-		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
-				+ " (" + filterForm.getSearchBy() + ")");
-
-		if (!filterForm.getSearchBy().isEmpty()) {
-			return noteRepository
-					.findAllByUserNameContainingIgnoreCaseOrUserSurnameContainingIgnoreCaseOrNotebookTitleContainingIgnoreCaseOrHeaderContainingIgnoreCaseOrTextContainingIgnoreCase(
-							filterForm.getSearchBy(), filterForm.getSearchBy(),
-							filterForm.getSearchBy(), filterForm.getSearchBy(),
-							filterForm.getSearchBy());
-		}
-
-		List<Note> notes;
-		if (currentUser.isAdmin())
-			notes = getFilteredForAdmin(filterForm);
-		else
-			notes = getFilteredForUser(filterForm, currentUser.getId());
-
-		return notes;
-	}
-
-	@Override
-	public List<Note> getNotesAjax(FilterForm filterForm, CurrentUser user) {
+	public List<Note> getFilteredNotes(FilterForm filterForm, CurrentUser user) {
 		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
 				+ " (" + filterForm.getSearchBy() + ")");
 
