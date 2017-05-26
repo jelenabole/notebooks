@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import hr.tvz.bole.server.service.NotebookService;
@@ -41,51 +42,74 @@ public class ViewNotebooksController {
 
 	@GetMapping("/viewNotebooks")
 	@Secured("ROLE_ADMIN")
-	public String getNewForm(@ModelAttribute NotebookForm notebookForm, Model model) {
+	public String getNotebooks(Model model) {
 		logger.info("GET - view notebooks");
 
-		// poslati za filtere:
+		// create filter form:
 		model.addAttribute("filterForm", getFilterForm());
-		model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
 
 		return "viewNotebooks";
 	}
 
-	@PostMapping("/viewNotebooks")
+	/**** OSTALE METODE VRAĆAJU FRAGMENTE STRANICE ****/
+
+	// XXX - AJAX - edit:
+	@GetMapping("/notebook/edit/{id}")
 	@Secured("ROLE_ADMIN")
-	public String filterNotebooks(@ModelAttribute NotebookForm notebookForm,
-			@ModelAttribute FilterForm filterForm, Model model) {
-		logger.info("GET - view notebooks");
+	public String loadNotebook(@PathVariable Integer id, Model model) {
+		logger.info("EDIT - view notebooks");
+
+		model.addAttribute("notebookForm", notebookService.getOneAsForm(id));
+
+		return "fragments/forms :: notebookForm";
+	}
+
+	// XXX - AJAX - new:
+	@GetMapping("/notebook/new")
+	@Secured("ROLE_ADMIN")
+	public String createNotebook(Model model) {
+		logger.info("NEW - view notebooks");
+		model.addAttribute("notebookForm", new NotebookForm());
+
+		return "fragments/forms :: notebookForm";
+	}
+
+	// XXX - AJAX - remove form (cancel):
+	@GetMapping("/notebook/removeForm")
+	@Secured("ROLE_ADMIN")
+	public String removeForm(Model model) {
+		logger.info("REMOVE FORM - view notebooks");
+		model.addAttribute("notebookForm", new NotebookForm());
+
+		return "fragments/forms :: empty";
+	}
+
+	// XXX - AJAX - save:
+	@PostMapping("/notebook/save")
+	@Secured("ROLE_ADMIN")
+	public String saveNotebook(@Valid @RequestBody NotebookForm notebookForm, BindingResult result,
+			Model model) {
+		logger.info("VALIDATE - view notebooks");
+
+		if (result.hasErrors()) {
+			model.addAttribute("notebookForm", notebookForm);
+			return "fragments/forms :: notebookForm";
+		}
+
+		logger.info("SAVE - view notebooks");
+
+		notebookService.save(notebookForm);
+		return "fragments/forms :: empty";
+	}
+
+	// XXX - AJAX - filter/sort:
+	@PostMapping("/notebooks/search")
+	public String searchNotes(@RequestBody FilterForm filterForm, Model model) {
+		logger.info("GET/POST - search notebooks");
 
 		model.addAttribute("notebooks", notebookService.getFilteredNotebooks(filterForm));
 
-		return "viewNotebooks";
-	}
-
-	@PostMapping("/saveNotebook")
-	@Secured("ROLE_ADMIN")
-	public String editExistingNotebook(@Valid NotebookForm notebookForm, BindingResult result,
-			Model model) {
-		logger.info("EDIT/NEW - notebook id: " + notebookForm.getId());
-
-		if (result.hasErrors()) {
-			model.addAttribute("notebooks", notebookService.findAllWithNumberOfNotes());
-			return "viewNotebooks";
-		}
-		notebookService.save(notebookForm);
-
-		model.addAttribute("notebookForm", new NotebookForm());
-
-		return "redirect:/viewNotebooks";
-	}
-
-	@GetMapping("/deleteNotebook/{id}")
-	@Secured("ROLE_ADMIN")
-	public String deleteNotebook(@PathVariable int id, Model model) {
-		// TODO - nekakvo upozorenje prije nastavka!
-		logger.info("DELETE - notebook id: " + id);
-		notebookService.delete(id);
-		return "redirect:/viewNotebooks";
+		return "fragments/tables :: viewNotebooksTable";
 	}
 
 }

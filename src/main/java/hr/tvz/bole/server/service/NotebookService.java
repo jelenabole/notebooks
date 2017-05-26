@@ -11,7 +11,7 @@ public interface NotebookService {
 	public List<Notebook> findAll();
 
 	public List<Notebook> findAllWithNumberOfNotes();
-	
+
 	public Notebook findOne(Integer id);
 
 	public Notebook save(Notebook notebook);
@@ -21,5 +21,7 @@ public interface NotebookService {
 	public void delete(Integer id);
 
 	public List<Notebook> getFilteredNotebooks(FilterForm filterForm);
-	
+
+	public NotebookForm getOneAsForm(Integer id);
+
 }

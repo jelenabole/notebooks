@@ -66,7 +66,7 @@
 	<div th:fragment="viewNotesTable">
 		<div class="viewNotes">
 			<table class="table table-striped">
-				<thead class="thead-inverse">
+				<thead>
 					<tr>
 						<th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{table.id}"></th>
 						<th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{note.user}"></th>
@@ -113,6 +113,34 @@
 				</tbody>
 			</table>
 		</div>
+	</div>
+
+
+	<div th:fragment="viewNotebooksTable">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th th:utext="#{table.id}"></th>
+					<th th:utext="#{notebook.title}"></th>
+					<th th:utext="#{notebook.description}"></th>
+					<th th:utext="#{notebook.numberOfNotes}"></th>
+					<th th:utext="#{table.actions}"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="notebook : ${notebooks}">
+					<td th:text="${notebook.id}"></td>
+					<td th:text="${notebook.title}"></td>
+					<td th:text="${notebook.description}"></td>
+					<td th:text="${notebook.numberOfNotes}"></td>
+					<td><a class="btn btn-sm btn-primary"
+						th:attr="onclick='javascript:getOne(\'' + ${notebook.id} + '\');'"
+						th:text="#{button.edit}"></a> <a class="btn btn-sm btn-danger"
+						th:attr="onclick='javascript:deleteNotebook(\'' + ${notebook.id} + '\');'"
+						th:text="#{button.delete}"></a>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 
 </body>

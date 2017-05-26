@@ -29,6 +29,7 @@ function getNotes(form) {
 			console.log("GET ALL");
 			// console.log("SUCCESS: ", data);
 			$("#table").html(data);
+			deleteForm();
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
@@ -75,8 +76,8 @@ function saveForm() {
 
 			if (data == "<div></div>") {
 				console.log("SAVED");
+				deleteForm();
 				filter();
-				hideForm();
 			} else {
 				console.log("ERRORS");
 			}

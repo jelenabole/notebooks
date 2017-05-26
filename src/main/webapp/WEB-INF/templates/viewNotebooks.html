@@ -18,79 +18,20 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 
-<body onload="checkForm();">
+<body onload="getAll()">
 
 	<div th:insert="~{fragments/menu :: viewNotes}"></div>
 
-	<div class="mainNote newForm">
-		<div class="col-sm-4 col-sm-offset-4">
-			<form th:action="@{/saveNotebook}" method="POST"
-				th:object="${notebookForm}" class="notebookForm">
-				<table class="noteForm">
-					<tr>
-						<td><label for="title" th:utext="#{notebook.form.title}"></label></td>
-						<td><input id="title" th:field="*{title}"
-							th:class="${#fields.hasErrors('title')}? 'form-control has-error' : 'form-control'" />
-							<span class="error" th:if="${#fields.hasErrors('title')}"
-							th:errors="*{title}"></span>
-					</tr>
-					<tr>
-						<td><label for="description"
-							th:utext="#{notebook.form.description}"></label></td>
-						<td><input id="description" th:field="*{description}"
-							th:class="${#fields.hasErrors('description')}? 'form-control has-error' : 'form-control'" />
-							<span class="error" th:if="${#fields.hasErrors('description')}"
-							th:errors="*{description}"></span>
-					</tr>
-					<tr>
-						<td><input type="text" id="id" hidden="hidden"
-							th:field="*{id}" /></td>
-						<td><input type="submit" name="saveButton"
-							th:value="#{button.save}" class="btn btn-success" /> <a
-							class="btn btn-warning" onclick="deleteForm()"> <span
-								th:utext="#{button.cancel}"></span>
-						</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
-	</div>
+	<div id="form"></div>
 
+	<div th:replace="~{fragments/forms :: newButton}"></div>
 
-	<div>
-		<a class="btn btn-info" onclick="showForm()" th:text="#{button.add}"></a>
-	</div>
+	<!-- <div th:insert="~{fragments/tables :: notesTable-java}"></div> -->
 
-	<div class="viewNotes">
-		<table class="table table-striped">
-			<thead class="thead-inverse">
-				<tr>
-					<th th:utext="#{table.id}"></th>
-					<th th:utext="#{notebook.title}"></th>
-					<th th:utext="#{notebook.description}"></th>
-					<th th:utext="#{notebook.numberOfNotes}"></th>
-					<th th:utext="#{table.actions}"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="notebook : ${notebooks}">
-					<td th:text="${notebook.id}"></td>
-					<td th:text="${notebook.title}"></td>
-					<td th:text="${notebook.description}"></td>
-					<td th:text="${notebook.numberOfNotes}"></td>
-					<td><a class="btn btn-sm btn-info"
-						th:attr="onclick='javascript:getNotebook(\'' + ${notebook.id} + '\');'"
-						th:text="#{button.edit}"></a> <a class="btn btn-sm btn-warning"
-						th:href="@{'/deleteNotebook/' + ${notebook.id}}"
-						th:text="#{button.delete}"></a> <!-- th:attr="onclick='javascript:confirm(\'' + #{alert.deleteNotebook} + '\');'" --></td>
-					<!-- th:attr="onclick='javascript:editNotebook(\'' + ${notebook.id} + '\', \'' + ${notebook.title} + '\', \'' + ${notebook.description} + '\');'" -->
-				</tr>
-			</tbody>
-		</table>
+	<!-- AJAX tablica - get fragment through @Controller -->
+	<div id="table"></div>
 
-		<a class="btn btn-info floatingButton" th:href="@{/newNote}"
-			th:utext="#{button.return}"></a>
-	</div>
+	<div th:replace="~{fragments/menu :: footer}"></div>
 
 </body>
 </html>

@@ -1,61 +1,134 @@
-//stara funkcija:
-function editNotebook(id, title, description) {
-	showForm();
-	console.log("funkcija: " + id);
-	$("#id").val(id);
-	$("#title").val(title);
-	$("#description").val(description);
+// get notebooks (on-load):
+function getAll() {
+	getNotebooks(form = {
+		orderBy : null,
+		orderDirection : null
+	});
 }
 
-// get notebook (for editing):
-function getNotebook(id) {
+// get notebooks (with filter):
+function filter() {
+	var form = {};
+	form["orderBy"] = $("#orderBy").val();
+	form["orderDirection"] = $(".filterForm input[type='radio']:checked").val()
+	form["searchBy"] = $("#searchBy").val();
+
+	getNotebooks(form);
+}
+
+// get notebooks - ajax:
+function getNotebooks(form) {
 	$.ajax({
-		type : "GET",
+		type : "POST",
 		contentType : "application/json",
-		url : "api/notebook/" + id,
-		dataType : 'json',
+		url : "notebooks/search",
+		data : JSON.stringify(form),
 		timeout : 100000,
 		success : function(data) {
-			console.log("SUCCESS: ", data);
-			var notebook = data;
-
-			$("#id").val(notebook.id);
-			$("#title").val(notebook.title);
-			$("#description").val(notebook.description);
+			console.log("GET ALL");
+			deleteForm();
+			$("#table").html(data);
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
-			display(e);
-		},
-		done : function(e) {
-			console.log("DONE");
 		}
 	});
-
-	showForm();
 }
 
-//provjera pri učitavanju stranice (zbog validacija):
-var checkForm = function() {
-	if ($("#id").val() != "" || $("#title").val() != ""
-			|| $("#description").val() != "") {
+// edit (get) one:
+function getOne(id) {
+	$.get("notebook/edit/" + id, function(data) {
+		console.log("GET FOR EDIT");
+		$("#form").html(data);
 		showForm();
-	} else {
-		hideForm();
-	}
+	});
 }
 
-//gumb odustani:
-var deleteForm = function() {
-	$("#id").val("");
-	$("#title").val("");
-	$("#description").val("");
-	hideForm();
+// add new - new form
+function addNew() {
+	$.get("notebook/new", function(data) {
+		console.log("CREATE NEW");
+		$("#form").html(data);
+		showForm();
+	});
 }
+
+// save (or update):
+function saveForm() {
+	// get data from form:
+	var notebookForm = getNotebookInfo();
+
+	$.ajax({
+		type : "POST",
+		contentType : "application/json",
+		url : "notebook/save",
+		data : JSON.stringify(notebookForm),
+		timeout : 100000,
+		success : function(data) {
+			console.log("VALIDATED");
+			$("#form").html(data);
+
+			if (data == "<div></div>") {
+				console.log("SAVED");
+				deleteForm();
+				filter();
+			} else {
+				console.log("ERRORS");
+			}
+		}
+	});
+}
+
+// delete notebook:
+function deleteNotebook(id) {
+	$.ajax({
+		type : "DELETE",
+		url : "api/notebook/" + id,
+		success : function(data) {
+			console.log("DELETED ID: ", id);
+			deleteForm();
+			filter();
+		}
+	});
+}
+
+// change DB status:
+function changeStatus(id) {
+	$.get("api/notebook/changeStatus/" + id, function(data) {
+		console.log("CHANGE STATUS FOR: ", id);
+		deleteForm();
+		filter();
+	});
+}
+
+// get info from form:
+var getNotebookInfo = function() {
+	var notebookForm = {
+		id : $("#id").val(),
+		title : $("#title").val(),
+		description : $("#description").val()
+	};
+
+	return notebookForm;
+}
+
+// delete form (cancel bttn):
+var deleteForm = function() {
+	$.get("notebook/removeForm", function(data) {
+		console.log("REMOVE FORM");
+		$("#form").html(data);
+		hideForm();
+	});
+}
+
+/** ************* SKRIVANJE FORME ************** */
 
 var hideForm = function() {
-	$(".newForm").hide();
+	// $(".newForm").hide();
+	$("#addButton").show();
+
 }
 var showForm = function() {
-	$(".newForm").show();
+	// $(".newForm").show();
+	$("#addButton").hide();
 }

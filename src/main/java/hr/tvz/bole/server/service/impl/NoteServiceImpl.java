@@ -99,12 +99,6 @@ public class NoteServiceImpl implements NoteService {
 		return noteRepository.countByNotebookId(id);
 	}
 
-	// @Override
-	// public Integer getNumberOfNotesByNotebookAndByUser(Integer notebookId,
-	// Integer userId) {
-	// return noteRepository.countByNotebookIdAndUserId(notebookId, userId);
-	// }
-
 	public void changeNoteStatus(Integer id) {
 		Note note = findOne(id);
 		if (note.getStatus() == DBStatus.ACTIVE)
@@ -124,8 +118,7 @@ public class NoteServiceImpl implements NoteService {
 		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
 				+ " (" + filterForm.getSearchBy() + ")");
 
-		// ako nema parametara, vrati sve za tog korisnika:
-		// null se šalje (u orderBy) samo na onload:
+		// orderBy == nul samo na onload (vrati sve):
 		if (filterForm.getOrderBy() == null) {
 			if (user.isAdmin())
 				return findAll();
@@ -135,9 +128,9 @@ public class NoteServiceImpl implements NoteService {
 
 		List<Note> notes;
 		if (user.isAdmin())
-			notes = getFilteredForAdmin(filterForm);
+			notes = getSortedForAdmin(filterForm);
 		else
-			notes = getFilteredForUser(filterForm, user.getId());
+			notes = getSortedForUser(filterForm, user.getId());
 
 		String search = filterForm.getSearchBy().toLowerCase();
 		notes = notes.stream()
@@ -153,7 +146,7 @@ public class NoteServiceImpl implements NoteService {
 		return notes;
 	}
 
-	private List<Note> getFilteredForUser(FilterForm filterForm, Integer userId) {
+	private List<Note> getSortedForUser(FilterForm filterForm, Integer userId) {
 		switch (filterForm.getOrderDirection()) {
 			case "asc":
 				switch (filterForm.getOrderBy()) {
@@ -203,7 +196,7 @@ public class NoteServiceImpl implements NoteService {
 		return null;
 	}
 
-	private List<Note> getFilteredForAdmin(FilterForm filterForm) {
+	private List<Note> getSortedForAdmin(FilterForm filterForm) {
 		switch (filterForm.getOrderDirection()) {
 			case "asc":
 				switch (filterForm.getOrderBy()) {

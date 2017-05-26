@@ -39,7 +39,7 @@ public class NotebookServiceImpl implements NotebookService {
 
 		return notebooks;
 	}
-	
+
 	public Notebook findOne(Integer id) {
 		return notebookRepository.findById(id);
 	}
@@ -62,21 +62,23 @@ public class NotebookServiceImpl implements NotebookService {
 		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
 				+ " (" + filterForm.getSearchBy() + ")");
 
-		if (!filterForm.getSearchBy().isEmpty()) {
-			List<Notebook> notebooks = notebookRepository
-					.findAllByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
-							filterForm.getSearchBy(), filterForm.getSearchBy());
-			return getNumberOfNotes(notebooks);
+		// onload (orderBy == null) - return all:
+		if (filterForm.getOrderBy() == null) {
+			return findAllWithNumberOfNotes();
 		}
 
 		List<Notebook> notebooks = getSortedNotebooks(filterForm);
-
-		// TODO - dodati number of notes, osim u slučaju sortiranja po toj
-		// koloni (već napravljeno):
-		// notebooks.forEach(e -> System.out.println(e));
+		// XXX - ako nije sortirano po broju bilješki, kolona nije dodana:
 		if (!filterForm.getOrderBy().equals("numberOfNotes")) {
 			notebooks = getNumberOfNotes(notebooks);
 		}
+
+		String search = filterForm.getSearchBy().toLowerCase();
+		notebooks = notebooks.stream()
+				.filter(e -> (e.getTitle().toLowerCase().contains(search)
+						|| e.getDescription().toLowerCase().contains(search)))
+				.collect(Collectors.toList());
+
 		return notebooks;
 	}
 
@@ -128,11 +130,16 @@ public class NotebookServiceImpl implements NotebookService {
 		}
 	}
 
-	// TODO - trenutno se ne koristi:
+	// TODO - napraviti sa upitom preko baze:
 	private List<Notebook> getNumberOfNotes(List<Notebook> notebooks) {
 		notebooks.forEach(
 				e -> e.setNumberOfNotes(noteService.getNumberOfNotesByNotebook(e.getId())));
 		return notebooks;
+	}
+
+	@Override
+	public NotebookForm getOneAsForm(Integer id) {
+		return NotebookMapper.mapNotebookToForm(findOne(id));
 	}
 
 }
