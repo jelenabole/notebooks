@@ -104,6 +104,7 @@ public class ViewNotebooksController {
 
 	// XXX - AJAX - filter/sort:
 	@PostMapping("/notebooks/search")
+	@Secured("ROLE_ADMIN")
 	public String searchNotes(@RequestBody FilterForm filterForm, Model model) {
 		logger.info("GET/POST - search notebooks");
 
