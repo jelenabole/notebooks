@@ -24,9 +24,9 @@
 
 	<div th:fragment="empty"></div>
 
-	<div th:fragment="noteForm" class="newForm col-sm-offset-3 col-sm-5">
-		<form method="POST" th:object="${noteForm}" class="noteForm">
-			<table>
+	<div th:fragment="noteForm" class="col-sm-offset-3 col-sm-5">
+		<form th:object="${noteForm}">
+			<table class="newForm">
 				<tr>
 					<td><label for="user" th:utext="#{note.form.user}"></label></td>
 					<td><select id="user" th:field="*{user}"
@@ -80,9 +80,10 @@
 				<tr>
 					<td><input type="text" id="id" hidden="hidden"
 						th:field="*{id}" /></td>
-					<td><a class="btn btn-success" onclick="saveForm()"> <span
-							th:utext="#{button.save}"></span>
-					</a> <a class="btn btn-warning" onclick="deleteForm()"> <span
+					<td><input type="submit"
+						onclick="event.preventDefault(); saveForm();"
+						th:value="#{button.save}" class="btn btn-success" /> <a
+						class="btn btn-warning" onclick="deleteForm()"> <span
 							th:utext="#{button.cancel}"></span>
 					</a></td>
 				</tr>
@@ -119,10 +120,9 @@
 		</script>
 	</div>
 
-	<div th:fragment="notebookForm"
-		class="newForm col-sm-offset-3 col-sm-5">
-		<form method="POST" th:object="${notebookForm}" class="notebookForm">
-			<table class="noteForm">
+	<div th:fragment="notebookForm" class="col-sm-offset-3 col-sm-5">
+		<form th:object="${notebookForm}">
+			<table class="newForm">
 				<tr>
 					<td><label for="title" th:utext="#{notebook.form.title}"></label></td>
 					<td><input id="title" th:field="*{title}"
@@ -141,9 +141,10 @@
 				<tr>
 					<td><input type="text" id="id" hidden="hidden"
 						th:field="*{id}" /></td>
-					<td><a class="btn btn-success" onclick="saveForm()"> <span
-							th:utext="#{button.save}"></span>
-					</a> <a class="btn btn-warning" onclick="deleteForm()"> <span
+					<td><input type="submit"
+						onclick="event.preventDefault(); saveForm();"
+						th:value="#{button.save}" class="btn btn-success" /> <a
+						class="btn btn-warning" onclick="deleteForm()"> <span
 							th:utext="#{button.cancel}"></span>
 					</a></td>
 				</tr>
@@ -151,21 +152,19 @@
 		</form>
 	</div>
 
-
-	<div th:fragment="userForm" class="newForm col-sm-offset-3 col-sm-5">
-		<form th:object="${userForm}" class="userForm">
-			<table class="noteForm">
+	<div th:fragment="userForm" class="col-sm-offset-3 col-sm-5">
+		<form th:object="${userForm}">
+			<table class="newForm">
 				<tr>
-					<td><label for="name" th:utext="#{user.name}"></label></td>
+					<td><label for="name" th:utext="#{user.form.name}"></label></td>
 					<td><input type="text" name="name" id="name"
 						th:field="*{name}"
 						th:class="${#fields.hasErrors('name')}? 'form-control has-error' : 'form-control'" />
 						<span class="error" th:if="${#fields.hasErrors('name')}"
 						th:errors="*{name}">error</span></td>
 				</tr>
-
 				<tr>
-					<td><label for="surname" th:utext="#{user.surname}"></label></td>
+					<td><label for="surname" th:utext="#{user.form.surname}"></label></td>
 					<td><input type="text" name="surname" id="surname"
 						th:field="*{surname}"
 						th:class="${#fields.hasErrors('surname')}? 'form-control has-error' : 'form-control'" />
@@ -173,12 +172,12 @@
 						th:errors="*{surname}">error</span></td>
 				</tr>
 				<tr>
-					<td><label for="username" th:utext="#{user.username}"></label></td>
+					<td><label for="username" th:utext="#{user.form.username}"></label></td>
 					<td><input type="text" name="username" id="username"
 						th:field="*{username}" class="form-control" readonly /></td>
 				</tr>
 				<tr>
-					<td><label for="email" th:utext="#{user.email}"></label></td>
+					<td><label for="email" th:utext="#{user.form.email}"></label></td>
 					<td><input type="text" name="email" id="email"
 						th:field="*{email}"
 						th:class="${#fields.hasErrors('email')}? 'form-control has-error' : 'form-control'" />
@@ -186,8 +185,8 @@
 						th:errors="*{email}">error</span></td>
 				</tr>
 				<tr>
-					<td><label th:utext="#{user.roles}"></label></td>
-					<td><label
+					<td><label th:utext="#{user.form.roles}"></label></td>
+					<td><label class="roles"
 						th:each="role : ${T(hr.tvz.bole.enums.UserRoles).values()}">
 							<input type="checkbox" th:field="*{roles}" th:value="${role}" />
 							<span th:utext="#{${role.translation}}"></span>
@@ -197,9 +196,10 @@
 					<td><input type="hidden" id="id" th:field="*{id}" /><input
 						type="hidden" id="password" th:field="*{password}"
 						th:value="*{password}" /></td>
-					<td><a class="btn btn-success" onclick="saveForm()"> <span
-							th:utext="#{button.save}"></span>
-					</a> <a class="btn btn-warning" onclick="deleteForm()"> <span
+					<td><input type="submit"
+						onclick="event.preventDefault(); saveForm();"
+						th:value="#{button.save}" class="btn btn-success" /> <a
+						class="btn btn-warning" onclick="deleteForm()"> <span
 							th:utext="#{button.cancel}"></span>
 					</a></td>
 				</tr>

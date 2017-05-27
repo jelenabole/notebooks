@@ -85,16 +85,6 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public void deleteByNotebook(Integer id) {
-		noteRepository.deleteByNotebookId(id);
-	}
-
-	@Override
-	public void deleteByUser(Integer id) {
-		noteRepository.deleteByUserId(id);
-	}
-
-	@Override
 	public Integer getNumberOfNotesByNotebook(Integer id) {
 		return noteRepository.countByNotebookId(id);
 	}

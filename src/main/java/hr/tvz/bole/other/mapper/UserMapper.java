@@ -81,4 +81,5 @@ public class UserMapper {
 
 		return currentUser;
 	}
+
 }

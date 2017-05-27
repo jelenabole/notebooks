@@ -49,12 +49,9 @@ public class ViewUsersController {
 	public String getUsers(Model model) {
 		logger.info("GET - view users");
 
-		// poslati za filtere:
+		// filter form:
 		model.addAttribute("filterForm", getFilterForm());
 
-		// TODO - poslati enum (role)
-		// model.addAttribute("users", userService.findAll());
-		// model.addAttribute("userForm", new UserForm());
 		return "viewUsers";
 	}
 
@@ -107,7 +104,16 @@ public class ViewUsersController {
 		logger.info("SAVE - view users");
 
 		// TODO - ubaciti mapper u servis:
-		userService.save(UserMapper.mapUserFormToUser(userForm));
+		if (userForm.getId() != null) {
+			userService.update(userForm);
+		} else {
+			try {
+				userService.save(UserMapper.mapUserFormToUser(userForm));
+			} catch (RoleExistsForUser | UserExistsException e) {
+				logger.info("SAVE - ERROR - user/role already exists");
+			}
+		}
+
 		return "fragments/forms :: empty";
 	}
 
@@ -117,7 +123,7 @@ public class ViewUsersController {
 	public String searchNotes(@RequestBody FilterForm filterForm, Model model) {
 		logger.info("GET/POST - search users");
 
-		model.addAttribute("notebooks", userService.getFilteredUsers(filterForm));
+		model.addAttribute("users", userService.getFilteredUsers(filterForm));
 
 		return "fragments/tables :: viewUsersTable";
 	}

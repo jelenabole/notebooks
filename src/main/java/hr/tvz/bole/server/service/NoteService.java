@@ -29,10 +29,6 @@ public interface NoteService {
 
 	public void delete(Integer id);
 
-	public void deleteByNotebook(Integer id);
-
-	public void deleteByUser(Integer id);
-
 	public Integer getNumberOfNotesByNotebook(Integer id);
 
 	public void changeNoteStatus(Integer id);

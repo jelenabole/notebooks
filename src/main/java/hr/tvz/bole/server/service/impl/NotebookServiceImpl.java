@@ -1,6 +1,5 @@
 package hr.tvz.bole.server.service.impl;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,81 +52,7 @@ public class NotebookServiceImpl implements NotebookService {
 	}
 
 	public void delete(Integer id) {
-		noteService.deleteByNotebook(id);
 		notebookRepository.deleteById(id);
-	}
-
-	@Override
-	public List<Notebook> getFilteredNotebooks(FilterForm filterForm) {
-		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
-				+ " (" + filterForm.getSearchBy() + ")");
-
-		// onload (orderBy == null) - return all:
-		if (filterForm.getOrderBy() == null) {
-			return findAllWithNumberOfNotes();
-		}
-
-		List<Notebook> notebooks = getSortedNotebooks(filterForm);
-		// XXX - ako nije sortirano po broju bilješki, kolona nije dodana:
-		if (!filterForm.getOrderBy().equals("numberOfNotes")) {
-			notebooks = getNumberOfNotes(notebooks);
-		}
-
-		String search = filterForm.getSearchBy().toLowerCase();
-		notebooks = notebooks.stream()
-				.filter(e -> (e.getTitle().toLowerCase().contains(search)
-						|| e.getDescription().toLowerCase().contains(search)))
-				.collect(Collectors.toList());
-
-		return notebooks;
-	}
-
-	private List<Notebook> getSortedNotebooks(FilterForm filterForm) {
-		switch (filterForm.getOrderDirection()) {
-			case "asc":
-				return getAscending(filterForm.getOrderBy());
-			case "desc":
-				return getDescending(filterForm.getOrderBy());
-		}
-		logger.error("notebook filter - return NULL");
-		return null;
-	}
-
-	private List<Notebook> getAscending(String orderBy) {
-		switch (orderBy) {
-			case "title":
-				return notebookRepository.findAllByOrderByTitleAsc();
-			case "description":
-				return notebookRepository.findAllByOrderByDescriptionAsc();
-			case "numberOfNotes":
-				Comparator<Notebook> byNumberOfNotes = Comparator
-						.comparing(e -> e.getNumberOfNotes());
-				List<Notebook> notebooks = notebookRepository.findAll();
-				notebooks = getNumberOfNotes(notebooks);
-				notebooks = notebooks.stream().sorted(byNumberOfNotes).collect(Collectors.toList());
-				return notebooks;
-			default:
-				return notebookRepository.findAll();
-		}
-	}
-
-	private List<Notebook> getDescending(String orderBy) {
-		switch (orderBy) {
-			case "title":
-				return notebookRepository.findAllByOrderByTitleDesc();
-			case "description":
-				return notebookRepository.findAllByOrderByDescriptionDesc();
-			case "numberOfNotes":
-				Comparator<Notebook> byNumberOfNotes = Comparator
-						.comparing(e -> e.getNumberOfNotes());
-				List<Notebook> notebooks = notebookRepository.findAll();
-				notebooks = getNumberOfNotes(notebooks);
-				notebooks = notebooks.stream().sorted(byNumberOfNotes.reversed())
-						.collect(Collectors.toList());
-				return notebooks;
-			default:
-				return notebookRepository.findAllByOrderByIdDesc();
-		}
 	}
 
 	// TODO - napraviti sa upitom preko baze:
@@ -140,6 +65,76 @@ public class NotebookServiceImpl implements NotebookService {
 	@Override
 	public NotebookForm getOneAsForm(Integer id) {
 		return NotebookMapper.mapNotebookToForm(findOne(id));
+	}
+
+	@Override
+	public List<Notebook> getFilteredNotebooks(FilterForm filterForm) {
+		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
+				+ " (" + filterForm.getSearchBy() + ")");
+
+		List<Notebook> notebooks = findAllWithNumberOfNotes();
+
+		// orderBy == nul samo na onload (vrati sve):
+		if (filterForm.getOrderBy() == null) {
+			return notebooks;
+		}
+
+		// return by expression:
+		if (!filterForm.getSearchBy().isEmpty()) {
+			notebooks = filter(notebooks, filterForm.getSearchBy().toLowerCase());
+		}
+
+		// sort by:
+		if (!filterForm.getOrderBy().isEmpty()) {
+			notebooks = orderBy(notebooks, filterForm.getOrderBy());
+		}
+
+		// reverse (if desc):
+		if (filterForm.getOrderDirection().equals("desc")) {
+			notebooks = reverseOrder(notebooks);
+		}
+
+		return notebooks;
+	}
+
+	// filter - filter by:
+	private List<Notebook> filter(List<Notebook> notebooks, String search) {
+		return notebooks.stream()
+				.filter(e -> (e.getTitle().toLowerCase().contains(search)
+						|| e.getDescription().toLowerCase().contains(search)))
+				.collect(Collectors.toList());
+	}
+
+	// filter - order by:
+	private List<Notebook> orderBy(List<Notebook> notebooks, String orderBy) {
+		switch (orderBy) {
+			case "title":
+				return notebooks.stream()
+						.sorted((e1, e2) -> e1.getTitle().compareToIgnoreCase(e2.getTitle()))
+						.collect(Collectors.toList());
+			case "description":
+				return notebooks.stream().sorted(
+						(e1, e2) -> e1.getDescription().compareToIgnoreCase(e2.getDescription()))
+						.collect(Collectors.toList());
+			case "numberOfNotes":
+				return notebooks.stream()
+						.sorted((e1, e2) -> e1.getNumberOfNotes().compareTo(e2.getNumberOfNotes()))
+						.collect(Collectors.toList());
+		}
+		return notebooks;
+	}
+
+	// filter - reverse order:
+	private List<Notebook> reverseOrder(List<Notebook> notebooks) {
+		int size = notebooks.size() / 2;
+		int k = notebooks.size() - 1;
+		for (int i = 0; i < size; i++) {
+			Notebook temp = notebooks.get(i);
+			notebooks.set(i, notebooks.get(k));
+			notebooks.set(k, temp);
+			k--;
+		}
+		return notebooks;
 	}
 
 }

@@ -3,6 +3,7 @@ package hr.tvz.bole.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import hr.tvz.bole.enums.UserRoles;
@@ -39,6 +41,9 @@ public class User implements Serializable {
 	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	List<UserRoles> roles;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Note> notes;
 
 	public String getFullName() {
 		return name + " " + surname;

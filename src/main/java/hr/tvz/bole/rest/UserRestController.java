@@ -2,8 +2,6 @@ package hr.tvz.bole.rest;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,16 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 import hr.tvz.bole.exceptions.RoleExistsForUser;
 import hr.tvz.bole.exceptions.UserExistsException;
 import hr.tvz.bole.model.User;
+import hr.tvz.bole.other.mapper.UserMapper;
 import hr.tvz.bole.server.service.UserService;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserRestController {
 
-	private static Logger logger = LoggerFactory.getLogger(UserRestController.class);
-
 	@Autowired
 	UserService userService;
+
+	/**** REST - POSTMAN ****/
 
 	@GetMapping
 	public List<User> findAll() {
@@ -48,8 +47,10 @@ public class UserRestController {
 
 	@PutMapping("/{id}")
 	public User update(@RequestBody User user) throws UserExistsException, RoleExistsForUser {
-		return userService.save(user);
+		return userService.update(UserMapper.mapUserToUserForm(user));
 	}
+
+	/**** AJAX ***/
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {
@@ -58,7 +59,6 @@ public class UserRestController {
 
 	@GetMapping("/changeStatus/{id}")
 	public void changeEnabledStatus(@PathVariable Integer id) {
-		logger.info("GET - enable/disable user id: " + id);
 		userService.changeEnabledStatus(id);
 	}
 

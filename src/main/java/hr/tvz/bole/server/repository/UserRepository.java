@@ -39,35 +39,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("UPDATE User SET password=:password WHERE id=:id")
 	public void changePassword(@Param("id") Integer id, @Param("password") String password);
 
-	@Modifying
 	@Transactional
 	public Long deleteById(Integer id);
-
-	// XXX -sortiranje:
-	public List<User> findAllByOrderByNameAsc();
-
-	public List<User> findAllByOrderBySurnameAsc();
-
-	public List<User> findAllByOrderByUsernameAsc();
-
-	public List<User> findAllByOrderByEmailAsc();
-
-	public List<User> findAllByOrderByEnabledAsc();
-
-	public List<User> findAllByOrderByIdDesc();
-
-	public List<User> findAllByOrderByNameDesc();
-
-	public List<User> findAllByOrderBySurnameDesc();
-
-	public List<User> findAllByOrderByUsernameDesc();
-
-	public List<User> findAllByOrderByEmailDesc();
-
-	public List<User> findAllByOrderByEnabledDesc();
-
-	// filter - search by:
-	public List<User> findAllByNameContainingIgnoreCaseOrSurnameContainingIgnoreCaseOrUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(
-			String str1, String str2, String str3, String str4);
 
 }

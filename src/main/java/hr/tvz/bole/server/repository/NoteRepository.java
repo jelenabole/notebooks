@@ -31,14 +31,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 	@Transactional
 	public void deleteById(Integer id);
 
-	@Modifying
-	@Transactional
-	public void deleteByNotebookId(Integer id);
-
-	@Modifying
-	@Transactional
-	public void deleteByUserId(Integer id);
-
 	public Integer countByNotebookId(Integer id);
 
 	// sort Asc - Admin:

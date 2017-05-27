@@ -1,11 +1,14 @@
 package hr.tvz.bole.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,6 +27,9 @@ public class Notebook implements Serializable {
 	// XXX - skip while importing from database:
 	@Transient
 	Integer numberOfNotes;
+
+	@OneToMany(mappedBy = "notebook", cascade = CascadeType.ALL)
+	private List<Note> notes;
 
 	public Integer getId() {
 		return id;

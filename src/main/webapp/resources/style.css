@@ -32,36 +32,40 @@ h1 {
 	padding: 2%;
 }
 
-/*** MAIN PAGE - New Note Form (mainNote - noteForm - statTable) ***/
-.noteForm {
+/*** NEW FORMS - on Main Page and for all entities ***/
+.newForm {
 	width: 100%;
 	margin: 1%;
 }
 
-.noteForm td {
+.newForm td {
 	padding: 1%;
 	vertical-align: top; /* zbog ispisa grešaka */
 }
 
-.noteForm td:first-child {
+.newForm td:first-child {
 	text-align: right;
 	padding-left: 3%;
 	padding-top: 2%;
 }
 
 /* labels of checkboxes and radio buttons */
-.noteForm label span {
+.newForm label span {
 	font-weight: 500;
 }
 
-.noteForm .marks {
+.newForm .marks {
 	padding-left: 3%;
 	font-style: italic;
 	display: block;
 }
 
-.noteForm input[type="submit"], .noteForm input[type="button"],
-	.noteForm button {
+.newForm .roles {
+	display: block;
+}
+
+.newForm input[type="submit"], .newForm input[type="button"], .newForm button
+	{
 	padding-left: 5%;
 	padding-right: 5%;
 }
@@ -128,7 +132,6 @@ h1 {
 .mainRegister label {
 	padding-top: 4%;
 }
-
 
 /*** dodatne klase za uređivanje bilješki ***/
 .savedNote { /* defaultna - mijenjati boju */

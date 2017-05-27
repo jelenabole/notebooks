@@ -2,8 +2,6 @@ package hr.tvz.bole.rest;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,10 +21,10 @@ import hr.tvz.bole.server.service.NotebookService;
 @RequestMapping("/api/notebook")
 public class NotebookRestController {
 
-	private static Logger logger = LoggerFactory.getLogger(NotebookRestController.class);
-
 	@Autowired
 	NotebookService notebookService;
+
+	/**** REST - POSTMAN ****/
 
 	@GetMapping
 	public List<Notebook> findAll() {
@@ -48,6 +46,8 @@ public class NotebookRestController {
 	public Notebook update(@RequestBody Notebook notebook) {
 		return notebookService.save(notebook);
 	}
+
+	/**** AJAX ***/
 
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Integer id) {

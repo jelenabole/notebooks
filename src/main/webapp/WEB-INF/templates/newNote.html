@@ -27,8 +27,8 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-1">
-				<form method="POST" th:object="${noteForm}" class="noteForm">
-					<table class="noteForm">
+				<form method="POST" th:object="${noteForm}">
+					<table class="newForm">
 						<tr>
 							<td><label for="user" th:utext="#{note.form.user}"></label></td>
 							<td><select id="user" th:field="*{user}"
@@ -67,25 +67,16 @@
 						</tr>
 						<tr>
 							<td></td>
-							<td>
-								<!-- <label class="block"><input id="important"
-									type="checkbox" th:value="$(noteImportance.name)"
-									th:field="*{important}" th:checked="'true'" /> <span
-									th:utext="#{${.important}"></span></label>--> <label
-								class="block" th:each="noteImportance : ${noteImportance}">
-									<input type="checkbox" th:id="${noteImportance.id}"
+							<td><label class="block"
+								th:each="noteImportance : ${noteImportance}"> <input
+									type="checkbox" th:id="${noteImportance.id}"
 									th:field="*{important}" th:value="${noteImportance.name}" /> <span
 									th:utext="#{${noteImportance.translation}}"></span>
-							</label> <!-- boje - različite oznake <label class="marks"
-								th:each="noteMark : ${noteMarks}"> <input type="radio"
-									th:field="*{mark}" th:value="${noteMark.name}" /> <span
-									th:utext="#{${noteMark.translation}}"></span>
-							</label> --> <label class="marks"
+							</label> <label class="marks"
 								th:each="noteMark : ${T(hr.tvz.bole.enums.NoteMark).values()}">
 									<input type="radio" th:field="*{mark}" th:value="${noteMark}" />
 									<span th:utext="#{${noteMark.translation}}"></span>
-							</label>
-							</td>
+							</label></td>
 						</tr>
 						<tr>
 							<td></td>

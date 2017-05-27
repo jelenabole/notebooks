@@ -2,6 +2,7 @@ package hr.tvz.bole.server.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,9 +91,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public void delete(Integer id) {
-		// obrisati role i bilješke korisnika:
-		roleService.deleteAllRolesForUser(id);
-		noteService.deleteByUser(id);
 		userRepository.deleteById(id);
 	}
 
@@ -122,62 +120,90 @@ public class UserServiceImpl implements UserService {
 		logger.info("order by: " + filterForm.getOrderBy() + " - " + filterForm.getOrderDirection()
 				+ " (" + filterForm.getSearchBy() + ")");
 
-		if (!filterForm.getSearchBy().isEmpty()) {
-			return userRepository
-					.findAllByNameContainingIgnoreCaseOrSurnameContainingIgnoreCaseOrUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(
-							filterForm.getSearchBy(), filterForm.getSearchBy(),
-							filterForm.getSearchBy(), filterForm.getSearchBy());
+		List<User> users = findAll();
+
+		// orderBy == nul samo na onload (vrati sve):
+		if (filterForm.getOrderBy() == null) {
+			return users;
 		}
 
-		List<User> users = getSortedUsers(filterForm);
+		// return by expression:
+		if (!filterForm.getSearchBy().isEmpty()) {
+			users = filter(users, filterForm.getSearchBy().toLowerCase());
+		}
+
+		// sort by:
+		if (!filterForm.getOrderBy().isEmpty()) {
+			users = orderBy(users, filterForm.getOrderBy());
+		}
+
+		// reverse (if desc):
+		if (filterForm.getOrderDirection().equals("desc")) {
+			users = reverseOrder(users);
+		}
+
 		return users;
 	}
 
-	private List<User> getSortedUsers(FilterForm filterForm) {
-		switch (filterForm.getOrderDirection()) {
-			case "asc":
-				return getAscending(filterForm.getOrderBy());
-			case "desc":
-				return getDescending(filterForm.getOrderBy());
-		}
-		logger.error("notebook filter - return NULL");
-		return null;
+	// filter - filter by:
+	private List<User> filter(List<User> users, String search) {
+		return users.stream()
+				.filter(e -> (e.getName().toLowerCase().contains(search)
+						|| e.getSurname().toLowerCase().contains(search)
+						|| e.getUsername().toLowerCase().contains(search)
+						|| e.getEmail().toLowerCase().contains(search)))
+				.collect(Collectors.toList());
 	}
 
-	private List<User> getAscending(String orderBy) {
+	// filter - order by:
+	private List<User> orderBy(List<User> users, String orderBy) {
 		switch (orderBy) {
 			case "name":
-				return userRepository.findAllByOrderByNameAsc();
+				users = users.stream()
+						.sorted((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()))
+						.collect(Collectors.toList());
+				break;
 			case "surname":
-				return userRepository.findAllByOrderBySurnameAsc();
+				users = users.stream()
+						.sorted((e1, e2) -> e1.getSurname().compareToIgnoreCase(e2.getSurname()))
+						.collect(Collectors.toList());
+				break;
 			case "username":
-				return userRepository.findAllByOrderByUsernameAsc();
+				users = users.stream()
+						.sorted((e1, e2) -> e1.getUsername().compareToIgnoreCase(e2.getUsername()))
+						.collect(Collectors.toList());
+				break;
 			case "email":
-				return userRepository.findAllByOrderByEmailAsc();
+				users = users.stream()
+						.sorted((e1, e2) -> e1.getEmail().compareToIgnoreCase(e2.getEmail()))
+						.collect(Collectors.toList());
+				break;
 			case "enabled":
-				return userRepository.findAllByOrderByEnabledAsc();
+				users = users.stream()
+						.sorted((e1, e2) -> String.valueOf(e1.isEnabled())
+								.compareTo(String.valueOf(e2.isEnabled())))
+						.collect(Collectors.toList());
+				break;
 			case "role":
-			default:
-				return userRepository.findAll();
+				// TODO - roles (with locale)
+				// po jednoj roli - uzmemo role i redoslijed iz enuma
+				// ako postoji rola sa order() 0, 1, 2, ...
+				break;
 		}
+		return users;
 	}
 
-	private List<User> getDescending(String orderBy) {
-		switch (orderBy) {
-			case "name":
-				return userRepository.findAllByOrderByNameDesc();
-			case "surname":
-				return userRepository.findAllByOrderBySurnameDesc();
-			case "username":
-				return userRepository.findAllByOrderByUsernameDesc();
-			case "email":
-				return userRepository.findAllByOrderByEmailDesc();
-			case "enabled":
-				return userRepository.findAllByOrderByEnabledDesc();
-			case "role":
-			default:
-				return userRepository.findAllByOrderByIdDesc();
+	// filter - reverse order:
+	private List<User> reverseOrder(List<User> users) {
+		int size = users.size() / 2;
+		int k = users.size() - 1;
+		for (int i = 0; i < size; i++) {
+			User temp = users.get(i);
+			users.set(i, users.get(k));
+			users.set(k, temp);
+			k--;
 		}
+		return users;
 	}
 
 }
