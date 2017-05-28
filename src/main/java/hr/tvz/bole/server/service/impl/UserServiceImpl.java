@@ -1,6 +1,6 @@
 package hr.tvz.bole.server.service.impl;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,30 +64,35 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	// XXX - update - view users (admin changes):
 	public User update(UserForm userForm) {
-		if (userForm.getNewPassword() != null && !userForm.getNewPassword().isEmpty()) {
-			// changePassword(userForm.getId(), userForm.getPassword());
-			System.out.println("set new password: " + userForm.getPassword());
-			userForm.setPassword(PasswordGenerator.generatePassword(userForm.getNewPassword()));
-		}
+		User user = findOne(userForm.getId());
+		user = UserMapper.updateUser(user, userForm);
 
-		// XXX - obavezno barem jedna rola (user):s
-		if (userForm.getRoles() == null || userForm.getRoles().isEmpty()) {
+		// XXX - obavezno barem jedna rola (user):
+		if (user.getRoles() == null || user.getRoles().isEmpty()) {
 			logger.info("UPDATE - no roles - added 'USER'");
-			userForm.setRoles(new ArrayList<>());
-			userForm.getRoles().add(UserRoles.ROLE_USER);
+			user.setRoles(Arrays.asList(UserRoles.ROLE_USER));
 		}
 
-		User user = UserMapper.mapUserFormToUser(userForm);
 		userRepository.save(user);
 
 		return user;
 	}
 
-	// TODO - nepotrebno ??
-	public void changePassword(Integer id, String password) {
-		String encripted = PasswordGenerator.generatePassword(password);
-		userRepository.changePassword(id, encripted);
+	// XXX - update - user info (user changes):
+	public User changeInfo(UserForm userForm) {
+		User user = findOne(userForm.getId());
+		user = UserMapper.changeInfo(user, userForm);
+
+		// change pass if necessary:
+		if (userForm.getNewPassword() != null && !userForm.getNewPassword().isEmpty()) {
+			user.setPassword(PasswordGenerator.generatePassword(userForm.getNewPassword()));
+		}
+
+		userRepository.save(user);
+
+		return user;
 	}
 
 	public void delete(Integer id) {

@@ -14,55 +14,6 @@
 </head>
 <body>
 
-	<div th:fragment="notesTable-java">
-		<div class="viewNotes">
-			<table class="table table-striped">
-				<thead class="thead-inverse">
-					<tr>
-						<th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{table.id}"></th>
-						<th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{note.user}"></th>
-						<th th:utext="#{note.notebook}"></th>
-						<th th:utext="#{note.header}"></th>
-						<th th:utext="#{note.text}"></th>
-						<th th:utext="#{note.important}"></th>
-						<th sec:authorize="hasRole('ROLE_ADMIN')"
-							th:utext="#{table.status}"></th>
-						<th th:utext="#{table.actions}"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="note : ${notes}">
-						<td sec:authorize="hasRole('ROLE_ADMIN')" th:text="${note.id}"></td>
-						<td sec:authorize="hasRole('ROLE_ADMIN')"
-							th:text="${note.user.fullName}"></td>
-						<td th:text="${note.notebook.title}"></td>
-						<td th:text="${note.header}"></td>
-						<td th:text="${note.text}"></td>
-
-						<td th:class="${note.mark}"><span
-							th:text="${note.importance?.important} ? #{table.yes} : #{table.no}"></span>
-							<span th:if="${note.importance?.important}"
-							class="glyphicon glyphicon-heart"
-							th:style="'color:' + ${note.mark.id}"></span></td>
-						<td sec:authorize="hasRole('ROLE_ADMIN')"><span
-							th:utext="#{${note.status.translation}}"></span> <span></span></td>
-
-						<td><a class="btn btn-sm btn-primary"
-							th:href="@{'/newNote/' + ${note.id}}" th:text="#{button.edit}"></a>
-							<a class="btn btn-sm btn-warning"
-							th:href="@{'/deleteNote/' + ${note.id}}"
-							th:text="#{button.delete}"></a> <a
-							sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-sm btn-info"
-							th:href="@{'/changeNoteStatus/' + ${note.id}}"
-							th:text="#{button.changeStatus}"></a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-
-	<!-- tablica za rezultate AJAX -->
 	<div th:fragment="viewNotesTable">
 		<div class="viewNotes">
 			<table class="table table-striped">
@@ -114,7 +65,6 @@
 			</table>
 		</div>
 	</div>
-
 
 	<div th:fragment="viewNotebooksTable">
 		<table class="table table-striped">

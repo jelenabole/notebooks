@@ -13,8 +13,6 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<!--  obrisati method POST  -->
-
 	<div th:fragment="newButton">
 		<div class="col-xs-12">
 			<a id="addButton" class="btn btn-info" onclick="addNew()"
@@ -174,7 +172,10 @@
 				<tr>
 					<td><label for="username" th:utext="#{user.form.username}"></label></td>
 					<td><input type="text" name="username" id="username"
-						th:field="*{username}" class="form-control" readonly /></td>
+						th:field="*{username}"
+						th:class="${#fields.hasErrors('username')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('username')}"
+						th:errors="*{username}">error</span></td>
 				</tr>
 				<tr>
 					<td><label for="email" th:utext="#{user.form.email}"></label></td>
@@ -186,17 +187,17 @@
 				</tr>
 				<tr>
 					<td><label th:utext="#{user.form.roles}"></label></td>
-					<td><label class="roles"
+					<td th:class="${#fields.hasErrors('roles')}? 'has-error' : ''"><label
+						class="roles" for="roles"
 						th:each="role : ${T(hr.tvz.bole.enums.UserRoles).values()}">
-							<input type="checkbox" th:field="*{roles}" th:value="${role}" />
-							<span th:utext="#{${role.translation}}"></span>
+							<input name="roles" type="checkbox" th:field="*{roles}"
+							th:value="${role}" /> <span th:utext="#{${role.translation}}"></span>
 					</label></td>
 				</tr>
 				<tr>
-					<td><input type="hidden" id="id" th:field="*{id}" /><input
-						type="hidden" id="password" th:field="*{password}"
-						th:value="*{password}" /></td>
-					<td><input type="submit"
+					<td><input type="hidden" id="id" th:field="*{id}" /></td>
+					<td><span class="error" th:if="${#fields.hasErrors('global')}"
+						th:errors="${userForm}">error</span> <input type="submit"
 						onclick="event.preventDefault(); saveForm();"
 						th:value="#{button.save}" class="btn btn-success" /> <a
 						class="btn btn-warning" onclick="deleteForm()"> <span

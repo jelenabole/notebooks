@@ -31,4 +31,5 @@ public enum UserRoles {
 	public void setTranslation(String translation) {
 		this.translation = translation;
 	}
+
 }

@@ -96,6 +96,16 @@ public class ViewUsersController {
 			throws RoleExistsForUser, UserExistsException {
 		logger.info("VALIDATE - view users");
 
+		// check if user exists:
+		if (userService.checkIfUserExists(userForm.getUsername())) {
+			result.rejectValue("username", "register.exception.userExists");
+		}
+
+		// TODO - ispisati grešku u formi:
+		if (userForm.getRoles().size() == 0) {
+			result.rejectValue("roles", "register.exception.minOneRole");
+		}
+
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", userForm);
 			return "fragments/forms :: userForm";

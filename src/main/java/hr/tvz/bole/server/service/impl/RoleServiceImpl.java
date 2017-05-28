@@ -26,7 +26,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	public List<UserRole> findAllRolesForUser(Integer id) {
-		return roleRepository.findAllByUser(id);
+		return roleRepository.findAllByUserId(id);
 	}
 
 	public UserRole findOneRoleForUser(Integer userId, String role) {

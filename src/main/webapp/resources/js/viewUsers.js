@@ -40,6 +40,7 @@ function getOne(id) {
 	$.get("user/edit/" + id, function(data) {
 		console.log("GET FOR EDIT");
 		$("#form").html(data);
+		$('#username').attr('readonly', true);
 		showForm();
 	});
 }
@@ -109,10 +110,10 @@ var getUserInfo = function() {
 		surname : $("#surname").val(),
 		username : $("#username").val(),
 		email : $("#email").val(),
-		// password : $("#password").val(),
-		newPassword : $("#newPassword").val()
-		
-	// TODO - add roles
+		newPassword : $("#newPassword").val(),
+		roles : $(".newForm input[type='checkbox']:checked").map(function() {
+			return this.value;
+		}).get()
 	}
 	return userForm;
 }

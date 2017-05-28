@@ -8,10 +8,12 @@ INSERT INTO users (name, surname, username, email, password, enabled) VALUES ('U
 INSERT INTO user_roles (user, role) VALUES (1, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES (2, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES (3, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES (4, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES (4, 'ROLE_ADMIN');
 INSERT INTO user_roles (user, role) VALUES (5, 'ROLE_USER');
 INSERT INTO user_roles (user, role) VALUES (5, 'ROLE_ADMIN');
 INSERT INTO user_roles (user, role) VALUES (6, 'ROLE_USER');
+INSERT INTO user_roles (user, role) VALUES (6, 'ROLE_ADMIN');
 
 INSERT INTO notebooks (title, description) VALUES('Web aplikacije u Javi', 'Bilješke s predavanja iz kolegija web aplikacije u Javi');
 INSERT INTO notebooks (title, description) VALUES('Razvoj aplikacija na Android platformi', 'Bilješke s predavanja kolegija razvoj aplikacija na Android platformi');

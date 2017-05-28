@@ -21,8 +21,6 @@ public interface UserService {
 
 	public User update(UserForm userForm);
 
-	public void changePassword(Integer id, String password);
-
 	public void delete(Integer id);
 
 	public boolean checkIfUserExists(String username);

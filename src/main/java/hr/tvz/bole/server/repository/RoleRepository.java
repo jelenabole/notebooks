@@ -12,7 +12,7 @@ public interface RoleRepository extends JpaRepository<UserRole, Long>{
 
 	public UserRole findByUserIdAndRoleLike(Integer userId, String role);
 
-	public List<UserRole> findAllByUser(Integer id);
+	public List<UserRole> findAllByUserId(Integer id);
 
 	@SuppressWarnings("unchecked")
 	public UserRole save(UserRole userRole);

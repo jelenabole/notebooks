@@ -28,8 +28,6 @@ public class UserForm {
 	@Size(max = 50)
 	String email;
 
-	// TODO - pass potreban samo kad si osoba sama sprema podatke
-	String password;
 	String newPassword;
 
 	List<UserRoles> roles;
@@ -64,14 +62,6 @@ public class UserForm {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getNewPassword() {

@@ -7,6 +7,8 @@ import hr.tvz.bole.web.form.UserForm;
 
 public class UserMapper {
 
+	/**** REGISTER FORM ****/
+
 	public static RegisterForm mapUserToRegisterForm(User user) {
 		RegisterForm registerForm = new RegisterForm();
 		registerForm.setId(user.getId());
@@ -32,6 +34,8 @@ public class UserMapper {
 		return user;
 	}
 
+	/**** USER FORM ****/
+
 	public static UserForm mapUserToUserForm(User user) {
 		UserForm userForm = new UserForm();
 		userForm.setId(user.getId());
@@ -39,7 +43,7 @@ public class UserMapper {
 		userForm.setSurname(user.getSurname());
 		userForm.setUsername(user.getUsername());
 		userForm.setEmail(user.getEmail());
-		userForm.setPassword(user.getPassword());
+		// userForm.setPassword(user.getPassword());
 		userForm.setRoles(user.getRoles());
 
 		return userForm;
@@ -52,7 +56,10 @@ public class UserMapper {
 		user.setSurname(userForm.getSurname());
 		user.setUsername(userForm.getUsername());
 		user.setEmail(userForm.getEmail());
-		user.setPassword(userForm.getPassword());
+
+		// TODO - password ne kopirat, kopira se naknadno po potrebi
+		// TODO - enabled se ne mijenja
+		// user.setPassword(userForm.getPassword());
 		user.setEnabled(true);
 
 		// TODO - role kao stringove!
@@ -61,6 +68,36 @@ public class UserMapper {
 
 		return user;
 	}
+
+	/**** CHANGE USER INFO - viewUsers and userInfo ****/
+
+	public static User updateUser(User user, UserForm userForm) {
+		// TODO - id should be the same:
+		if (!user.getId().equals(userForm.getId())) {
+			System.out.println("UserMapper - ERROR - IDs not equal");
+		}
+		user.setName(userForm.getName());
+		user.setSurname(userForm.getSurname());
+		user.setEmail(userForm.getEmail());
+		// TODO - stare role se brišu, nove dodaju:
+		user.setRoles(userForm.getRoles());
+
+		return user;
+	}
+
+	public static User changeInfo(User user, UserForm userForm) {
+		// TODO - id should be the same:
+		if (!user.getId().equals(userForm.getId())) {
+			System.out.println("UserMapper - ERROR - IDs not equal");
+		}
+		user.setName(userForm.getName());
+		user.setSurname(userForm.getSurname());
+		user.setEmail(userForm.getEmail());
+
+		return user;
+	}
+
+	/**** CURRENT USER ****/
 
 	public static User mapCurrentUserToUser(CurrentUser currentUser) {
 		User user = new User();
