@@ -57,14 +57,15 @@ public class LoginController {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@Valid RegisterForm registerForm, BindingResult result, WebRequest request,
-			Errors errors, Model model) {
+	public String registerUser(@Valid RegisterForm registerForm, BindingResult result,
+			WebRequest request, Errors errors, Model model) {
 		// TODO - da li je webRequest i Errors = potrebno ?!
 		logger.info("POST - register");
 
 		if (userService.checkIfUserExists(registerForm.getUsername())) {
 			result.rejectValue("username", "register.exception.userExists");
 		}
+
 		// provjeriti greske:
 		if (result.hasErrors()) {
 			logger.info("POST - register - errors: " + result.getErrorCount());
