@@ -143,9 +143,10 @@
 				</label> &nbsp; <input type="text" class="form-control" id="searchBy"
 					th:field="*{searchBy}" th:placeholder="#{filter.search}">
 			</div>
-			<button type="submit" class="btn btn-default">Submit</button>
 			<button onclick="event.preventDefault(); filter()"
-				class="btn btn-default">Ajax</button>
+				class="btn btn-default">
+				<span th:utext="#{button.search}"></span>
+			</button>
 		</form>
 	</div>
 

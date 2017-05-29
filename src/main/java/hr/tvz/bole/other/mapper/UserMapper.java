@@ -58,12 +58,7 @@ public class UserMapper {
 		user.setEmail(userForm.getEmail());
 
 		// TODO - password ne kopirat, kopira se naknadno po potrebi
-		// TODO - enabled se ne mijenja
-		// user.setPassword(userForm.getPassword());
 		user.setEnabled(true);
-
-		// TODO - role kao stringove!
-		// TODO - provjeriti na userInfo
 		user.setRoles(userForm.getRoles());
 
 		return user;
@@ -93,6 +88,8 @@ public class UserMapper {
 		user.setName(userForm.getName());
 		user.setSurname(userForm.getSurname());
 		user.setEmail(userForm.getEmail());
+
+		// XXX - roles stay the same
 
 		return user;
 	}

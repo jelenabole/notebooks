@@ -13,6 +13,9 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+	<!-- newButton, empty, noteForm, importanceScript, notebookForm, userForm, userInfo -->
+
 	<div th:fragment="newButton">
 		<div class="col-xs-12">
 			<a id="addButton" class="btn btn-info" onclick="addNew()"
@@ -185,6 +188,14 @@
 						<span class="error" th:if="${#fields.hasErrors('email')}"
 						th:errors="*{email}">error</span></td>
 				</tr>
+				<tr id="password">
+					<td><label for="newPassword" th:utext="#{user.form.password}"></label></td>
+					<td><input type="password" name="newPassword" id="newPassword"
+						th:field="*{newPassword}"
+						th:class="${#fields.hasErrors('newPassword')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('newPassword')}"
+						th:errors="*{newPassword}">error</span></td>
+				</tr>
 				<tr>
 					<td><label th:utext="#{user.form.roles}"></label></td>
 					<td th:class="${#fields.hasErrors('roles')}? 'has-error' : ''"><label
@@ -198,6 +209,58 @@
 					<td><input type="hidden" id="id" th:field="*{id}" /></td>
 					<td><span class="error" th:if="${#fields.hasErrors('global')}"
 						th:errors="${userForm}">error</span> <input type="submit"
+						onclick="event.preventDefault(); saveForm();"
+						th:value="#{button.save}" class="btn btn-success" /> <a
+						class="btn btn-warning" onclick="deleteForm()"> <span
+							th:utext="#{button.cancel}"></span>
+					</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+
+	<div th:fragment="userInfo" class="col-sm-6 col-sm-offset-3">
+		<form th:object="${userForm}">
+			<table class="newForm">
+				<tr>
+					<td><label for="name" th:utext="#{user.form.name}"></label></td>
+					<td><input type="text" name="name" id="name"
+						th:field="*{name}"
+						th:class="${#fields.hasErrors('name')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}">error</span></td>
+				</tr>
+				<tr>
+					<td><label for="surname" th:utext="#{user.form.surname}"></label></td>
+					<td><input type="text" name="surname" id="surname"
+						th:field="*{surname}"
+						th:class="${#fields.hasErrors('surname')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('surname')}"
+						th:errors="*{surname}">error</span></td>
+				</tr>
+				<tr>
+					<td><label for="username" th:utext="#{user.form.username}"></label></td>
+					<td><input type="text" name="username" id="username"
+						th:field="*{username}" class="form-control" readonly /></td>
+				</tr>
+				<tr>
+					<td><label for="email" th:utext="#{user.form.email}"></label></td>
+					<td><input type="text" name="email" id="email"
+						th:field="*{email}"
+						th:class="${#fields.hasErrors('email')}? 'form-control has-error' : 'form-control'" />
+						<span class="error" th:if="${#fields.hasErrors('email')}"
+						th:errors="*{email}">error</span></td>
+				</tr>
+				<tr>
+					<td><label for="newPassword" th:utext="#{user.form.newPassword}"></label></td>
+					<td><input type="password" name="newPassword" id="newPassword"
+						th:field="*{newPassword}" class="form-control"
+						th:placeholder="#{user.newPassword}" /></td>
+				</tr>
+				<tr>
+					<td><input type="hidden" th:field="*{id}" /></td>
+					<td><input type="submit"
 						onclick="event.preventDefault(); saveForm();"
 						th:value="#{button.save}" class="btn btn-success" /> <a
 						class="btn btn-warning" onclick="deleteForm()"> <span

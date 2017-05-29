@@ -96,14 +96,18 @@ public class ViewUsersController {
 			throws RoleExistsForUser, UserExistsException {
 		logger.info("VALIDATE - view users");
 
-		// check if user exists:
-		if (userService.checkIfUserExists(userForm.getUsername())) {
-			result.rejectValue("username", "register.exception.userExists");
-		}
-
 		// TODO - ispisati grešku u formi:
 		if (userForm.getRoles().size() == 0) {
 			result.rejectValue("roles", "register.exception.minOneRole");
+		}
+
+		// check if pass is blank, and username exists:
+		if (userForm.getId() == null) {
+			if (userForm.getNewPassword().isEmpty())
+				result.rejectValue("newPassword", "NotBlank");
+			if (userService.checkIfUserExists(userForm.getUsername())) {
+				result.rejectValue("username", "register.exception.userExists");
+			}
 		}
 
 		if (result.hasErrors()) {
@@ -111,17 +115,13 @@ public class ViewUsersController {
 			return "fragments/forms :: userForm";
 		}
 
-		logger.info("SAVE - view users");
-
 		// TODO - ubaciti mapper u servis:
 		if (userForm.getId() != null) {
+			logger.info("UPDATE - view users");
 			userService.update(userForm);
 		} else {
-			try {
-				userService.save(UserMapper.mapUserFormToUser(userForm));
-			} catch (RoleExistsForUser | UserExistsException e) {
-				logger.info("SAVE - ERROR - user/role already exists");
-			}
+			logger.info("SAVE - view users");
+			userService.save(userForm);
 		}
 
 		return "fragments/forms :: empty";

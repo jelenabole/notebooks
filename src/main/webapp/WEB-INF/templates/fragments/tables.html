@@ -14,6 +14,8 @@
 </head>
 <body>
 
+	<!-- viewNoteTable, viewNotebookTable, viewUsersTable, userInfoTable -->
+
 	<div th:fragment="viewNotesTable">
 		<div class="viewNotes">
 			<table class="table table-striped">
@@ -129,6 +131,36 @@
 						th:text="#{button.delete}"></a></td>
 				</tr>
 			</tbody>
+		</table>
+	</div>
+
+	<div th:fragment="userInfoTable" class="col-sm-6 col-sm-offset-3">
+		<table class="table" th:object="${userForm}">
+			<tr>
+				<td th:utext="#{user.name}"></td>
+				<td th:text="*{name}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{user.surname}"></td>
+				<td th:text="*{surname}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{user.username}"></td>
+				<td th:text="*{username}"></td>
+			</tr>
+			<tr>
+				<td th:utext="#{user.email}"></td>
+				<td th:text="*{email}"></td>
+			</tr>
+			<tr th:if="${saved}">
+				<td></td>
+				<td><span class="error" th:utext="#{message.changesSaved}"></span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a class="btn btn-sm btn-success" th:text="#{button.edit}"
+					onclick="editUser()">Edit</a></td>
+			</tr>
 		</table>
 	</div>
 

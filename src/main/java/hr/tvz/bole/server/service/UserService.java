@@ -19,7 +19,11 @@ public interface UserService {
 
 	public User save(User user) throws UserExistsException, RoleExistsForUser;
 
+	public User save(UserForm userForm);
+
 	public User update(UserForm userForm);
+
+	public User changeInfo(UserForm userForm);
 
 	public void delete(Integer id);
 

@@ -40,6 +40,7 @@ function getOne(id) {
 	$.get("user/edit/" + id, function(data) {
 		console.log("GET FOR EDIT");
 		$("#form").html(data);
+		$("#password").hide();
 		$('#username').attr('readonly', true);
 		showForm();
 	});

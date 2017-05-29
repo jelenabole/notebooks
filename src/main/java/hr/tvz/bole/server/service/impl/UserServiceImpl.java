@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUsername(username);
 	}
 
+	// save - register user:
 	public User save(User user) throws UserExistsException, RoleExistsForUser {
 		if (checkIfUserExists(user.getUsername())) {
 			throw new UserExistsException("username exists: " + user.getUsername());
@@ -60,6 +61,16 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 
 		roleService.saveRole(new UserRole(null, user, "ROLE_USER"));
+
+		return user;
+	}
+
+	// XXX - save - view users (admin changes):
+	public User save(UserForm userForm) {
+		User user = UserMapper.mapUserFormToUser(userForm);
+
+		user.setPassword(PasswordGenerator.generatePassword(userForm.getNewPassword()));
+		userRepository.save(user);
 
 		return user;
 	}
@@ -87,6 +98,7 @@ public class UserServiceImpl implements UserService {
 
 		// change pass if necessary:
 		if (userForm.getNewPassword() != null && !userForm.getNewPassword().isEmpty()) {
+			logger.info("SAVE - user info - changed password");
 			user.setPassword(PasswordGenerator.generatePassword(userForm.getNewPassword()));
 		}
 
