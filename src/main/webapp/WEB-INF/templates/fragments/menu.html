@@ -143,10 +143,8 @@
 				</label> &nbsp; <input type="text" class="form-control" id="searchBy"
 					th:field="*{searchBy}" th:placeholder="#{filter.search}">
 			</div>
-			<button onclick="event.preventDefault(); filter()"
-				class="btn btn-default">
-				<span th:utext="#{button.search}"></span>
-			</button>
+			<input type="submit" onclick="event.preventDefault(); filter()"
+				class="btn btn-default" th:value="#{button.search}" />
 		</form>
 	</div>
 

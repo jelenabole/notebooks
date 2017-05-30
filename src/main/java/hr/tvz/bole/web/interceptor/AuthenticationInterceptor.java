@@ -11,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import hr.tvz.bole.model.CurrentUser;
-import hr.tvz.bole.server.repository.CurrentUserRepository;
-import hr.tvz.bole.server.service.RoleService;
 import hr.tvz.bole.server.service.UserService;
 
 @ControllerAdvice
@@ -21,11 +19,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 	private static Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
 	@Autowired
-	CurrentUserRepository currentUserRepository;
-	@Autowired
 	UserService userService;
-	@Autowired
-	RoleService roleService;
 
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
@@ -61,7 +55,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 			request.getSession().setAttribute("currentUser", currentUser);
 			logger.info("INTERCEPTOR - logged in as: " + currentUser.getUsername());
 		}
-		
+
 		return true;
 	}
 

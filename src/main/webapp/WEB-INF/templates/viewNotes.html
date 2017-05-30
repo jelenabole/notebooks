@@ -23,14 +23,12 @@
 
 	<div id="form"></div>
 
-	<div th:replace="~{fragments/forms :: newButton}"></div>
+	<div sec:authorize="hasRole('ROLE_ADMIN')"
+		th:replace="~{fragments/forms :: newButton}"></div>
 
-	<!-- <div th:insert="~{fragments/tables :: notesTable-java}"></div> -->
-
-	<!-- AJAX tablica - get fragment through @Controller -->
 	<div id="table"></div>
 
 	<div th:replace="~{fragments/menu :: footer}"></div>
-	
+
 </body>
 </html>
